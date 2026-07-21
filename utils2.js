@@ -14,22 +14,19 @@ export let CITY_STATE = {
     GLOBAL_PRODUCTS_LIST: []
 };
 
-// Hàm Getter hoãn giờ bốc biến toàn cục, đợi cdnjs nạp xong thư viện đám mây [🗎1]
-// Hàm Getter hoãn giờ bốc biến toàn cục, đợi cdnjs nạp xong thư viện đám mây
+// Hàm Getter hoãn giờ tương thích 100% với cổng kết nối CDN mở
 export function getDB() {
     if (cachedSupabaseClient) return cachedSupabaseClient;
     
-    // ĐÃ VÁ CHUẨN: Bốc thẳng biến supabase toàn cục của cửa sổ trình duyệt hiện tại [🗎2]
+    // ĐÃ VÁ CHUẨN: Bốc thẳng đối tượng supabase từ cửa sổ trình duyệt hiện tại [🗎2]
     const supabaseEngine = window.supabase;
-    
     if (!supabaseEngine) {
-        console.warn("⚠️ Trạm Kho 2 utils.js: Đang đợi thư viện đám mây nạp ngầm...");
+        console.warn("⚠️ Đang đợi thư viện đám mây nạp ngầm...");
         return null;
     }
     cachedSupabaseClient = supabaseEngine.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     return cachedSupabaseClient;
 }
-
 
 // =========================================================
 // THUẬT TOÁN TỐI CAO: BỐC TÁCH VÀ THẨM ĐỊNH MÃ CHIP TOKEN ID TỪ THANH URL [🗎1]

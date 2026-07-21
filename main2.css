@@ -1,0 +1,135 @@
+/* =========================================================
+   INDEPENDENT CITY - MAIN.CSS (BẢNG MÀU CHUNG CHUẨN - PHẦN 1)
+   ========================================================= */
+
+:root {
+    --navy-dark: #001F3F;    /* Màu xanh hải quân gần đen */
+    --black-pure: #000000;   /* Màu đen hoàn toàn */
+    --white-pure: #ffffff;   /* Màu trắng tinh khiết */
+    --gray-border: #4a5568;  /* Màu xám làm viền phụ */
+}
+
+/* Đặt cấu trúc chuẩn cho toàn bộ trang web */
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    background-color: var(--white-pure);
+    color: var(--black-pure);
+    height: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* Chế độ Dark Mode (Tối) cấu hình sẵn phục vụ cài đặt trang chủ */
+body.dark-theme {
+    background-color: var(--black-pure);
+    color: var(--white-pure);
+}
+
+/* QUY CHUẨN Ô NHẬP LIỆU TOÀN HỆ THỐNG */
+.city-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--black-pure);
+    border-radius: 0px; /* Thiết kế vuông vức tối giản cao cấp */
+    font-size: 14px;
+    background-color: var(--white-pure);
+    color: var(--black-pure);
+    box-sizing: border-box;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Hiệu ứng khi nhấn chuột vào ô nhập liệu */
+.city-input:focus {
+    outline: none;
+    border: 2px solid var(--navy-dark);
+}
+
+/* Ô nhập liệu trong chế độ tối */
+body.dark-theme .city-input {
+    border: 1px solid var(--white-pure);
+    background-color: var(--black-pure);
+    color: var(--white-pure);
+}
+body.dark-theme .city-input:focus {
+    border: 2px solid var(--white-pure);
+}
+/* =========================================================
+   INDEPENDENT CITY - MAIN.CSS (QUY CHUẨN NÚT BẤM & CARD - PHẦN 2)
+   ========================================================= */
+
+/* QUY CHUẨN NÚT BẤM ĐỘC LẬP TOÀN THÀNH PHỐ */
+.city-btn {
+    padding: 12px 24px;
+    background-color: var(--white-pure);
+    color: var(--black-pure);
+    font-weight: bold;
+    border: 2px solid var(--black-pure);
+    border-radius: 0px; /* Thiết kế vuông vức cổ điển */
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 13px;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Hiệu ứng di chuột chạm vào phóng to 5% và đảo màu nền */
+.city-btn:hover {
+    transform: scale(1.05);
+    background-color: var(--black-pure);
+    color: var(--white-pure);
+}
+
+/* Nút bấm trong chế độ tối */
+body.dark-theme .city-btn {
+    background-color: var(--black-pure);
+    color: var(--white-pure);
+    border: 2px solid var(--white-pure);
+}
+body.dark-theme .city-btn:hover {
+    background-color: var(--white-pure);
+    color: var(--black-pure);
+}
+
+/* QUY CHUẨN KHUNG BAO BỌC (CARD) */
+.city-card {
+    border: 1px solid var(--black-pure);
+    background-color: var(--white-pure);
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 0px;
+}
+body.dark-theme .city-card {
+    border: 1px solid var(--white-pure);
+    background-color: var(--black-pure);
+}
+
+/* NHÃN HUY HIỆU DANH TÍNH (BADGE) */
+.city-badge {
+    display: inline-block;
+    padding: 2px 6px;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    background-color: var(--navy-dark);
+    color: var(--white-pure);
+    border: 1px solid var(--white-pure);
+}
+
+/* ĐỊNH DẠNG KHU VỰC TIÊU ĐỀ */
+.city-title {
+    font-size: 20px;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin-top: 0;
+    margin-bottom: 20px;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--black-pure);
+    padding-bottom: 10px;
+}
+body.dark-theme .city-title {
+    border-bottom: 2px solid var(--white-pure);
+}
+/* KHÓA ĐỢT 2: HOÀN THÀNH FILE MAIN.CSS, ĐỢT 3 SẼ CHUYỂN SANG FILE UTILS.JS */
+

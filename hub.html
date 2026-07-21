@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="vi">
-<head>
+<head
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Independent City - Trung Tâm Xử Lý Mạng Lõi</title>
     
-    <!-- Nhúng thư viện Supabase và file giao diện gốc để đồng bộ màu sắc vuông vức -->
-    <script src="https://cloudflare.com"></script>
-    <link rel="stylesheet" href="main.css">
+    <!-- ĐÃ VÁ TRIỆT ĐỂ CORB: Nhúng thư viện Supabase qua cổng CDN mở cho phép chạy chéo Multi-Web [🗎2] -->
+    <script src="https://jsdelivr.net"></script>
+    <link rel="stylesheet" href="main2.css">
+
     
     <style>
         body {
@@ -390,7 +391,7 @@
             publishNewServiceCloud,
             purchaseServiceCloud,
             showNotificationPopup
-        } from './utils.js';
+        } from './utils2.js';
 
         // Biến lưu giữ mã token hiện tại phục vụ dọn rác khi đăng xuất
         let CURRENT_SESSION_TOKEN = "";

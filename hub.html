@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Independent City - Trung Tâm Xử Lý Mạng Lõi</title>
+    
+    <!-- Nhúng thư viện Supabase và file giao diện gốc để đồng bộ màu sắc vuông vức -->
+    <script src="https://cloudflare.com"></script>
+    <link rel="stylesheet" href="main.css">
+    
+    <style>
+        body {
+            margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #ffffff; color: #000000;
+            display: flex; justify-content: center; align-items: center; height: 100vh;
+        }
+        /* Khung xương hộp chứa tổng thể hợp nhất của siêu ứng dụng mạng lõi */
+        .main-wrapper {
+            width: 1000px; height: 720px; border: 2px solid #000000;
+            display: flex; flex-direction: column; position: relative; background-color: #ffffff;
+        }
+        body.dark-theme .main-wrapper { border-color: #ffffff; background-color: #000000; }
+
+        /* Thanh Navbar tổng điều hướng phối màu Xanh hải quân gần đen - Trắng - Đen của bạn */
+        .city-navbar {
+            display: flex; border-bottom: 2px solid #000000; background-color: #ffffff;
+        }
+        body.dark-theme .city-navbar { border-bottom: 2px solid #ffffff; background-color: #000000; }
+
+        .nav-item {
+            flex: 1; padding: 16px; text-align: center; font-weight: bold; cursor: pointer;
+            text-transform: uppercase; border-right: 1px solid #000000; font-size: 13px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            transition: all 0.2s ease-in-out; color: #000000;
+        }
+        body.dark-theme .nav-item { border-right: 1px solid #ffffff; color: #ffffff; }
+        .nav-item:last-child { border-right: none; }
+        .nav-item:hover, .nav-item.active {
+            background-color: #001F3F; color: #ffffff;
+        }
+
+        /* KHÔNG GIAN RUỘT CÁC TAB Div ẨN HIỆN LINH HOẠT THAY THẾ CHO IFRAME CŨ */
+        .hub-body-tab {
+            flex: 1; padding: 25px; box-sizing: border-box; overflow-y: auto; display: none;
+        }
+        .hub-body-tab.active { display: block; }
+
+        #notification-container {
+            position: absolute; bottom: 20px; right: 20px;
+            display: flex; flex-direction: column; gap: 10px; z-index: 9999;
+        }
+
+        /* Bộ Layout hai cột Trái - Phải nội bộ cho từng phân khu tab con */
+        .inner-two-col { display: flex; gap: 25px; height: 100%; }
+        .inner-main { flex: 2; display: flex; flex-direction: column; gap: 20px; }
+        .inner-sidebar { flex: 1; display: flex; flex-direction: column; gap: 20px; border-left: 1px solid #000000; padding-left: 25px; }
+        body.dark-theme .inner-sidebar { border-left-color: #ffffff; }
+    </style>
+
+    <!-- BỘ NẠP ĐIỀU HƯỚNG CƠ HỌC ĐẶT TRÊN ĐỈNH CHỐNG LỖI LIỆT CHUYỂN PHÂN KHU [🗎1] -->
+    <script>
+        // Thuật toán đổi Tab Động sảnh mạng lõi bằng div ẩn hiện mượt mà bách phát bách trúng [🗎1]
+        window.switchHubTab = function(tabId) {
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            document.querySelectorAll('.hub-body-tab').forEach(tab => tab.classList.remove('active'));
+
+            const activeNav = document.getElementById('navTab-' + tabId.replace('tab-', ''));
+            if (activeNav) activeNav.classList.add('active');
+            
+            const targetTab = document.getElementById(tabId);
+            if (targetTab) {
+                targetTab.classList.add('active');
+                // Nếu cư dân lật về tab chợ thì tự động ra lệnh nạp đồ trên mây
+                if (tabId === 'tab-service' && typeof window.loadMarketDataCloud === 'function') {
+                    window.loadMarketDataCloud();
+                }
+            }
+        };
+
+        // Hàm đổi Tab phụ Mua / Bán nội bộ bên trong phân khu Chợ dịch vụ công khai
+        window.switchMarketView = function(panelId) {
+            document.getElementById('panel-buy').style.display = "none";
+            document.getElementById('panel-sell').style.display = "none";
+            document.getElementById('tabCtrlBuy').classList.remove('active');
+            document.getElementById('tabCtrlSell').classList.remove('active');
+
+            document.getElementById(panelId).style.display = "flex";
+            if (panelId === 'panel-buy') {
+                document.getElementById('tabCtrlBuy').classList.add('active');
+                if (typeof window.loadMarketDataCloud === 'function') window.loadMarketDataCloud();
+            } else {
+                document.getElementById('tabCtrlSell').classList.add('active');
+            }
+        };
+
+        // Hàm bật/tắt form đăng tin khi cư dân bấm vào nút dấu cộng vuông vức
+        window.toggleNewServiceForm = function() {
+            const formBox = document.getElementById("newServiceFormBox");
+            const plusBtn = document.querySelector(".add-plus-btn");
+            if (formBox.style.display === "none") {
+                formBox.style.display = "block";
+                plusBtn.innerText = "-";
+            } else {
+                formBox.style.display = "none";
+                plusBtn.innerText = "+";
+            }
+        };
+    </script>
+</head>
+<body>
+
+    <div class="main-wrapper">
+        <!-- THANH NAVBAR TỔNG ĐIỀU HƯỚNG MẠNG LÕI -->
+        <div class="city-navbar">
+            <div id="navTab-hub" class="nav-item active" onclick="switchHubTab('tab-hub')">🏠 Hub Chủ</div>
+            <div id="navTab-bank" class="nav-item" onclick="switchHubTab('tab-bank')">🏦 Ngân Hàng</div>
+            <div id="navTab-service" class="nav-item" onclick="switchHubTab('tab-service')">🛒 Dịch Vụ</div>
+            <div id="navTab-chat" class="nav-item" onclick="switchHubTab('tab-chat')">✉️ Tin Nhắn</div>
+        </div>
+
+        <!-- Hộp chứa các Toast Popup thông báo giật lên ở góc màn hình từ file hỗ trợ -->
+        <div id="notification-container"></div>
+                <!-- =========================================================
+             TAB 1: RUỘT PHÂN KHU HUB CHỦ (🏠)
+             ========================================================= -->
+        <div id="tab-hub" class="hub-body-tab active">
+            <div class="inner-two-col">
+                <!-- Khu vực bên trái: Bộ lọc tra cứu toàn thành phố -->
+                <div class="inner-main">
+                    <div class="city-title">🏠 Trung Tâm Dịch Vụ Mạng Independent City</div>
+                    <div class="city-card" style="margin-bottom: 0;">
+                        <label style="font-weight: bold; display: block; margin-bottom: 10px; font-size: 14px;">🔎 Tìm kiếm cư dân hoặc sản phẩm trong mạng lưới:</label>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="globalSearchInput" class="city-input" placeholder="Nhập tên cư dân hoặc từ khóa dịch vụ...">
+                            <button class="city-btn" onclick="triggerGlobalSearch()">Tìm Kiếm</button>
+                        </div>
+                    </div>
+                    <!-- Vùng hiển thị kết quả quét mạng lưới -->
+                    <div id="searchResultsArea" style="flex: 1; border: 1px dashed var(--black-pure); padding: 15px; overflow-y: auto; min-height: 200px;">
+                        <p style="color: #718096; font-size: 13px; font-style: italic; text-align: center; margin-top: 60px;">Kết quả tra cứu thông tin mạng lưới sẽ hiển thị tại đây...</p>
+                    </div>
+                </div>
+
+                <!-- Khu vực bên phải: Hồ sơ cá nhân profile và Cài đặt hệ thống -->
+                <div class="inner-sidebar">
+                    <div style="font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--black-pure); padding-bottom: 5px; margin-bottom: 15px;">👤 Hồ Sơ Cư Dân</div>
+                    <div style="width: 80px; height: 80px; border: 2px solid var(--black-pure); display: flex; align-items: center; justify-content: center; font-size: 32px; background-color: var(--gray-light);" id="profileAvatarBox">👤</div>
+                    <div style="margin-bottom: 12px;">
+                        <span style="font-size: 12px; color: #718096; display: block;">Tên cư dân:</span>
+                        <span id="profileUsername" style="font-weight: 800; font-size: 16px;">Đang tải...</span>
+                    </div>
+                    <div style="margin-bottom: 12px;">
+                        <span style="font-size: 12px; color: #718096; display: block;">Hòm thư điện tử:</span>
+                        <span id="profileEmail" style="font-size: 14px; font-weight: bold; word-break: break-all;">Đang tải...</span>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <span style="font-size: 12px; color: #718096; display: block;">Mô tả bản thân:</span>
+                        <span id="profileBio" style="font-size: 13px; font-style: italic; line-height: 1.4;">Đang tải...</span>
+                    </div>
+
+                    <div style="font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--black-pure); padding-bottom: 5px; margin-top: 15px; margin-bottom: 15px;">⚙️ Cài Đặt Hệ Thống</div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; font-size: 13px;">
+                        <span style="font-weight: bold;">Giao diện (Sáng/Tối):</span>
+                        <select id="themeSelect" class="city-input" style="width: 110px; padding: 6px;" onchange="changeSystemTheme()">
+                            <option value="light">☀️ Sáng</option>
+                            <option value="dark">🌙 Tối</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px; font-size: 13px;">
+                        <div>
+                            <span style="font-weight: bold; display: block;">Chế độ ẩn danh:</span>
+                            <span style="font-size: 11px; color: #718096;">Giấu thông tin profile</span>
+                        </div>
+                        <input type="checkbox" id="profileHiddenCheckbox" style="width: 20px; height: 20px; cursor: pointer;" onchange="updatePrivacyModeCloud()">
+                    </div>
+                    <button class="city-btn" style="width: 100%; border-color: #E63946; color: #E63946;" onclick="triggerLogout()">🚪 Đăng xuất khỏi mạng</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================================
+             TAB 2: RUỘT PHÂN KHU NGÂN HÀNG (🏦)
+             ========================================================= -->
+        <div id="tab-bank" class="hub-body-tab">
+            <div style="display: flex; flex-direction: column; gap: 20px; height: 100%;">
+                <div class="city-title">🏦 Ngân Hàng Trung Tâm Independent City</div>
+                
+                <!-- Thẻ khổng lồ hiển thị dòng tiền tệ AD thời gian thực -->
+                <div style="border: 2px solid var(--black-pure); padding: 30px; background-color: var(--gray-light); text-align: center;" id="balanceCardBox">
+                    <span style="font-size: 13px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; color: #718096;">Số dư ví điện tử hiện tại</span>
+                    <div style="font-size: 36px; font-weight: 900; letter-spacing: 1px; margin-top: 10px;">
+                        <span id="liveBalanceAmount">1,000,000</span> <span style="font-size: 20px; font-weight: 700;">AD</span>
+                    </div>
+                </div>
+
+                <div class="inner-two-col" style="height: auto;">
+                    <!-- Cột trái: Biểu mẫu điền thông tin chuyển khoản nội bộ -->
+                    <div class="inner-main" style="border-right: 1px solid var(--black-pure); padding-right: 25px; gap: 0;">
+                        <div style="font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--black-pure); padding-bottom: 5px; margin-bottom: 15px;">💸 Chuyển Khoản Liên Cư Dân</div>
+                        <form id="cityTransferForm" onsubmit="executeTransaction(event)">
+                            <div style="margin-bottom: 15px;">
+                                <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px;">Tên tài khoản người nhận:</label>
+                                <input type="text" id="targetReceiverInput" class="city-input" placeholder="Nhập chính xác Username..." required autocomplete="off">
+                            </div>
+                            <div style="margin-bottom: 20px;">
+                                <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px;">Số tiền muốn chuyển (Đơn vị: AD):</label>
+                                <input type="number" id="transferAmountInput" class="city-input" min="1" placeholder="Nhập số tiền..." required>
+                            </div>
+                            <button type="submit" class="city-btn" style="width: 100%;">Khởi tác chuyển khoản ⚡</button>
+                        </form>
+                    </div>
+                    
+                    <!-- Cột phải: Khung hiển thị biến động dòng tiền tạm thời -->
+                    <div class="inner-sidebar" style="border-left: none; padding-left: 0;">
+                        <div style="font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--black-pure); padding-bottom: 5px; margin-bottom: 15px;">📜 Lịch Sử Giao Dịch Dòng Tiền</div>
+                        <div id="bankHistoryArea" style="flex: 1; overflow-y: auto; max-height: 230px; border: 1px dashed var(--black-pure); padding: 10px; min-height: 180px;">
+                            <p style="color: #718096; font-size: 12px; font-style: italic; text-align: center; margin-top: 70px;">Chưa ghi nhận biến động dòng tiền AD nào...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+                <!-- =========================================================
+             TAB 3: RUỘT PHÂN KHU CHỢ DỊCH VỤ TỰ DOANH (🛒)
+             ========================================================= -->
+        <div id="tab-service" class="hub-body-tab">
+            <div style="display: flex; flex-direction: column; gap: 20px; height: 100%;">
+                <div class="city-title">🛒 Chợ Dịch Vụ Tự Doanh Independent City</div>
+                
+                <!-- Thanh gạt điều khiển phụ lật 2 chế độ Mua / Bán nội bộ bên trong chợ -->
+                <div style="display: flex; border: 1px solid var(--black-pure); margin-bottom: 5px;" id="marketCtrlBar">
+                    <div id="tabCtrlBuy" style="flex: 1; padding: 12px; text-align: center; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 13px;" class="active" onclick="switchMarketView('panel-buy')">🛍️ Khu Vực Mua Hàng</div>
+                    <div id="tabCtrlSell" style="flex: 1; padding: 12px; text-align: center; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 13px; border-left: 1px solid var(--black-pure);" onclick="switchMarketView('panel-sell')">💼 Khu Vực Đăng Bán</div>
+                </div>
+
+                <!-- Phân khu Mua: Nơi trưng bày sảnh tổng và thanh tìm kiếm sản phẩm nhanh -->
+                <div id="panel-buy" style="display: flex; flex-direction: column; gap: 15px;">
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="marketSearchInput" class="city-input" placeholder="Nhập tên sản phẩm cần lọc nhanh trên chợ...">
+                        <button class="city-btn" onclick="filterMarketProducts()">Lọc</button>
+                    </div>
+                    <div id="marketProductsGrid" style="overflow-y: auto; max-height: 380px; display: flex; flex-direction: column; gap: 15px; padding-right: 5px;">
+                        <p style="color: #718096; font-size: 13px; font-style: italic; text-align: center; margin-top: 5px;">Hệ thống đang đồng bộ danh mục dịch vụ từ đám mây...</p>
+                    </div>
+                </div>
+
+                <!-- Phân khu Bán: Nơi cư dân tự quản lý và phát hành món đồ cá nhân -->
+                <div id="panel-sell" style="display: none; flex-direction: column; gap: 15px;">
+                    <div style="font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">➕ Đăng Tải Sản Phẩm / Dịch Vụ Mới</div>
+                    <!-- Nút bấm dấu cộng mở rộng ẩn/hiện biểu mẫu điền thông tin -->
+                    <div style="font-size: 24px; font-weight: bold; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--black-pure); background-color: var(--white-pure); cursor: pointer; transition: all 0.2s;" class="add-plus-btn" onclick="toggleNewServiceForm()">+</div>
+                    
+                    <!-- Biểu mẫu nhập liệu (Mặc định ẩn ngầm, bấm dấu + mới bung ra) -->
+                    <div id="newServiceFormBox" class="city-card" style="display: none; padding: 25px;">
+                        <form id="cityUploadProductForm" onsubmit="publishNewService(event)">
+                            <div style="margin-bottom: 12px;">
+                                <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px;">Tên sản phẩm / dịch vụ:</label>
+                                <input type="text" id="prodTitleInput" class="city-input" placeholder="Ví dụ: Thiết kế Banner, Code game..." required>
+                            </div>
+                            <div style="margin-bottom: 12px;">
+                                <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px;">Mô tả chi tiết sản phẩm:</label>
+                                <textarea id="prodDescInput" class="city-input" style="height: 60px; font-family: inherit; resize: none;" placeholder="Giới thiệu ngắn gọn..." required></textarea>
+                            </div>
+                            <div style="margin-bottom: 12px;">
+                                <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px;">Link ảnh minh họa (URL):</label>
+                                <input type="url" id="prodImageInput" class="city-input" placeholder="Dán link ảnh (Có thể rỗng)...">
+                            </div>
+                            <div style="margin-bottom: 20px;">
+                                <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 13px;">Giá niêm yết (Trần dưới 1000 AD):</label>
+                                <input type="number" id="prodPriceInput" class="city-input" min="1" max="1000" placeholder="Nhập mức giá AD..." required>
+                            </div>
+                            <button type="submit" class="city-btn">Phát hành lên mạng lưới ⚡</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================================
+             TAB 4: RUỘT PHÂN KHU TIN NHẮN TRỰC TUYẾN & BÁO CÁO (✉️)
+             ========================================================= -->
+        <div id="tab-chat" class="hub-body-tab">
+            <div class="inner-two-col" style="height: 100%;">
+                <!-- Cột trái Sidebar: Đường dây nóng Admin xử lý khiếu nại vi phạm -->
+                <div class="inner-sidebar" style="border-left: none; border-right: 1px solid var(--black-pure); padding-left: 0; padding-right: 25px; flex: 1;" id="chatSidebarArea">
+                    <div style="font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--black-pure); padding-bottom: 5px;">🛠️ Điều Khiển Kênh</div>
+                    <div class="city-card" style="margin-top: 15px; padding: 15px; border-style: dashed;">
+                        <span class="city-badge" style="background-color: #E63946; margin-bottom: 10px;">🚨 Đường Dây Nóng Admin</span>
+                        <p style="font-size: 12px; margin-top: 5px; margin-bottom: 12px; line-height: 1.4; color: #718096;">
+                            Phát hiện cư dân vi phạm luồng tiền tệ hoặc đăng sản phẩm sai quy chuẩn? Hãy gửi đơn báo cáo khẩn trực tiếp cho Admin <b>@STDHenry</b>.
+                        </p>
+                        <form id="cityReportForm" onsubmit="sendEmergencyReport(event)">
+                            <div style="margin-bottom: 12px;">
+                                <textarea id="reportContentInput" class="city-input" style="height: 80px; font-family: inherit; resize: none; font-size: 12px;" placeholder="Gõ nội dung vi phạm..." required></textarea>
+                            </div>
+                            <button type="submit" class="city-btn" style="width: 100%; font-size: 11px; padding: 8px; border-color: #E63946; color: #E63946;">⚡ Phát Hỏa Đơn Báo Cáo</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Cột phải: Sảnh chat sầm uất luân phiên thời gian thực -->
+                <div class="inner-main" style="flex: 2;">
+                    <div class="city-title" style="margin-bottom: 5px;">✉️ Phòng Chat Tổng Independent City</div>
+                    <div id="cityLiveChatArea" style="flex: 1; border: 1px solid var(--black-pure); background-color: var(--gray-light); padding: 15px; overflow-y: auto; max-height: 380px; display: flex; flex-direction: column; gap: 12px; min-height: 300px;">
+                        <p style="color: #718096; font-size: 13px; font-style: italic; text-align: center; margin-top: 130px;">Hệ thống đang mở cổng WebSockets kết nối phòng chat tổng...</p>
+                    </div>
+                    <form id="cityChatSubmitForm" style="display: flex; gap: 10px;" onsubmit="sendGeneralMessage(event)">
+                        <input type="text" id="cityChatInput" class="city-input" placeholder="Nhập tin nhắn..." required autocomplete="off">
+                        <button type="submit" class="city-btn">Gửi</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div> <!-- Thẻ đóng kín của main-wrapper tổng -->
+        <!-- =========================================================
+         BỘ ĐIỀU PHỐI JAVASCRIPT THƯỜNG: ĐIỀU HƯỚNG VÀ DỌN RÁC SESSION - PHẦN 5
+         ========================================================= -->
+    <script>
+        // CỔNG TRUNG GIAN TOÀN CỤC: Hứng sự kiện click từ giao diện và chuyển tiếp vào khối Module [🗎1]
+        window.triggerGlobalSearch = function() {
+            if (typeof window.executeGlobalSearchCloud === 'function') {
+                window.executeGatewaySearchCloud();
+            }
+        };
+
+        window.updatePrivacyModeCloud = function() {
+            if (typeof window.executeUpdatePrivacyModeCloud === 'function') {
+                window.executeUpdatePrivacyModeCloud();
+            }
+        };
+
+        window.executeTransaction = function(event) {
+            if (typeof window.executeTransactionCloudBridge === 'function') {
+                window.executeTransactionCloudBridge(event);
+            }
+        };
+
+        window.publishNewService = function(event) {
+            if (typeof window.executePublishNewServiceBridge === 'function') {
+                window.executePublishNewServiceBridge(event);
+            }
+        };
+
+        window.sendGeneralMessage = function(event) {
+            if (typeof window.executeSendGeneralMessageBridge === 'function') {
+                window.executeSendGeneralMessageBridge(event);
+            }
+        };
+
+        window.sendEmergencyReport = function(event) {
+            if (typeof window.executeSendEmergencyReportBridge === 'function') {
+                window.executeSendEmergencyReportBridge(event);
+            }
+        };
+
+        // THUẬT TOÁN ĐỔI MÀU GIAO DIỆN SÁNG / TỐI NỘI BỘ KHO 2
+        window.changeSystemTheme = function() {
+            const selectValue = document.getElementById("themeSelect").value;
+            if (selectValue === "dark") {
+                document.body.classList.add('dark-theme');
+            } else {
+                document.body.classList.remove('dark-theme');
+            }
+        };
+
+        // THUẬT TOÁN ĐĂNG XUẤT (LOGOUT) KIẾN TRÚC VI DỊCH VỤ PHÂN TÁN [🗎1]
+        window.triggerLogout = function() {
+            if (confirm("Independent City: Bạn có chắc chắn muốn đăng xuất và hủy phiên làm việc hiện tại?")) {
+                if (typeof window.executeLogoutAndClearSessionCloud === 'function') {
+                    window.executeLogoutAndClearSessionCloud();
+                } else {
+                    // Phương án dự phòng khẩn cấp nếu trạm mây bị đứt mạch giữa chừng
+                    window.location.href = "index.html"; 
+                }
+            }
+        };
+    </script>
+        <!-- =========================================================
+         BỘ NÃO JAVASCRIPT MODULE: THẨM ĐỊNH DANH TÍNH CLOUD SUPABASE - PHẦN 6
+         ========================================================= -->
+    <script type="module">
+        // Nhập trạm liên thông dữ liệu đám mây và bộ nhớ đệm tập trung từ bộ não utils.js
+        import { 
+            getDB, 
+            CITY_STATE, 
+            validateSessionTokenAndGetIdentity,
+            executeTransactionCloud,
+            publishNewServiceCloud,
+            purchaseServiceCloud,
+            showNotificationPopup
+        } from './utils.js';
+
+        // Biến lưu giữ mã token hiện tại phục vụ dọn rác khi đăng xuất
+        let CURRENT_SESSION_TOKEN = "";
+
+        // TỰ ĐỘNG KÍCH NỔ LUỒNG QUÉT KHI CƯ DÂN TRUY CẬP VÀO SẢNH MẠNG LÕI [🗎1]
+        document.addEventListener("DOMContentLoaded", async () => {
+            // Bước A: Đợi 0.4 giây hoãn giờ ngầm để trình duyệt nạp xong thư viện cdnjs [🗎1]
+            setTimeout(async () => {
+                if (!getDB()) {
+                    alert("⏳ Trạm mạng lõi: Đang kết nối hạ tầng đám mây bảo mật... Vui lòng đợi 1 giây rồi bấm F5 tải lại sảnh nhé!");
+                    return;
+                }
+
+                // Bước B: Kích nổ hàm bốc tách và đối chiếu mã Token ID nhận diện từ thanh URL [🗎1]
+                const authCheck = await validateSessionTokenAndGetIdentity();
+
+                // LÁ CHẮN BẢO VỆ: Nếu chip nhận diện không hợp lệ hoặc bị rỗng ngầm, sập cửa trục xuất ngay [🗎1]
+                if (!authCheck.valid) {
+                    alert(authCheck.message);
+                    window.location.href = "index.html"; // Đá văng trình duyệt quay ngược về Gateway chủ
+                    return;
+                }
+
+                // Bước C: Xác thực thông mạch thành công! Găm mã token vào bộ nhớ máy con
+                CURRENT_SESSION_TOKEN = authCheck.token;
+
+                // Đổ văn bản chào mừng láng mịn ra góc màn hình
+                showNotificationPopup("HỆ THỐNG MẠNG LÕI", `Cư dân @${CITY_STATE.LOGGED_IN_USER} đã liên thông Single Sign-On thành công! 🔓`);
+
+                // Bước D: Gọi trạm nổ súng nạp đồng loạt dữ liệu Ví tiền, Chợ và Chat (Sẽ định nghĩa ở đợt sau)
+                await initializeLiveAppModules();
+
+            }, 4000); // 4000ms hoãn giờ bảo vệ cho Cloudflare cdnjs nạp láng mịn 100%
+        });
+
+        // =========================================================
+        // THUẬT TOÁN ĐĂNG XUẤT XÓA SỔ MÃ CHIP NHẬN DIỆN TRÊN ĐÁM MÂY (LOGOUT COOKIE TỰ CHẾ) [🗎1]
+        // =========================================================
+        window.executeLogoutAndClearSessionCloud = async function() {
+            const db = getDB();
+            if (!db) return;
+
+            try {
+                // Bắn lệnh DELETE hủy diệt mã Token ID này trên bảng city_sessions [🗎1]
+                await db.from('city_sessions').delete().eq('token', CURRENT_SESSION_TOKEN);
+                
+                showNotificationPopup("HỆ THỐNG", "Đang dọn dẹp phiên làm việc ngầm...");
+                
+                // Trục xuất cư dân quay về trang đăng nhập Gateway chủ [🗎1]
+                setTimeout(() => {
+                    window.location.href = "index.html";
+                }, 1000);
+
+            } catch (err) {
+                window.location.href = "index.html";
+            }
+        };
+                // =========================================================
+        // GIAI ĐOẠN 2 - ĐỢT 7: BỘ KHỞI ĐỘNG HẠ TẦNG VÀ ĐỒNG BỘ DÒNG TIỀN AD REALTIME
+        // =========================================================
+        async function initializeLiveAppModules() {
+            const db = getDB();
+            if (!db) return;
+
+            // Hành động A: Đổ tên hiển thị cư dân lên các nhãn văn bản ở trang Hub Chủ [🗎1]
+            document.getElementById("profileUsername").innerText = CITY_STATE.LOGGED_IN_USER;
+            document.getElementById("profileEmail").innerText = CITY_STATE.USER_EMAIL;
+            document.getElementById("profileBio").innerText = "Chào mừng cư dân số hóa đến với Independent City!";
+
+            // Hành động B: Tra cứu số dư ví AD gốc từ bảng city_bank đổ về màn hình Ngân hàng [🗎1]
+            const { data: bankData } = await db.from('city_bank').select('balance').eq('username', CITY_STATE.LOGGED_IN_USER).single();
+            if (bankData) {
+                CITY_STATE.CURRENT_BALANCE = bankData.balance;
+                document.getElementById("liveBalanceAmount").innerText = CITY_STATE.CURRENT_BALANCE.toLocaleString("vi-VN");
+            }
+
+            // Hành động C: Kích nổ luồng tải danh mục Chợ tự doanh và Phòng Chat (Sẽ định nghĩa ở đợt sau)
+            await window.loadMarketDataCloud();
+            await window.fetchChatMessagesCloud();
+
+            // =========================================================
+            // KÍCH HOẠT LẮNG NGHE BIẾN ĐỘNG VÍ TIỀN REALTIME QUA ĐƯỜNG TRUYỀN WEBSOCKETS [🗎1]
+            // =========================================================
+            db.channel('bank_realtime_ref')
+                .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'city_bank', filter: `username=eq.${CITY_STATE.LOGGED_IN_USER}` }, payload => {
+                    const oldBal = CITY_STATE.CURRENT_BALANCE;
+                    CITY_STATE.CURRENT_BALANCE = payload.new.balance;
+                    
+                    // Cập nhật con số hiển thị mượt mà ra giao diện Ngân hàng
+                    document.getElementById("liveBalanceAmount").innerText = CITY_STATE.CURRENT_BALANCE.toLocaleString("vi-VN");
+                    
+                    // Bắn Popup giật xịn mịn nổ từ góc màn hình bay lên thông qua bộ não utils.js [🗎1]
+                    if (CITY_STATE.CURRENT_BALANCE > oldBal) {
+                        showNotificationPopup("NGÂN HÀNG", `Ví AD: Được cộng +${(CITY_STATE.CURRENT_BALANCE - oldBal).toLocaleString()} AD thời gian thực! 💰`);
+                    } else if (CITY_STATE.CURRENT_BALANCE < oldBal) {
+                        showNotificationPopup("NGÂN HÀNG", `Ví AD: Đã trừ -${(oldBal - CITY_STATE.CURRENT_BALANCE).toLocaleString()} AD giao dịch thành công! 💸`);
+                    }
+                })
+                .subscribe();
+        }
+
+        // =========================================================
+        // CẦU NỐI TRUNG GIAN THỰC THI TRANSCTION CHUYỂN KHOẢN AN TOÀN
+        // =========================================================
+        window.executeTransactionCloudBridge = async function(event) {
+            event.preventDefault(); // Chặn hành vi tải lại trang mặc định của biểu mẫu Form
+            
+            const receiverInput = document.getElementById("targetReceiverInput").value.trim();
+            const amountInput = parseInt(document.getElementById("transferAmountInput").value);
+
+            // Bắn lệnh liên thông yêu cầu bộ não utils.js thực thi dòng tiền trên đám mây [🗎1]
+            const res = await executeTransactionCloud(receiverInput, amountInput);
+            
+            if (res.success) {
+                // Cập nhật con số hiển thị và vẽ lịch sử giao dịch ra cột phải Ngân hàng
+                document.getElementById("liveBalanceAmount").innerText = res.newBalance.toLocaleString("vi-VN");
+                window.logTransactionToUI('SEND', receiverInput, amountInput);
+                
+                // Làm sạch form nhập liệu sảnh chuyển tiền
+                document.getElementById("targetReceiverInput").value = "";
+                document.getElementById("transferAmountInput").value = "";
+                
+                showNotificationPopup("GIAO DỊCH", `Đã chuyển khoản thành công ${amountInput.toLocaleString()} AD tới cư dân @${receiverInput}! 💸`);
+            } else {
+                alert(res.message); // Xuất lệnh chặn cảnh báo nếu rách lá chắn (ví âm, tự chuyển, nick rác)
+            }
+        };
+
+        // Tiện ích phụ hỗ trợ render hàng lịch sử giao dịch cơ học lên giao diện
+        window.logTransactionToUI = function(type, target, amount) {
+            const area = document.getElementById("bankHistoryArea");
+            if (area.innerHTML.includes("Chưa ghi nhận biến động")) area.innerHTML = "";
+
+            const row = document.createElement("div");
+            row.className = "city-card";
+            row.style.cssText = "padding:10px; margin-bottom:8px; font-size:12px; border-style:dashed;";
+            
+            const time = new Date().toLocaleTimeString("vi-VN", { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            if (type === 'SEND') {
+                row.innerHTML = `⏱️ <b>[${time}]</b> Gửi tới <span style="font-weight:bold;">@${target}</span> <br> <span style="color:#e63946; font-weight:bold;">-${amount.toLocaleString()} AD</span>`;
+            } else {
+                row.innerHTML = `⏱️ <b>[${time}]</b> Nhận từ <span style="font-weight:bold;">@${target}</span> <br> <span style="color:#2ed573; font-weight:bold;">+${amount.toLocaleString()} AD</span>`;
+            }
+            area.insertBefore(row, area.firstChild);
+        };
+                // =========================================================
+        // GIAI ĐOẠN 2 - ĐỢT 8A: BỘ NÃO VẬN HÀNH CHỢ TỰ DOANH ĐÁM MÂY (VÁ CHUẨN BIẾN DB)
+        // =========================================================
+
+        // --- HÀM TẢI VÀ ĐỒNG BỘ DANH SÁCH CHỢ DỊCH VỤ TỪ CLOUD ---
+        window.loadMarketDataCloud = async function() {
+            const db = getDB();
+            const grid = document.getElementById("marketProductsGrid");
+            if (!db || !grid) return;
+            
+            try {
+                // Kéo danh sách sản phẩm đăng bán xếp theo thời gian mới nhất lên đầu sảnh chợ
+                const { data: services, error } = await db.from('city_services').select('*').order('created_at', { ascending: false });
+                if (error) throw error;
+                CITY_STATE.GLOBAL_PRODUCTS_LIST = services || [];
+                window.renderProductsToUI(CITY_STATE.GLOBAL_PRODUCTS_LIST);
+            } catch (err) {
+                grid.innerHTML = `<p style="color:#e63946; text-align:center; font-size:13px; margin-top:5px;">Lỗi: Không thể kết nối dữ liệu Chợ tự doanh!</p>`;
+            }
+        };
+
+        // --- CẦU NỐI ĐĂNG TẢI SẢN PHẨM MỚI LÊN CHỢ KHÓA TRẦN DƯỚI 1000 AD ---
+        window.executePublishNewServiceBridge = async function(event) {
+            event.preventDefault(); // Chặn hành vi tải lại trang mặc định của biểu mẫu
+            const title = document.getElementById("prodTitleInput").value.trim();
+            const description = document.getElementById("prodDescInput").value.trim();
+            const imageUrl = document.getElementById("prodImageInput").value.trim();
+            const price = parseInt(document.getElementById("prodPriceInput").value);
+
+            // Bắn lệnh liên thông gọi bộ não utils.js đẩy dịch vụ khóa giá trần lên database [🗎1]
+            const res = await publishNewServiceCloud(title, description, imageUrl, price);
+            if (res.success) {
+                showNotificationPopup("CHỢ TỰ DOANH", `Sản phẩm [${title}] của bạn đã được phát hành thành công với giá ${price} AD! 🛒`);
+                document.getElementById("cityUploadProductForm").reset(); // Làm sạch ô nhập liệu
+                window.toggleNewServiceForm(); // Tự động thu nhỏ form dấu + lại cho ngăn nắp
+                await window.loadMarketDataCloud(); // Nạp lại danh sách sảnh chợ
+            } else {
+                alert(res.message);
+            }
+        };
+
+        // --- THUẬT TOÁN RENDERING ĐỒ HỌA CHỢ VÀ HỘP ĐÁNH GIÁ 100 SAO JSONB ---
+        window.renderProductsToUI = function(products) {
+            const grid = document.getElementById("marketProductsGrid");
+            if (!grid) return;
+            grid.innerHTML = ""; // Dọn sạch sảnh gõ chữ đang tải ngầm
+
+            if (products.length === 0) {
+                grid.innerHTML = `<p style="color:#718096; text-align:center; font-size:13px; margin-top:5px;">Không tìm thấy dịch vụ nào đang đăng bán...</p>`;
+                return;
+            }
+
+            products.forEach(p => {
+                const isMyOwn = (p.seller === CITY_STATE.LOGGED_IN_USER);
+                const revArray = p.reviews || [];
+                
+                // Tính toán điểm số đánh giá trung bình và số lượng (Giới hạn tối đa 100 lượt)
+                let avgStars = 0;
+                if (revArray.length > 0) {
+                    const totalStars = revArray.reduce((acc, cur) => acc + parseInt(cur.stars || 5), 0);
+                    avgStars = (totalStars / revArray.length).toFixed(1);
+                }
+
+                // Thiết lập phom hiển thị danh sách đánh giá sao con (Bốc 5 bình luận mới nhất)
+                let reviewsListHtml = "";
+                revArray.slice(-5).forEach(r => {
+                    reviewsListHtml += `
+                        <div style="font-size:11px; border-top:1px dashed #cbd5e0; padding-top:4px; margin-top:4px; color:#000000;">
+                            ⭐ <b>${r.stars}/5 Sao</b> bởi <i>@${r.reviewer}</i>: "${r.comment}"
+                        </div>
+                    `;
+                });
+
+                const card = document.createElement("div");
+                card.className = "city-card";
+                card.style.cssText = "display: flex; gap: 15px; padding: 15px; position:relative; align-items: flex-start; text-align: left; margin-bottom: 10px;";
+
+                card.innerHTML = `
+                    <img src="${p.image_url}" style="width: 80px; height: 80px; object-fit: cover; border: 1px solid var(--black-pure);" class="prod-img" alt="Product">
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="font-weight: 800; font-size: 15px; text-transform: uppercase;">${p.title}</div>
+                        <div style="font-size: 12px; color: #718096; margin-top: 3px; margin-bottom: 5px;">Người bán: <b>@${p.seller}</b> | Đánh giá: <b>${revArray.length > 0 ? avgStars + ' ⭐' : 'Chưa có'}</b> (${revArray.length}/100)</div>
+                        <div style="font-size: 13px; line-height: 1.4; word-break: break-word;">${p.description}</div>
+                        
+                        <div style="margin-top:10px; background-color: var(--gray-light); padding: 5px 10px;" class="reviews-container-box">
+                            <span style="font-size:11px; font-weight:bold; color:var(--navy-dark);" class="rev-lbl">💬 Nhận xét của cư dân:</span>
+                            ${revArray.length === 0 ? '<div style="font-size:11px; color:#a0aec0; font-style: italic;">Chưa có đánh giá nào.</div>' : reviewsListHtml}
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 8px; align-items: flex-end; width: 120px;">
+                        <div style="font-size: 18px; font-weight: 900; color: var(--navy-dark);" class="price-lbl">${p.price} AD</div>
+                        ${isMyOwn ? 
+                            `<span class="city-badge" style="background-color:#718096;">Đồ của bạn</span>` : 
+                            `<button class="city-btn" style="padding: 6px 12px; font-size:11px;" onclick="purchaseServiceCloudBridge(${p.id}, '${p.seller}', ${p.price})">MUA NGAY 🛒</button>`
+                        }
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+
+            // Đồng bộ màu sắc đường viền/khung nền nếu sảnh đang được cư dân gạt Dark Mode
+            if (document.body.classList.contains('dark-theme')) {
+                document.querySelectorAll('.reviews-container-box').forEach(b => b.style.backgroundColor = '#1a1a1a');
+                document.querySelectorAll('.price-lbl').forEach(l => l.style.color = 'var(--white-pure)');
+                document.querySelectorAll('.rev-lbl').forEach(l => l.style.color = 'var(--white-pure)');
+                document.querySelectorAll('.prod-img').forEach(i => i.style.borderColor = 'var(--white-pure)');
+            }
+        };
+
+        // Thuật toán gạt nút lọc nhanh sản phẩm nội bộ sảnh chợ con không cần gọi lại mây
+        window.filterMarketProducts = function() {
+            const keyword = document.getElementById("marketSearchInput").value.trim().toLowerCase();
+            if (keyword === "") {
+                window.renderProductsToUI(CITY_STATE.GLOBAL_PRODUCTS_LIST);
+                return;
+            }
+            const filtered = CITY_STATE.GLOBAL_PRODUCTS_LIST.filter(p => p.title.toLowerCase().includes(keyword));
+            window.renderProductsToUI(filtered);
+        };
+
+        // --- CẦU NỐI MUA SẢN PHẨM LIÊN THÔNG VÍ TRỪ TIỀN ĐÁM MÂY VÀ XIN REVIEW ---
+        window.purchaseServiceCloudBridge = async function(prodId, sellerName, priceAmount) {
+            const confirmBuy = confirm(`Bạn có chắc chắn muốn bỏ ra ${priceAmount} AD để mua dịch vụ này không? Hệ thống ngân hàng sẽ tự động khấu trừ ví tiền của bạn.`);
+            if (!confirmBuy) return;
+
+            const comment = prompt("✍️ MỜI BẠN ĐÁNH GIÁ SẢN PHẨM:\nHãy để lại một dòng nhận xét ngắn về chất lượng dịch vụ:");
+            let stars = prompt("Chọn số sao đánh giá (Nhập từ số 1 đến 5):", "5");
+            stars = parseInt(stars) || 5;
+
+            // Gọi bộ não utils.js trừ tiền liên thông ví và nhồi mảng 100 review sao JSONB [🗎1]
+            const res = await purchaseServiceCloud(prodId, sellerName, priceAmount, comment || "Cư dân không để lại nhận xét.", stars);
+            if (res.success) {
+                showNotificationPopup("CHỢ TỰ DOANH", `Giao dịch thành công! Đã chuyển thanh toán ${priceAmount} AD tới cư dân @${sellerName}. 💸`);
+                await window.loadMarketDataCloud(); // Đồng bộ lại khu chợ ngay lập tức
+            } else {
+                alert(res.message); // Chặn cảnh báo nếu rách lá chắn (ví người mua thiếu tiền)
+            }
+        };
+                // =========================================================
+        // GIAI ĐOẠN 2 - ĐỢT 8B: HẠ TẦNG PHÒNG CHAT SẢNH TỔNG VÀ ĐƯỜNG DÂY NÓNG ADMIN (WEBSOCKETS)
+        // =========================================================
+        window.fetchChatMessagesCloud = async function() {
+            const db = getDB();
+            const area = document.getElementById("cityLiveChatArea");
+            if (!db || !area) return;
+            try {
+                // Chỉ kéo các tin nhắn sảnh tổng (is_report = false), xếp theo thời gian gửi tăng dần
+                const { data: messages } = await db.from('city_chats').select('*').eq('is_report', false).order('created_at', { ascending: true }).limit(100);
+                if (messages) {
+                    area.innerHTML = ""; // Dọn sạch dòng chữ "Hệ thống đang mở cổng..."
+                    messages.forEach(msg => appendMessageToChatUI(msg));
+                    boxChatScrollToBottom();
+                }
+            } catch (err) { console.error(err); }
+        };
+
+        // Thuật toán vẽ bong bóng tin nhắn trái/phải vuông vức tối giản
+        function appendMessageToChatUI(msgObj) {
+            const area = document.getElementById("cityLiveChatArea");
+            if (!area || document.getElementById(`msg-id-ref-${msgObj.id}`)) return; // Chống vẽ lặp tin nhắn
+
+            const isMe = (msgObj.sender === CITY_STATE.LOGGED_IN_USER);
+            const wrapper = document.createElement("div");
+            wrapper.className = `msg-row ${isMe ? 'msg-me' : 'msg-other'}`;
+            wrapper.id = `msg-id-ref-${msgObj.id}`;
+            wrapper.style.marginBottom = "5px";
+
+            // Hiện nhãn tên cư dân nếu là người khác nhắn
+            if (!isMe) {
+                const nameLbl = document.createElement("div");
+                nameLbl.style.cssText = "font-size:11px; font-weight:bold; color:#4a5568; margin-bottom:2px; padding-left:5px;";
+                nameLbl.innerText = `@${msgObj.sender}`;
+                // Tạo huy hiệu đỏ rực rỡ đặc trưng nếu chính Admin STDHenry nhắn tin vào sảnh tổng
+                if (msgObj.sender === 'STDHenry') {
+                    nameLbl.innerHTML += ` <span class="city-badge" style="background-color:#E63946; font-size:9px; padding:0px 4px; color:#ffffff; font-weight:bold;">ADMIN</span>`;
+                }
+                wrapper.appendChild(nameLbl);
+            }
+
+            const bubble = document.createElement("div");
+            bubble.className = `msg-bubble ${isMe ? 'bubble-me' : 'bubble-other'}`;
+            bubble.innerText = msgObj.message;
+
+            const meta = document.createElement("div");
+            meta.style.cssText = "font-size:10px; color:#a0aec0; margin-top:2px;";
+            if (isMe) meta.style.textAlign = "right";
+            meta.innerText = new Date(msgObj.created_at).toLocaleTimeString("vi-VN", { hour: '2-digit', minute: '2-digit' });
+
+            wrapper.appendChild(bubble);
+            wrapper.appendChild(meta);
+            area.appendChild(wrapper);
+        }
+
+        // Đẩy tin nhắn gõ từ form sảnh chủ lên sảnh tổng đám mây
+        window.executeSendGeneralMessageBridge = async function(event) {
+            event.preventDefault();
+            const db = getDB();
+            const input = document.getElementById("cityChatInput");
+            const txt = input.value.trim();
+            if (!db || txt === "") return;
+            input.value = ""; // Dọn sạch thanh gõ lập tức cho mượt giao diện
+            await db.from('city_chats').insert([{ sender: CITY_STATE.LOGGED_IN_USER, message: txt, is_report: false }]);
+        };
+
+        // Gửi đơn khiếu nại vi phạm phát hỏa gửi đích danh lên Admin @STDHenry [🗎1]
+        window.executeSendEmergencyReportBridge = async function(event) {
+            event.preventDefault();
+            const db = getDB();
+            const area = document.getElementById("reportContentInput");
+            const txt = area.value.trim();
+            if (!db || txt === "") return;
+            area.value = ""; // Dọn sạch ô nhập báo cáo
+
+            const { error } = await db.from('city_chats').insert([{ sender: CITY_STATE.LOGGED_IN_USER, receiver: 'STDHenry', message: txt, is_report: true }]);
+            if (!error) {
+                alert("🚨 Đơn báo cáo vi phạm đã được mã hóa gửi thẳng trực tiếp lên bàn làm việc của Admin @STDHenry!");
+            }
+        };
+
+        // Tự động cuộn hộp thoại chat xuống tận cùng đáy
+        function boxChatScrollToBottom() {
+            const box = document.getElementById("cityLiveChatArea");
+            if (box) box.scrollTop = box.scrollHeight;
+        }
+    </script>
+</body>
+</html>

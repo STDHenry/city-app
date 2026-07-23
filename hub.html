@@ -42,10 +42,7 @@
             box-shadow: 8px 8px 0px var(--white-pure); 
         }
     </style>
-            /* =========================================================
-           ĐỢT 2: KHỐI CSS NÂNG CAO CHO NAVBAR, GRID CARDS VÀ CÁC BIỂU MẪU
-           ========================================================= */
-        /* Thanh Navbar tổng điều hướng phối màu vuông vức, sắc nét */
+    <style>
         .city-navbar {
             display: flex; border-bottom: var(--border-heavy); background-color: var(--white-pure);
         }
@@ -65,14 +62,11 @@
         body.dark-theme .nav-item:hover, body.dark-theme .nav-item.active {
             background-color: var(--white-pure); color: var(--black-pure);
         }
-
-        /* KHÔNG GIAN RUỘT CÁC PHAN KHU ẨN HIỆN LINH HOẠT */
         .hub-body-tab {
             flex: 1; padding: 30px; box-sizing: border-box; display: none;
         }
         .hub-body-tab.active { display: block; }
 
-        /* ĐỒ HỌA THẺ LƯỚI (GRID CARDS) THEO ĐÚNG ẢNH MẪU BẠN GỬI ✍️ */
         .services-title-section {
             text-align: center; margin-bottom: 35px; margin-top: 10px;
         }
@@ -90,7 +84,7 @@
         .services-grid-container {
             display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; margin-bottom: 35px;
         }
-        /* Phom thẻ Grid vuông vức, viền đen dày, nền kem cam nhạt sang trọng */
+
         .service-grid-card {
             border: 2px solid var(--black-pure); background-color: var(--kem-orange); 
             padding: 20px 10px; text-align: center; cursor: pointer; box-sizing: border-box;
@@ -109,7 +103,6 @@
         .service-grid-card:hover .card-text-lbl { color: var(--white-pure) !important; }
         body.dark-theme .service-grid-card:hover .card-text-lbl { color: var(--black-pure) !important; }
 
-        /* TIỆN ÍCH BIỂU MẪU VÀ THẺ THÀNH PHỐ THÔ ĐẬM */
         .city-title {
             font-size: 20px; font-weight: 900; text-transform: uppercase;
             color: var(--navy-deep); border-bottom: var(--border-heavy);
@@ -140,7 +133,7 @@
             padding: 4px 8px; font-size: 11px; font-weight: 900; border: 1px solid var(--black-pure); color: var(--white-pure); text-transform: uppercase;
         }
 
-        /* LAYOUT HAI CỘT NỘI BỘ VÀ BONG BÓNG PHÒNG CHAT */
+
         .inner-two-col { display: flex; gap: 25px; height: 100%; }
         .inner-main { flex: 2; display: flex; flex-direction: column; gap: 20px; }
         .inner-sidebar { flex: 1; display: flex; flex-direction: column; gap: 20px; border-left: 2px solid var(--black-pure); padding-left: 25px; }
@@ -159,8 +152,7 @@
         body.dark-theme .bubble-me { background-color: #3d2b1f; color: var(--white-pure); }
         body.dark-theme .bubble-other { background-color: #2d2d2d; color: var(--white-pure); }
         #notification-container { position: absolute; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 9999; }
-        /* KHÓA LỚP ÁO ĐỒ HỌA CSS HOÀN CHỈNH TẠI ĐÂY */
-    </style>
+</style>
 
     <!-- =========================================================
          BỘ NẠP ĐẦU VÀO TOÀN CỤC: ĐẶT TRÊN ĐỈNH ĐỂ CHỐNG LỖI IS NOT A FUNCTION [🗎1]

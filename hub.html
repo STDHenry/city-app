@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Independent City - Trung Tâm Xử Lý Mạng Lõi Các Cấp</title>
+    <title>Independent City - Mạng Lõi Hợp Nhất Cao Cấp</title>
+    
+    <!-- ĐÃ ĐỒNG BỘ: Nhúng duy nhất đường link thư viện thần thánh từ dự án mini chat, chấp mọi loại CORB và TIMED_OUT -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     
     <style>
-        /* HỆ THỐNG BIẾN MÔI TRƯỜNG PHỐI MÀU ĐẬM ĐÀ, SẮC NÉT THEO GU TỐI GIẢN CAO CẤP */
+        /* HỆ THỐNG BIẾN PHỐI MÀU VUÔNG VỨC, ĐẬM ĐÀ SẮC NÉT THEO GU TỐI GIẢN CAO CẤP */
         :root {
             --navy-deep: #001F3F;
             --navy-light: #003366;
@@ -25,138 +27,303 @@
             display: flex; justify-content: center; align-items: flex-start; min-height: 100vh;
         }
 
-        /* KHUNG XƯƠNG CẢI TIẾN NỚI RỘNG 100% FULL MÀN HÌNH RỘNG RÃI CHUẨN WEB */
+        /* KHUNG XƯƠNG MỚI: Nới rộng tối đa 1300px Full màn hình, rộng rãi chuẩn web, không bó hẹp */
         .main-wrapper {
-            width: 100%; max-width: 1300px; min-height: 800px; margin: 25px;
+            width: 100%; max-width: 1300px; min-height: 850px; margin: 25px;
             border: var(--border-heavy); box-shadow: var(--shadow-flat);
             display: flex; flex-direction: column; position: relative; 
             background-color: var(--white-pure); box-sizing: border-box;
         }
 
-        /* LỚP NỀN TRƯỢT DARK THỀME TOÀN DIỆN CHỐNG NHẠT GIAO DIỆN */
+        /* HẠ TẦNG PHÒNG THỦ CHẾ ĐỘ BÓNG TỐI (DARK THEME) TOÀN DIỆN CHỐNG NHẠT GIAO DIỆN */
         body.dark-theme { background-color: #121212; color: var(--white-pure); }
         body.dark-theme .main-wrapper { 
             border-color: var(--white-pure); background-color: #1a1a1a; 
             box-shadow: 8px 8px 0px var(--white-pure); 
         }
     </style>
+    </script>
     <style>
         .city-navbar {
-            display: flex; border-bottom: var(--border-heavy); background-color: var(--white-pure);
-        }
-        body.dark-theme .city-navbar { border-bottom-color: var(--white-pure); background-color: #1a1a1a; }
-
-        .nav-item {
-            flex: 1; padding: 18px; text-align: center; font-weight: 900; cursor: pointer;
-            text-transform: uppercase; border-right: 2px solid var(--black-pure); font-size: 14px;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            transition: all 0.15s ease-in-out; color: var(--black-pure); letter-spacing: 0.5px;
-        }
-        body.dark-theme .nav-item { border-right-color: var(--white-pure); color: var(--white-pure); }
-        .nav-item:last-child { border-right: none; }
-        .nav-item:hover, .nav-item.active {
-            background-color: var(--navy-deep); color: var(--white-pure);
-        }
-        body.dark-theme .nav-item:hover, body.dark-theme .nav-item.active {
-            background-color: var(--white-pure); color: var(--black-pure);
-        }
-        .hub-body-tab {
-            flex: 1; padding: 30px; box-sizing: border-box; display: none;
-        }
-        .hub-body-tab.active { display: block; }
-
-        .services-title-section {
-            text-align: center; margin-bottom: 35px; margin-top: 10px;
-        }
-        .services-main-title {
-            font-size: 22px; font-weight: 900; text-transform: uppercase; 
-            letter-spacing: 1px; color: var(--navy-deep); display: inline-block;
-            position: relative; padding-bottom: 10px;
-        }
-        body.dark-theme .services-main-title { color: var(--white-pure); }
-        .services-main-title::after {
-            content: ''; position: absolute; bottom: 0; left: 25%; width: 50%;
-            height: 3px; background-color: #E63946; /* Đường gạch đỏ cam chuẩn như ảnh mẫu */
-        }
-
-        .services-grid-container {
-            display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; margin-bottom: 35px;
-        }
-
-        .service-grid-card {
-            border: 2px solid var(--black-pure); background-color: var(--kem-orange); 
-            padding: 20px 10px; text-align: center; cursor: pointer; box-sizing: border-box;
-            transition: all 0.2s ease; display: flex; flex-direction: column; 
-            align-items: center; justify-content: center; min-height: 140px;
-        }
-        body.dark-theme .service-grid-card { border-color: var(--white-pure); background-color: #2d2d2d; color: var(--white-pure); }
-        .service-grid-card:hover {
-            transform: translateY(-4px); box-shadow: 4px 4px 0px var(--black-pure);
-            background-color: var(--navy-deep); color: var(--white-pure);
-        }
-        body.dark-theme .service-grid-card:hover { background-color: var(--white-pure); color: var(--black-pure); box-shadow: 4px 4px 0px var(--white-pure); }
-        .card-icon-box { font-size: 36px; margin-bottom: 12px; }
-        .card-text-lbl { font-size: 13px; font-weight: 800; color: #4A5568; line-height: 1.4; }
-        body.dark-theme .card-text-lbl { color: #cbd5e0; }
-        .service-grid-card:hover .card-text-lbl { color: var(--white-pure) !important; }
-        body.dark-theme .service-grid-card:hover .card-text-lbl { color: var(--black-pure) !important; }
-
-        .city-title {
-            font-size: 20px; font-weight: 900; text-transform: uppercase;
-            color: var(--navy-deep); border-bottom: var(--border-heavy);
-            padding-bottom: 8px; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;
-        }
-        body.dark-theme .city-title { color: var(--white-pure); border-bottom-color: var(--white-pure); }
-        .city-card {
-            border: 2px solid var(--black-pure); padding: 20px; margin-bottom: 20px;
+            display: flex; 
+            border-bottom: var(--border-heavy); 
             background-color: var(--white-pure);
         }
-        body.dark-theme .city-card { border-color: var(--white-pure); background-color: #242424; }
+        body.dark-theme .city-navbar { 
+            border-bottom-color: var(--white-pure); 
+            background-color: #1a1a1a; 
+        }
+
+        /* Từng nút bấm lớn trên thanh Navbar */
+        .nav-item {
+            flex: 1; 
+            padding: 18px; 
+            text-align: center; 
+            font-weight: 900; 
+            cursor: pointer;
+            text-transform: uppercase; 
+            border-right: 2px solid var(--black-pure); 
+            font-size: 14px;
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 10px;
+            transition: all 0.15s ease-in-out; 
+            color: var(--black-pure); 
+            letter-spacing: 0.5px;
+        }
+        body.dark-theme .nav-item { 
+            border-right-color: var(--white-pure); 
+            color: var(--white-pure); 
+        }
+        .nav-item:last-child { 
+            border-right: none; 
+        }
+        .nav-item:hover, .nav-item.active {
+            background-color: var(--navy-deep); 
+            color: var(--white-pure);
+        }
+        body.dark-theme .nav-item:hover, body.dark-theme .nav-item.active {
+            background-color: var(--white-pure); 
+            color: var(--black-pure);
+        }
+
+        /* Khung ruột ẩn hiện cơ học thay thế hoàn toàn cho iframe cũ */
+        .hub-body-tab {
+            flex: 1; 
+            padding: 30px; 
+            box-sizing: border-box; 
+            display: none;
+        }
+        .hub-body-tab.active { 
+            display: block; 
+        }
+        /* =========================================================
+           ĐỢT 4: KHỐI CSS QUY ĐỊNH DIỆN MẠO BIỂU MẪU, CARD VÀ NÚT BẤM THÔ ĐẬM
+           ========================================================= */
+        /* Tiêu đề phân khu viền đen thô dày dặn, đậm đà sắc nét */
+        .city-title {
+            font-size: 20px; 
+            font-weight: 900; 
+            text-transform: uppercase;
+            color: var(--navy-deep); 
+            border-bottom: var(--border-heavy);
+            padding-bottom: 8px; 
+            margin-bottom: 20px; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px;
+        }
+        body.dark-theme .city-title { 
+            color: var(--white-pure); 
+            border-bottom-color: var(--white-pure); 
+        }
+
+        /* Hộp thẻ Card vuông vức viền đen bao quanh */
+        .city-card {
+            border: 2px solid var(--black-pure); 
+            padding: 20px; 
+            margin-bottom: 20px;
+            background-color: var(--white-pure);
+        }
+        body.dark-theme .city-card { 
+            border-color: var(--white-pure); 
+            background-color: #242424; 
+        }
+
+        /* Thanh ô nhập liệu chữ thô đậm bọc viền dày sắc nét */
         .city-input {
-            width: 100%; padding: 12px; border: 2px solid var(--black-pure);
-            box-sizing: border-box; font-size: 14px; font-weight: bold; background-color: var(--white-pure);
+            width: 100%; 
+            padding: 12px; 
+            border: 2px solid var(--black-pure);
+            box-sizing: border-box; 
+            font-size: 14px; 
+            font-weight: bold; 
+            background-color: var(--white-pure);
         }
-        body.dark-theme .city-input { border-color: var(--white-pure); background-color: #2d2d2d; color: var(--white-pure); }
-        .city-input:focus { outline: none; background-color: #F0F7FF; }
-        body.dark-theme .city-input:focus { background-color: #1a2634; }
+        body.dark-theme .city-input { 
+            border-color: var(--white-pure); 
+            background-color: #2d2d2d; 
+            color: var(--white-pure); 
+        }
+        .city-input:focus { 
+            outline: none; 
+            background-color: #F0F7FF; 
+        }
+        body.dark-theme .city-input:focus { 
+            background-color: #1a2634; 
+        }
+
+        /* Nút bấm thô đậm đổ bóng khối phẳng (Flat Button Design) đặc trưng */
         .city-btn {
-            padding: 12px 24px; border: 2px solid var(--black-pure); background-color: var(--white-pure);
-            color: var(--black-pure); font-weight: 900; font-size: 13px; text-transform: uppercase;
-            cursor: pointer; transition: all 0.1s ease; box-shadow: 3px 3px 0px var(--black-pure);
+            padding: 12px 24px; 
+            border: 2px solid var(--black-pure); 
+            background-color: var(--white-pure);
+            color: var(--black-pure); 
+            font-weight: 900; 
+            font-size: 13px; 
+            text-transform: uppercase;
+            cursor: pointer; 
+            transition: all 0.1s ease; 
+            box-shadow: 3px 3px 0px var(--black-pure);
         }
-        body.dark-theme .city-btn { border-color: var(--white-pure); background-color: #2d2d2d; color: var(--white-pure); box-shadow: 3px 3px 0px var(--white-pure); }
-        .city-btn:hover { background-color: var(--black-pure); color: var(--white-pure); transform: translate(1px, 1px); box-shadow: 2px 2px 0px var(--black-pure); }
-        body.dark-theme .city-btn:hover { background-color: var(--white-pure); color: var(--black-pure); box-shadow: 2px 2px 0px var(--white-pure); }
+        body.dark-theme .city-btn { 
+            border-color: var(--white-pure); 
+            background-color: #2d2d2d; 
+            color: var(--white-pure); 
+            box-shadow: 3px 3px 0px var(--white-pure); 
+        }
+        .city-btn:hover { 
+            background-color: var(--black-pure); 
+            color: var(--white-pure); 
+            transform: translate(1px, 1px); 
+            box-shadow: 2px 2px 0px var(--black-pure); 
+        }
+        body.dark-theme .city-btn:hover { 
+            background-color: var(--white-pure); 
+            color: var(--black-pure); 
+            box-shadow: 2px 2px 0px var(--white-pure); 
+        }
+
+        /* Huy hiệu nhỏ viền thô đậm */
         .city-badge {
-            padding: 4px 8px; font-size: 11px; font-weight: 900; border: 1px solid var(--black-pure); color: var(--white-pure); text-transform: uppercase;
+            padding: 4px 8px; 
+            font-size: 11px; 
+            font-weight: 900; 
+            border: 1px solid var(--black-pure); 
+            color: var(--white-pure); 
+            text-transform: uppercase;
+        }
+        /* =========================================================
+           ĐỢT 5: KHỐI CSS QUY ĐỊNH DIỆN MẠO BỐ CỤC HAI CỘT VÀ BONG BÓNG CHAT
+           ========================================================= */
+        /* Hệ phân tách layout hai cột nội bộ cho từng phân khu */
+        .inner-two-col { 
+            display: flex; 
+            gap: 25px; 
+            height: 100%; 
+        }
+        .inner-main { 
+            flex: 2; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 20px; 
+        }
+        .inner-sidebar { 
+            flex: 1; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 20px; 
+            border-left: 2px solid var(--black-pure); 
+            padding-left: 25px; 
+        }
+        body.dark-theme .inner-sidebar { 
+            border-left-color: var(--white-pure); 
         }
 
-
-        .inner-two-col { display: flex; gap: 25px; height: 100%; }
-        .inner-main { flex: 2; display: flex; flex-direction: column; gap: 20px; }
-        .inner-sidebar { flex: 1; display: flex; flex-direction: column; gap: 20px; border-left: 2px solid var(--black-pure); padding-left: 25px; }
-        body.dark-theme .inner-sidebar { border-left-color: var(--white-pure); }
-
-        .msg-row { display: flex; flex-direction: column; width: 100%; }
-        .msg-me { align-items: flex-end; }
-        .msg-other { align-items: flex-start; }
+        /* Kiến trúc hàng tin nhắn và phom bong bóng chat vuông vức */
+        .msg-row { 
+            display: flex; 
+            flex-direction: column; 
+            width: 100%; 
+        }
+        .msg-me { 
+            align-items: flex-end; 
+        }
+        .msg-other { 
+            align-items: flex-start; 
+        }
         .msg-bubble {
-            max-width: 70%; padding: 12px 16px; border: 2px solid var(--black-pure);
-            font-size: 14px; font-weight: bold; line-height: 1.4; word-break: break-word;
+            max-width: 70%; 
+            padding: 12px 16px; 
+            border: 2px solid var(--black-pure);
+            font-size: 14px; 
+            font-weight: bold; 
+            line-height: 1.4; 
+            word-break: break-word;
         }
-        .bubble-me { background-color: var(--kem-orange); border-radius: 12px 12px 0px 12px; color: var(--black-pure); }
-        .bubble-other { background-color: var(--white-pure); border-radius: 12px 12px 12px 0px; color: var(--black-pure); }
-        body.dark-theme .msg-bubble { border-color: var(--white-pure); }
-        body.dark-theme .bubble-me { background-color: #3d2b1f; color: var(--white-pure); }
-        body.dark-theme .bubble-other { background-color: #2d2d2d; color: var(--white-pure); }
-        #notification-container { position: absolute; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 9999; }
-</style>
+        .bubble-me { 
+            background-color: var(--kem-orange); 
+            border-radius: 12px 12px 0px 12px; 
+            color: var(--black-pure); 
+        }
+        .bubble-other { 
+            background-color: var(--white-pure); 
+            border-radius: 12px 12px 12px 0px; 
+            color: var(--black-pure); 
+        }
+        body.dark-theme .msg-bubble { 
+            border-color: var(--white-pure); 
+        }
+        body.dark-theme .bubble-me { 
+            background-color: #3d2b1f; 
+            color: var(--white-pure); 
+        }
+        body.dark-theme .bubble-other { 
+            background-color: #2d2d2d; 
+            color: var(--white-pure); 
+        }
 
+        /* Hộp chứa các Toast Popup thông báo góc màn hình */
+        #notification-container { 
+            position: absolute; 
+            bottom: 20px; 
+            right: 20px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 10px; 
+            z-index: 9999; 
+        }
+    </style>
     <!-- =========================================================
-         BỘ NẠP ĐẦU VÀO TOÀN CỤC: ĐẶT TRÊN ĐỈNH ĐỂ CHỐNG LỖI IS NOT A FUNCTION [🗎1]
+         BỘ ĐIỀU PHỐI ĐẦU VÀO TOÀN CỤC: ĐẶT TRÊN ĐỈNH CHỐNG LỖI IS NOT A FUNCTION [🗎1]
          ========================================================= -->
     <script>
-          
+        // Thuật toán đổi Tab động sảnh mạng lõi bằng div ẩn hiện mượt mà bách phát bách trúng [🗎1]
+        window.switchHubTab = function(tabId) {
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            document.querySelectorAll('.hub-body-tab').forEach(tab => tab.classList.remove('active'));
+
+            // Đổ màu nền Navy đậm đà cho nút Navbar vừa được cư dân bấm chọn
+            const activeNav = document.getElementById('navTab-' + tabId.replace('tab-', ''));
+            if (activeNav) activeNav.classList.add('active');
+            
+            // Kích hoạt phân khu ruột tương ứng bung tỏa sáng rõ
+            const targetTab = document.getElementById(tabId);
+            if (targetTab) {
+                targetTab.classList.add('active');
+                // Nếu cư dân chuyển sang Tab Chợ thì ép luồng tự động đồng bộ hàng hóa ngay [🗎1]
+                if (tabId === 'tab-service' && typeof window.loadMarketDataCloud === 'function') {
+                    window.loadMarketDataCloud();
+                }
+            }
+        };
+
+        // PHÁT KIẾN THÔNG MẠCH: Cho phép click từ 6 ô lưới Grid sảnh Hub chủ tự gạt nút nhảy Tab liên thông
+        window.jumpToHubServiceCard = function(tabId, subPanelId) {
+            window.switchHubTab(tabId);
+            if (subPanelId) {
+                window.switchMarketView(subPanelId);
+            }
+        };
+
+        // Hàm đổi Tab phụ Mua / Bán nội bộ độc lập bên trong phân khu Chợ dịch vụ tự doanh
+        window.switchMarketView = function(panelId) {
+            document.getElementById('panel-buy').style.display = "none";
+            document.getElementById('panel-sell').style.display = "none";
+            document.getElementById('tabCtrlBuy').classList.remove('active');
+            document.getElementById('tabCtrlSell').classList.remove('active');
+
+            document.getElementById(panelId).style.display = "flex";
+            if (panelId === 'panel-buy') {
+                document.getElementById('tabCtrlBuy').classList.add('active');
+                if (typeof window.loadMarketDataCloud === 'function') window.loadMarketDataCloud();
+            } else {
+                document.getElementById('tabCtrlSell').classList.add('active');
+            }
+        };
+
+        // Thuật toán đổi Tab phụ Kênh Tổng / Chat Riêng nội bộ độc lập bên trong phân khu Tin Nhắn
         window.switchChatView = function(panelId) {
             document.getElementById('panel-chat-general').style.display = "none";
             document.getElementById('panel-chat-private').style.display = "none";
@@ -173,78 +340,193 @@
             }
         };
 
-        // Hàm ẩn hiện form điền đơn báo cáo vi phạm lồng trong Chat Riêng
+        // Hàm bật/tắt lật mở biểu mẫu đăng tin chợ khi cư dân click dấu cộng vuông vức
+        window.toggleNewServiceForm = function() {
+            const formBox = document.getElementById("newServiceFormBox");
+            const plusBtn = document.querySelector(".add-plus-btn");
+            if (!formBox || !plusBtn) return;
+            
+            if (formBox.style.display === "none") {
+                formBox.style.display = "block";
+                plusBtn.innerText = "-";
+            } else {
+                formBox.style.display = "none";
+                plusBtn.innerText = "+";
+            }
+        };
+
+        // Hàm ẩn hiện form điền đơn khiếu nại báo cáo lồng thẳng trong giao diện Chat Riêng Admin
         window.toggleEmergencyReportFormBox = function() {
             const box = document.getElementById("emergencyReportFormBox");
             if (!box) return;
             box.style.display = (box.style.display === "none") ? "block" : "none";
         };
+    </script>
+    <!-- =========================================================
+         ĐỢT 7: HỆ THỐNG CẦU NỐI SỰ KIỆN TOÀN CỤC VÀ ĐĂNG XUẤT CƠ HỌC
+         ========================================================= -->
+    <script>
+        // Cầu nối thực thi quét danh tính công khai toàn thành phố
+        window.triggerGlobalSearch = function() {
+            if (typeof window.executeGlobalSearchCloud === 'function') {
+                window.executeGlobalSearchCloud();
+            }
+        };
 
-        // Cầu nối đẩy tin nhắn riêng sang lõi xử lý module bảo mật
+        // Cầu nối cập nhật chế độ ẩn danh/công khai profile lên mây
+        window.updatePrivacyModeCloud = function() {
+            if (typeof window.executeUpdatePrivacyModeCloud === 'function') {
+                window.executeUpdatePrivacyModeCloud();
+            }
+        };
+
+        // Cầu nối thực thi giao dịch tài chính chuyển AD liên cư dân
+        window.executeTransaction = function(event) {
+            if (typeof window.executeTransactionCloudBridge === 'function') {
+                window.executeTransactionCloudBridge(event);
+            }
+        };
+
+        // Cầu nối đăng tải phát hành sản phẩm mới lên chợ tự doanh
+        window.publishNewService = function(event) {
+            if (typeof window.executePublishNewServiceBridge === 'function') {
+                window.executePublishNewServiceBridge(event);
+            }
+        };
+
+        // Cầu nối gửi tin nhắn sảnh tổng công khai
+        window.sendGeneralMessage = function(event) {
+            if (typeof window.executeSendGeneralMessageBridge === 'function') {
+                window.executeSendGeneralMessageBridge(event);
+            }
+        };
+
+        // Cầu nối gửi tin nhắn mật thoại riêng tư với Admin
         window.sendPrivateMessageToAdmin = function(event) {
             if (typeof window.executeSendPrivateMessageBridge === 'function') {
                 window.executeSendPrivateMessageBridge(event);
             }
         };
 
+        // Cầu nối phát hỏa đơn báo cáo khiếu nại khẩn gửi lên bàn Admin
+        window.sendEmergencyReport = function(event) {
+            if (typeof window.executeSendEmergencyReportBridge === 'function') {
+                window.executeSendEmergencyReportBridge(event);
+            }
+        };
+
+        // THUẬT TOÁN ĐỔI MÀU GIAO DIỆN SÁNG / TỐI NỘI BỘ MẠNG LÕI
+        window.changeSystemTheme = function() {
+            const selectValue = document.getElementById("themeSelect").value;
+            if (selectValue === "dark") {
+                document.body.classList.add('dark-theme');
+            } else {
+                document.body.classList.remove('dark-theme');
+            }
+        };
+
+        // THUẬT TOÁN ĐĂNG XUẤT ĐỌN SẠCH CHIP DANH TÍNH LIÊN TRANG WEB [🗎1]
+        window.triggerLogout = function() {
+            if (confirm("Independent City: Bạn có chắc chắn muốn đăng xuất và hủy phiên làm việc hiện tại?")) {
+                if (typeof window.executeLogoutAndClearSessionCloud === 'function') {
+                    window.executeLogoutAndClearSessionCloud();
+                } else {
+                    window.location.href = "index.html"; // Phương án quay đầu dự phòng khẩn cấp
+                }
+            }
+        };
     </script>
+</head> 
+<!-- =========================================================
+     ĐỢT 8: MỞ THẺ CƠ THỂ, DỰNG CẤU TRÚC NAVBAR TỔNG VIỀN THÔ ĐẬM
+     ========================================================= -->
+<body>
+
     <div class="main-wrapper">
         <!-- THANH NAVBAR TỔNG ĐIỀU HƯỚNG ĐẬM ĐÀ SẮC NÉT (VIỀN ĐEN DÀY) -->
         <div class="city-navbar">
             <div id="navTab-hub" class="nav-item active" onclick="switchHubTab('tab-hub')">🏠 Hub Chủ Mạng</div>
+            <div id="navTab-guide" class="nav-item" onclick="switchHubTab('tab-guide')">📖 Sổ Tay</div>
             <div id="navTab-bank" class="nav-item" onclick="switchHubTab('tab-bank')">🏦 Ngân Hàng AD</div>
             <div id="navTab-service" class="nav-item" onclick="switchHubTab('tab-service')">🛒 Sảnh Chợ</div>
-            <div id="navTab-chat" class="nav-item" onclick="switchHubTab('tab-chat')">✉️ Phòng Chat Tổng</div>
+            <div id="navTab-chat" class="nav-item" onclick="switchHubTab('tab-chat')">✉️ Phòng Chat</div>
         </div>
 
-        <!-- Hộp chứa các Toast Popup thông báo giật ra từ góc màn hình thuộc file utils2.js -->
+        <!-- Hộp chứa các Toast Popup thông báo giật ngược lên từ góc màn hình -->
         <div id="notification-container"></div>
-
         <!-- =========================================================
-             TAB 1: KHÔNG GIAN HIỂN THỊ PHÂN KHU HUB CHỦ TRUNG TÂM (🏠)
+             TAB MỚI: PHÂN KHU SỔ TAY HƯỚNG DẪN CƯ DÂN (📖) - ĐỢT 9
+             ========================================================= -->
+        <div id="tab-guide" class="hub-body-tab">
+            <div style="display: flex; flex-direction: column; gap: 20px; height: 100%;">
+                
+                <!-- Tiêu đề phân khu Sổ tay với viền đen thô bản sắc nét -->
+                <div class="city-title">📖 Sổ Tay Hướng Dẫn Cư Dân Independent City</div>
+                
+                <!-- Hộp chứa cuộn nội dung văn bản hướng dẫn phối tông màu thô đậm -->
+                <div class="city-card" style="box-shadow: 4px 4px 0px var(--black-pure); overflow-y: auto; max-height: 520px; padding: 30px; line-height: 1.8;">
+                    <h3 style="margin-top: 0; color: var(--navy-deep); text-transform: uppercase; font-weight: 900; letter-spacing: 0.5px;">➔ Hướng dẫn nhập tịch và sinh tồn</h3>
+                    
+                    <p style="font-weight: 900; color: #2d3748; text-transform: uppercase; font-size: 13px;">1. Cơ chế Single Sign-On (SSO) tự chế:</p>
+                    <p style="font-size: 13px; padding-left: 15px; color: #4a5568; font-weight: 700; margin-top: -5px;">Mỗi khi đăng nhập thành công tại sảnh Gateway, hệ thống sẽ tự động găm chip nhận diện ngầm lên URL. Tuyệt đối không tự ý xóa đuôi <code>?id=...</code> trên thanh địa chỉ khi đang lướt mạng lưới để tránh bị đá văng ra sảnh.</p>
+                    
+                    <p style="font-weight: 900; color: #2d3748; text-transform: uppercase; font-size: 13px; margin-top: 20px;">2. Vận hành luồng dòng tiền tệ AD:</p>
+                    <p style="font-size: 13px; padding-left: 15px; color: #4a5568; font-weight: 700; margin-top: -5px;">Ví gốc được cấp hạn mức vốn cố định là 1.000.000 AD. Bạn có thể dùng tiền này để giao thương chéo tại sảnh Chợ hoặc thực hiện chuyển khoản liên cư dân bằng cách gõ chính xác Username người nhận. Quy chuẩn giá chợ khóa cứng giá trần nghiêm ngặt từ 1 đến 1000 AD [🗎1].</p>
+                    
+                    <p style="font-weight: 900; color: #2d3748; text-transform: uppercase; font-size: 13px; margin-top: 20px;">3. Quy tắc bảo mật thông tin cá nhân mới:</p>
+                    <p style="font-size: 13px; padding-left: 15px; color: #4a5568; font-weight: 700; margin-top: -5px;">Để bảo vệ quyền riêng tư tuyệt đối cho cư dân, hệ thống đã chính thức **Ẩn Số Dư Ví AD** và **Địa chỉ Email** khỏi trạm quét mạng lưới công khai của cư dân khác. Người khác tra cứu tài khoản chỉ nhìn thấy duy nhất Tên danh tính và dòng Mô tả cá nhân bản thân của bạn [🗎1].</p>
+                    
+                    <h3 style="margin-top: 30px; color: #E63946; text-transform: uppercase; font-weight: 900; letter-spacing: 0.5px;">🚨 Kênh mật thoại và Chat riêng Admin</h3>
+                    <p style="font-size: 13px; color: #4a5568; font-weight: 700; margin-top: -5px;">Mọi hành vi gian lận luồng tiền tệ hoặc spam sảnh chợ sẽ bị trục xuất khỏi mạng lưới. Hãy vào phân khu Phòng Chat, lật sang tab phụ **Chat Riêng Admin** để báo cáo khẩn, phát hỏa đơn khiếu nại vi phạm hoặc trực tiếp mật thoại với cơ gác sảnh @STDHenry [🗎1].</p>
+                </div>
+
+            </div>
+        </div>
+                <!-- =========================================================
+             TAB 1: KHÔNG GIAN HIỂN THỊ PHÂN KHU HUB CHỦ TRUNG TÂM (🏠) - ĐỢT 10
              ========================================================= -->
         <div id="tab-hub" class="hub-body-tab active">
             
-            <!-- TIÊU ĐỀ KHU VỰC CHUẨN PHOM ĐƯỜNG GẠCH ĐỎ CAM THEO ẢNH MẪU ✍️ -->
+            <!-- TIÊU ĐỀ KHU VỰC CHUẨN PHOM ĐƯỜNG GẠCH ĐỎ CAM THEO ẢNH MẪU BẠN GỬI ✍️ -->
             <div class="services-title-section">
                 <div class="services-main-title">Dịch Vụ Của Chúng Tôi</div>
             </div>
 
-            <!-- DÀN 6 Ô LƯỚI GRID HỘP CHỮ NHẬT VUÔNG VỨC, NỀN KEM CAM ĐẬM ĐÀ, BẤM LÀ NHẢY TAB LIÊN THÔNG -->
+            <!-- DÀN 6 Ô LƯỚI GRID HỘP CHỮ NHẬT VUÔNG VỨC, NỀN KEM CAM ĐẬM ĐÀ, CLICK LÀ NHẢY CHUYỂN TAB LIÊN THÔNG -->
             <div class="services-grid-container">
-                <!-- Thẻ 1: Nhảy thẳng về phân khu Mua hàng bên Chợ -->
+                <!-- Thẻ Grid 1: Điều hướng cơ học tự nhảy về phân khu Mua hàng bên Chợ -->
                 <div class="service-grid-card" onclick="jumpToHubServiceCard('tab-service', 'panel-buy')">
                     <div class="card-icon-box">🛒</div>
-                    <div class="card-text-lbl">Sảnh Chợ Mua Sắm Dịch Vụ</div>
+                    <div class="card-text-lbl">Sảnh Chợ Mua Sắm</div>
                 </div>
-                <!-- Thẻ 2: Nhảy thẳng về phân khu Đăng bán bên Chợ -->
+                <!-- Thẻ Grid 2: Điều hướng cơ học tự nhảy về phân khu Đăng bán bên Chợ -->
                 <div class="service-grid-card" onclick="jumpToHubServiceCard('tab-service', 'panel-sell')">
                     <div class="card-icon-box">➕</div>
-                    <div class="card-text-lbl">Phát Hành Tin Sản Phẩm</div>
+                    <div class="card-text-lbl">Phát Hành Tin Bán</div>
                 </div>
-                <!-- Thẻ 3: Nhảy về phân khu xem số dư Ngân hàng -->
+                <!-- Thẻ Grid 3: Chuyển đổi tab xem số dư tài khoản Ngân hàng AD -->
                 <div class="service-grid-card" onclick="switchHubTab('tab-bank')">
                     <div class="card-icon-box">🏦</div>
                     <div class="card-text-lbl">Ngân Hàng Trung Tâm</div>
                 </div>
-                <!-- Thẻ 4: Nhảy thẳng về sảnh điền form chuyển tiền Ngân hàng -->
+                <!-- Thẻ Grid 4: Chuyển đổi tab nhảy thẳng đến sảnh chuyển khoản liên cư dân -->
                 <div class="service-grid-card" onclick="switchHubTab('tab-bank')">
                     <div class="card-icon-box">💸</div>
                     <div class="card-text-lbl">Chuyển Tiền Liên Cư Dân</div>
                 </div>
-                <!-- Thẻ 5: Nhảy về sảnh gõ bong bóng chat tổng -->
+                <!-- Thẻ Grid 5: Chuyển đổi tab nhảy thẳng về sảnh gõ phòng chat tổng -->
                 <div class="service-grid-card" onclick="switchHubTab('tab-chat')">
                     <div class="card-icon-box">✉️</div>
                     <div class="card-text-lbl">Phòng Chat Sảnh Tổng</div>
                 </div>
-                <!-- Thẻ 6: Nhảy về sidebar báo cáo khiếu nại lên Admin -->
+                <!-- Thẻ Grid 6: Chuyển đổi tab nhảy về sảnh chat riêng gửi hotline Admin -->
                 <div class="service-grid-card" onclick="switchHubTab('tab-chat')">
                     <div class="card-icon-box">🚨</div>
                     <div class="card-text-lbl">Đường Dây Nóng Admin</div>
                 </div>
             </div>
                         <!-- =========================================================
-                 ĐỢT 5: BỐ CỤC PHÂN ĐÔI CỘT PHÍA DƯỚI CỦA KHÔNG GIAN HUB CHỦ
+                 ĐỢT 11: BỐ CỤC PHÂN ĐÔI CỘT PHÍA DƯỚI CỦA KHÔNG GIAN HUB CHỦ
                  ========================================================= -->
             <div class="inner-two-col">
                 
@@ -266,11 +548,11 @@
 
                 <!-- Cột bên phải: Sảnh hiển thị thông tin Hồ sơ Profile cá nhân và Cài đặt hệ thống -->
                 <div class="inner-sidebar" style="box-sizing: border-box; flex: 0.9;">
-                    <div style="font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid var(--black-pure); padding-bottom: 8px; margin-bottom: 20px; color: var(--navy-deep);" class="city-title-label-box">👤 Hồ Sơ Cư Dân Cá Nhân</div>
+                    <div style="font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid #000000; padding-bottom: 8px; margin-bottom: 20px; color: var(--navy-deep);" class="city-title-label-box">👤 Hồ Sơ Cư Dân Cá Nhân</div>
                     
                     <!-- Khung Avatar đại diện vuông vức kết hợp nhãn tên đậm đà sắc nét -->
                     <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 20px;">
-                        <div style="width: 65px; height: 60px; border: 2px solid var(--black-pure); display: flex; align-items: center; justify-content: center; font-size: 28px; background-color: #e2e8f0; box-shadow: 3px 3px 0px var(--black-pure);" id="profileAvatarBox">👤</div>
+                        <div style="width: 65px; height: 60px; border: 2px solid #000000; display: flex; align-items: center; justify-content: center; font-size: 28px; background-color: #e2e8f0; box-shadow: 3px 3px 0px var(--black-pure);" id="profileAvatarBox">👤</div>
                         <div>
                             <span style="font-size: 11px; color: #718096; display: block; font-weight: bold; text-transform: uppercase; letter-spacing: 0.3px;">Username danh tính</span>
                             <span id="profileUsername" style="font-weight: 950; font-size: 18px; color: var(--navy-deep);">Đang mở cổng định vị...</span>
@@ -283,16 +565,16 @@
                     </div>
                     
                     <div style="margin-bottom: 20px;">
-                        <span style="font-size: 11px; color: #718096; display: block; font-weight: bold; text-transform: uppercase; letter-spacing: 0.3px;">Mô tả bản thân cư dân</span>
+                        <span style="font-size: 11px; color: #718096; display: block; font-weight: bold; text-transform: uppercase; letter-spacing: 0.3px;">Mô tả cư dân</span>
                         <span id="profileBio" style="font-size: 13px; font-style: italic; line-height: 1.5; font-weight: 700; color: #4A5568;">Đang giải mã profile từ đám mây...</span>
                     </div>
 
                     <!-- Khu vực Bảng điều khiển trung tâm cài đặt hệ thống -->
-                    <div style="font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid var(--black-pure); padding-bottom: 8px; margin-top: 20px; margin-bottom: 20px; color: var(--navy-deep);" class="city-title-label-box">⚙️ Trung Tâm Hệ Thống</div>
+                    <div style="font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid #000000; padding-bottom: 8px; margin-top: 20px; margin-bottom: 20px; color: var(--navy-deep);" class="city-title-label-box">⚙️ Trung Tâm Hệ Thống</div>
                     
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; font-size: 13px;">
                         <span style="font-weight: 900; text-transform: uppercase; font-size: 12px; letter-spacing: 0.3px;">Chủ đề sảnh (Theme):</span>
-                        <select id="themeSelect" class="city-input" style="width: 130px; padding: 8px; font-weight: 900; border-width: 2px;" onchange="changeSystemTheme()">
+                        <select id="themeSelect" class="city-input" style="width: 120px; padding: 6px; font-weight: 900; border-width: 2px;" onchange="changeSystemTheme()">
                             <option value="light">☀️ Ánh Sáng</option>
                             <option value="dark">🌙 Bóng Tối</option>
                         </select>
@@ -312,7 +594,7 @@
             </div> <!-- Thẻ đóng của inner-two-col -->
         </div> <!-- Thẻ đóng của tab-hub (Phân khu 1) -->
                 <!-- =========================================================
-             TAB 2: RUỘT PHÂN KHU NGÂN HÀNG VÍ ĐIỆN TỬ AD (🏦) - ĐỢT 6
+             TAB 2: RUỘT PHÂN KHU NGÂN HÀNG VÍ ĐIỆN TỬ AD (🏦) - ĐỢT 12
              ========================================================= -->
         <div id="tab-bank" class="hub-body-tab">
             <div style="display: flex; flex-direction: column; gap: 25px; height: 100%;">
@@ -335,6 +617,7 @@
                     <div class="inner-main" style="border-right: 2px solid var(--black-pure); padding-right: 30px; gap: 0; flex: 1.2;">
                         <div style="font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid var(--black-pure); padding-bottom: 8px; margin-bottom: 20px; color: var(--navy-deep);">💸 Chuyển Khoản An Toàn Liên Cư Dân</div>
                         
+                        <!-- CỐT LÕI: Gọi trực tiếp hàm cầu nối toàn cục, chặn đứng hành vi làm mới trang (Reload) [🗎1] -->
                         <form id="cityTransferForm" onsubmit="executeTransaction(event)">
                             <div style="margin-bottom: 18px;">
                                 <label style="font-weight: 900; display: block; margin-bottom: 8px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.3px;">Tên tài khoản người nhận (Username):</label>
@@ -360,7 +643,7 @@
             </div>
         </div>
                 <!-- =========================================================
-             TAB 3: RUỘT PHÂN KHU CHỢ DỊCH VỤ TỰ DOANH (🛒) - ĐỢT 7
+             TAB 3: RUỘT PHÂN KHU CHỢ DỊCH VỤ TỰ DOANH (🛒) - ĐỢT 13
              ========================================================= -->
         <div id="tab-service" class="hub-body-tab">
             <div style="display: flex; flex-direction: column; gap: 25px; height: 100%;">
@@ -376,7 +659,7 @@
 
                 <!-- SUB-PANEL 1: KHU VỰC MUA HÀNG (Mặc định hiển thị sáng rõ) -->
                 <div id="panel-buy" style="display: flex; flex-direction: column; gap: 20px;">
-                    <!-- Thanh thanh lọc tra cứu hàng hóa mỳ ăn liền đầu vào -->
+                    <!-- Thanh lọc tra cứu hàng hóa mỳ ăn liền đầu vào -->
                     <div style="display: flex; gap: 12px;">
                         <input type="text" id="marketSearchInput" class="city-input" placeholder="Nhập tên sản phẩm hoặc từ khóa cần lọc nhanh trên sảnh chợ...">
                         <button class="city-btn" onclick="filterMarketProducts()">Lọc Đồ</button>
@@ -420,17 +703,14 @@
 
             </div> <!-- Thẻ đóng của cụm hộp chứa flex-direction: column phân khu chợ -->
         </div> <!-- Thẻ đóng của tab-service (Phân khu 3) -->
-               <!-- =========================================================
-             TAB 4: RUỘT PHÂN KHU TIN NHẮN TRỰC TUYẾN & BÁO CÁO (✉️) - ĐỢT 9
-             ========================================================= -->
                 <!-- =========================================================
-             TAB 4: RUỘT PHÂN KHU PHÒNG CHAT HAI CỬA SỔ NÂNG CAO (✉️) - ĐỢT 3
+             TAB 4: RUỘT PHÂN KHU PHÒNG CHAT HAI CỬA SỔ NÂNG CAO (✉️) - ĐỢT 15
              ========================================================= -->
         <div id="tab-chat" class="hub-body-tab">
             <div style="display: flex; flex-direction: column; gap: 20px; height: 100%;">
                 
                 <!-- Tiêu đề phân khu Chat viền thô đậm đậm đà sắc nét -->
-                <div class="city-title">✉️ Trung Tâm Liên LẠC Independent City</div>
+                <div class="city-title">✉️ Trung Tâm Liên Lạc Independent City</div>
 
                 <!-- Thanh gạt phụ lật 2 chế độ: Chat Tổng sảnh công khai và Chat Riêng với Admin -->
                 <div style="display: flex; border: 2px solid var(--black-pure); margin-bottom: 5px; box-shadow: 4px 4px 0px var(--black-pure);" id="chatCtrlBar">
@@ -454,7 +734,7 @@
                     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed var(--black-pure); padding-bottom: 10px;">
                         <div style="font-size: 13px; font-weight: 900; color: #E63946;">🛡️ KÊNH ĐƯỜNG TRUYỀN BẢO MẬT TRỰC TIẾP VỚI ADMIN @STDHenry</div>
                         <!-- NÚT BẤM BÁO CÁO VI PHẠM LỒNG THẲNG TRONG GIAO DIỆN CHAT RIÊNG -->
-                        <button class="city-btn" style="background-color: #E63946; color: #ffffff; border-color: #000000; padding: 8px 16px; font-size: 11px; box-shadow: 2px 2px 0px #000000;" onclick="toggleEmergencyReportFormBox()">🚨 Gửi Báo Cáo Khẩn</button>
+                        <button type="button" class="city-btn" style="background-color: #E63946; color: #ffffff; border-color: #000000; padding: 8px 16px; font-size: 11px; box-shadow: 2px 2px 0px #000000;" onclick="toggleEmergencyReportFormBox()">🚨 Gửi Báo Cáo Khẩn</button>
                     </div>
 
                     <!-- Biểu mẫu điền đơn báo cáo (Mặc định ẩn ngầm, bấm nút đỏ mới bung tỏa ra) -->
@@ -479,164 +759,11 @@
 
             </div>
         </div>
-                <!-- Cột phải: Sảnh chat sầm uất luân phiên kết nối WebSockets -->
-                <div class="inner-main" style="flex: 2.2;">
-                    <div class="city-title" style="margin-bottom: 5px;">✉️ Phòng Chat Tổng Independent City</div>
-                    
-                    <!-- Khung cuộn hộp thoại bong bóng tin nhắn nền xám nhạt viền thô đậm -->
-                    <div id="cityLiveChatArea" style="flex: 1; border: 2px solid var(--black-pure); background-color: var(--gray-bg); padding: 20px; overflow-y: auto; max-height: 400px; display: flex; flex-direction: column; gap: 15px; min-height: 320px; box-sizing: border-box; box-shadow: inset 2px 2px 5px rgba(0,0,0,0.1);">
-                        <p style="color: #718096; font-size: 13px; font-style: italic; text-align: center; margin-top: 140px;">Hệ thống đang mở cổng WebSockets kết nối phòng chat tổng đám mây mới...</p>
-                    </div>
-                    
-                    <!-- Biểu mẫu Form gõ đẩy tin nhắn mỳ ăn liền -->
-                    <form id="cityChatSubmitForm" style="display: flex; gap: 12px; margin-top: 5px;" onsubmit="sendGeneralMessage(event)">
-                        <input type="text" id="cityChatInput" class="city-input" placeholder="Nhập nội dung tin nhắn sảnh tổng của bạn..." required autocomplete="off">
-                        <button type="submit" class="city-btn" style="padding-left: 30px; padding-right: 30px;">Gửi</button>
-                    </form>
-                </div>
 
-            </div>
-        </div>
-<!-- =========================================================
-             ĐỢT 1: CẢI TIẾN NAVBAR 5 TAB EMOJI VÀ GIAO DIỆN SỔ TAY HƯỚNG DẪN
-             ========================================================= -->
-        <!-- THANH NAVBAR TỔNG ĐIỀU HƯỚNG ĐẬM ĐÀ SẮC NÉT (5 NÚT BẤM) -->
-        <div class="city-navbar">
-            <div id="navTab-hub" class="nav-item active" onclick="switchHubTab('tab-hub')">🏠 Hub Chủ Mạng</div>
-            <div id="navTab-guide" class="nav-item" onclick="switchHubTab('tab-guide')">📖 Sổ Tay</div>
-            <div id="navTab-bank" class="nav-item" onclick="switchHubTab('tab-bank')">🏦 Ngân Hàng AD</div>
-            <div id="navTab-service" class="nav-item" onclick="switchHubTab('tab-service')">🛒 Sảnh Chợ</div>
-            <div id="navTab-chat" class="nav-item" onclick="switchHubTab('tab-chat')">✉️ Phòng Chat</div>
-        </div>
-
-        <!-- Hộp chứa các Toast Popup thông báo giật ra từ góc màn hình thuộc file utils2.js -->
-        <div id="notification-container"></div>
-
+    </div> <!-- THÈ ĐÓNG QUAN TRỌNG KẾT THÚC TOÀN BỘ KHỐI MAIN-WRAPPER TỔNG -->
         <!-- =========================================================
-             TAB MỚI: PHÂN KHU SỔ TAY HƯỚNG DẪN CƯ DÂN (📖)
-             ========================================================= -->
-        <div id="tab-guide" class="hub-body-tab">
-            <div style="display: flex; flex-direction: column; gap: 20px; height: 100%;">
-                <div class="city-title">📖 Sổ Tay Hướng Dẫn Cư Dân Independent City</div>
-                
-                <div class="city-card" style="box-shadow: 4px 4px 0px var(--black-pure); overflow-y: auto; max-height: 500px; padding: 30px; line-height: 1.8;">
-                    <h3 style="margin-top: 0; color: var(--navy-deep); text-transform: uppercase; font-weight: 900;">➔ Hướng dẫn nhập tịch và sinh tồn</h3>
-                    <p style="font-weight: 700; color: #2d3748;">1. Cơ chế Single Sign-On (SSO) tự chế:</p>
-                    <p style="font-size: 13px; padding-left: 15px; color: #4a5568; font-weight: 600;">Mỗi khi đăng nhập thành công tại sảnh Gateway, hệ thống sẽ tự động găm chip nhận diện ngầm lên URL. Tuyệt đối không xóa đuôi <code>?id=...</code> trên thanh địa chỉ khi đang lướt mạng lưới để tránh bị đá văng ra sảnh.</p>
-                    
-                    <p style="font-weight: 700; color: #2d3748;">2. Vận hành luồng dòng tiền tệ AD:</p>
-                    <p style="font-size: 13px; padding-left: 15px; color: #4a5568; font-weight: 600;">Ví gốc được cấp 1.000.000 AD. Bạn có thể dùng tiền này để giao thương chéo tại sảnh Chợ hoặc chuyển khoản cho anh em bằng Username chính xác. Quy chuẩn giá chợ chặn trần nghiêm ngặt dưới 1000 AD.</p>
-                    
-                    <p style="font-weight: 700; color: #2d3748;">3. Quy tắc bảo mật thông tin cá nhân mới:</p>
-                    <p style="font-size: 13px; padding-left: 15px; color: #4a5568; font-weight: 600;">Để bảo vệ quyền riêng tư tuyệt đối, hệ thống đã **Ẩn Số Dư Ví AD** và **Email** khỏi trạm quét mạng lưới công khai của cư dân khác. Người khác chỉ có thể xem được Tên và Mô tả cá nhân của bạn mà thôi.</p>
-                    
-                    <h3 style="margin-top: 25px; color: #E63946; text-transform: uppercase; font-weight: 900;">🚨 Đường dây nóng & Chat riêng Admin</h3>
-                    <p style="font-size: 13px; color: #4a5568; font-weight: 600;">Mọi hành vi gian lận luồng tiền tệ hoặc spam sảnh chợ sẽ bị xử lý nghiêm khắc. Hãy vào phân khu Phòng Chat, lật sang tab **Chat Riêng Admin** để báo cáo khẩn hoặc nhắn tin trực tiếp với cơ gác sảnh @STDHenry.</p>
-                        <!-- =========================================================
-             ĐỢT 1: CẢI TIẾN NAVBAR 5 TAB EMOJI VÀ GIAO DIỆN SỔ TAY HƯỚNG DẪN
-             ========================================================= -->
-        <!-- THANH NAVBAR TỔNG ĐIỀU HƯỚNG ĐẬM ĐÀ SẮC NÉT (5 NÚT BẤM) -->
-        <div class="city-navbar">
-            <div id="navTab-hub" class="nav-item active" onclick="switchHubTab('tab-hub')">🏠 Hub Chủ Mạng</div>
-            <div id="navTab-guide" class="nav-item" onclick="switchHubTab('tab-guide')">📖 Sổ Tay</div>
-            <div id="navTab-bank" class="nav-item" onclick="switchHubTab('tab-bank')">🏦 Ngân Hàng AD</div>
-            <div id="navTab-service" class="nav-item" onclick="switchHubTab('tab-service')">🛒 Sảnh Chợ</div>
-            <div id="navTab-chat" class="nav-item" onclick="switchHubTab('tab-chat')">✉️ Phòng Chat</div>
-        </div>
-
-        <!-- Hộp chứa các Toast Popup thông báo giật ra từ góc màn hình thuộc file utils2.js -->
-        <div id="notification-container"></div>
-
-        <!-- =========================================================
-             TAB MỚI: PHÂN KHU SỔ TAY HƯỚNG DẪN CƯ DÂN (📖)
-             ========================================================= -->
-        <div id="tab-guide" class="hub-body-tab">
-            <div style="display: flex; flex-direction: column; gap: 20px; height: 100%;">
-                <div class="city-title">📖 Sổ Tay Hướng Dẫn Cư Dân Independent City</div>
-                
-                <div class="city-card" style="box-shadow: 4px 4px 0px var(--black-pure); overflow-y: auto; max-height: 500px; padding: 30px; line-height: 1.8;">
-                    <h3 style="margin-top: 0; color: var(--navy-deep); text-transform: uppercase; font-weight: 900;">➔ Hướng dẫn nhập tịch và sinh tồn</h3>
-                    <p style="font-weight: 700; color: #2d3748;">1. Cơ chế Single Sign-On (SSO) tự chế:</p>
-                    <p style="font-size: 13px; padding-left: 15px; color: #4a5568; font-weight: 600;">Mỗi khi đăng nhập thành công tại sảnh Gateway, hệ thống sẽ tự động găm chip nhận diện ngầm lên URL. Tuyệt đối không xóa đuôi <code>?id=...</code> trên thanh địa chỉ khi đang lướt mạng lưới để tránh bị đá văng ra sảnh.</p>
-                    
-                    <p style="font-weight: 700; color: #2d3748;">2. Vận hành luồng dòng tiền tệ AD:</p>
-                    <p style="font-size: 13px; padding-left: 15px; color: #4a5568; font-weight: 600;">Ví gốc được cấp 1.000.000 AD. Bạn có thể dùng tiền này để giao thương chéo tại sảnh Chợ hoặc chuyển khoản cho anh em bằng Username chính xác. Quy chuẩn giá chợ chặn trần nghiêm ngặt dưới 1000 AD.</p>
-                    
-                    <p style="font-weight: 700; color: #2d3748;">3. Quy tắc bảo mật thông tin cá nhân mới:</p>
-                    <p style="font-size: 13px; padding-left: 15px; color: #4a5568; font-weight: 600;">Để bảo vệ quyền riêng tư tuyệt đối, hệ thống đã **Ẩn Số Dư Ví AD** và **Email** khỏi trạm quét mạng lưới công khai của cư dân khác. Người khác chỉ có thể xem được Tên và Mô tả cá nhân của bạn mà thôi.</p>
-                    
-                    <h3 style="margin-top: 25px; color: #E63946; text-transform: uppercase; font-weight: 900;">🚨 Đường dây nóng & Chat riêng Admin</h3>
-                    <p style="font-size: 13px; color: #4a5568; font-weight: 600;">Mọi hành vi gian lận luồng tiền tệ hoặc spam sảnh chợ sẽ bị xử lý nghiêm khắc. Hãy vào phân khu Phòng Chat, lật sang tab **Chat Riêng Admin** để báo cáo khẩn hoặc nhắn tin trực tiếp với cơ gác sảnh @STDHenry.</p>
-                </div>
-            </div>
-        </div>
-                </div>
-            </div>
-        </div>
-    
-    </div> <!-- THẺ ĐÓNG KÍN MÁY CHỦ QUAN TRỌNG KẾT THÚC KHỐI MAIN-WRAPPER TỔNG -->
-        <!-- =========================================================
-         BỘ ĐIỀU PHỐI JAVASCRIPT THƯỜNG: ĐIỀU HƯỚNG VÀ DỌN RÁC SESSION - ĐỢT 10
+         BỘ NÃO JAVASCRIPT MODULE: KIỂM TRA CHIP NHẬN DIỆN SSO - ĐỢT 16
          ========================================================= -->
-    <script>
-        // CỔNG TRUNG GIAN TOÀN CỤC: Hứng sự kiện click từ giao diện và chuyển tiếp vào lõi Module [🗎1]
-        window.triggerGlobalSearch = function() {
-            if (typeof window.executeGlobalSearchCloud === 'function') {
-                window.executeGlobalSearchCloud();
-            }
-        };
-
-        window.updatePrivacyModeCloud = function() {
-            if (typeof window.executeUpdatePrivacyModeCloud === 'function') {
-                window.executeUpdatePrivacyModeCloud();
-            }
-        };
-
-        window.executeTransaction = function(event) {
-            if (typeof window.executeTransactionCloudBridge === 'function') {
-                window.executeTransactionCloudBridge(event);
-            }
-        };
-
-        window.publishNewService = function(event) {
-            if (typeof window.executePublishNewServiceBridge === 'function') {
-                window.executePublishNewServiceBridge(event);
-            }
-        };
-
-        window.sendGeneralMessage = function(event) {
-            if (typeof window.executeSendGeneralMessageBridge === 'function') {
-                window.executeSendGeneralMessageBridge(event);
-            }
-        };
-
-        window.sendEmergencyReport = function(event) {
-            if (typeof window.executeSendEmergencyReportBridge === 'function') {
-                window.executeSendEmergencyReportBridge(event);
-            }
-        };
-
-        // THUẬT TOÁN ĐỔI MÀU GIAO DIỆN SÁNG / TỐI NỘI BỘ KHO 2 CHỐNG NHẠT
-        window.changeSystemTheme = function() {
-            const selectValue = document.getElementById("themeSelect").value;
-            if (selectValue === "dark") {
-                document.body.classList.add('dark-theme');
-            } else {
-                document.body.classList.remove('dark-theme');
-            }
-        };
-
-        // THUẬT TOÁN ĐĂNG XUẤT (LOGOUT) LIÊN THÔNG VI DỊCH VỤ PHÂN TÁN [🗎1]
-        window.triggerLogout = function() {
-            if (confirm("Independent City: Bạn có chắc chắn muốn đăng xuất và hủy phiên làm việc hiện tại?")) {
-                if (typeof window.executeLogoutAndClearSessionCloud === 'function') {
-                    window.executeLogoutAndClearSessionCloud();
-                } else {
-                    window.location.href = "index.html"; // Phương án dự phòng khẩn cấp
-                }
-            }
-        };
-    </script>
     <script type="module">
         // Nhập trạm liên thông dữ liệu đám mây và bộ nhớ đệm tập trung từ bộ não utils2.js
         import { 
@@ -654,7 +781,7 @@
 
         // TỰ ĐỘNG KÍCH NỔ LUỒNG QUÉT NGAY KHI CƯ DÂN VỪA LỌT SẢNH MẠNG LÕI [🗎1]
         document.addEventListener("DOMContentLoaded", async () => {
-            // Bước A: Hoãn giờ ngầm siêu ngắn 0.1 giây (100ms) thay vì 4 giây cũ để tải tia chớp [🗎1]
+            // Bước A: Hoãn giờ ngầm siêu ngắn 0.1 giây (100ms) để tải tia chớp [🗎1]
             setTimeout(async () => {
                 if (!getDB()) {
                     alert("⏳ Trạm mạng lõi: Hệ thống đang kết nối hạ tầng đám mây... Vui lòng bấm F5 tải lại sảnh nhé!");
@@ -683,13 +810,37 @@
             }, 100); // Đã rút ngắn xuống 100ms gạt công tắc tải dữ liệu siêu tốc! [🗎1]
         });
                 // =========================================================
-        // ĐỢT 13: BỘ KHỞI ĐỘNG HẠ TẦNG VÀ ĐỒNG BỘ DANH TÍNH CƯ DÂN TỐC ĐỘ CAO
+        // ĐỢT 17: THUẬT TOÁN ĐĂNG XUẤT XÓA SỔ MÃ CHIP VÀ BỘ NẠP DANH TÍNH CƯ DÂN
         // =========================================================
+        window.executeLogoutAndClearSessionCloud = async function() {
+            const db = getDB();
+            if (!db) {
+                window.location.href = "index.html";
+                return;
+            }
+
+            try {
+                // Bắn lệnh DELETE hủy diệt mã Token ID này trên bảng city_sessions [🗎1]
+                await db.from('city_sessions').delete().eq('token', CURRENT_SESSION_TOKEN);
+                
+                showNotificationPopup("HỆ THỐNG", "Đang dọn dẹp phiên làm việc ngầm... Hủy chip danh tính.");
+                
+                // Trục xuất cư dân quay về trang đăng nhập Gateway chủ [🗎1]
+                setTimeout(() => {
+                    window.location.href = "index.html";
+                }, 1000);
+
+            } catch (err) {
+                window.location.href = "index.html";
+            }
+        };
+
+        // --- BỘ KHỞI ĐỘNG HẠ TẦNG VÀ ĐỒNG BỘ DANH TÍNH CƯ DÂN TỐC ĐỘ CAO ---
         async function initializeLiveAppModules() {
             const db = getDB();
             if (!db) return; // Lá chắn bảo vệ an toàn chống nghẽn mạch ngầm [🗎1]
 
-            // 1. QUÉT SẠCH CHỮ DÒNG "ĐANG TẢI...": Đổ trực tiếp dữ liệu profile từ bộ não đám mây ra sảnh Hub Chủ
+            // 1. QUÉT SẠCH DÒNG "ĐANG TẢI...": Đổ trực tiếp dữ liệu profile từ bộ não đám mây ra sảnh Hub Chủ
             document.getElementById("profileUsername").innerText = "@" + CITY_STATE.LOGGED_IN_USER;
             document.getElementById("profileEmail").innerText = CITY_STATE.USER_EMAIL;
             
@@ -720,7 +871,7 @@
             await activateBankRealtimeWebSocket();
         }
                 // =========================================================
-        // ĐỢT 14: KÍCH HOẠT LẮNG NGHE BIẾN ĐỘNG VÍ TIỀN REALTIME QUA ĐƯỜNG TRUYỀN WEBSOCKETS
+        // ĐỢT 18: KÍCH HOẠT LẮNG NGHE VÍ TIỀN REALTIME VÀ CẦU CHUYỂN AD AN TOÀN
         // =========================================================
         async function activateBankRealtimeWebSocket() {
             const db = getDB();
@@ -752,11 +903,10 @@
                 })
                 .subscribe();
         }
-               // =========================================================
-        // ĐỢT 15: CẦU NỐI TRUNG GIAN THỰC THI CHUYỂN KHOẢN AN TOÀN LIÊN CƯ DÂN
-        // =========================================================
+
+        // --- CẦU NỐI TRUNG GIAN THỰC THI GIAO DỊCH CHUYỂN KHOẢN AN TOÀN ---
         window.executeTransactionCloudBridge = async function(event) {
-            event.preventDefault(); // Chặn hành vi tải lại trang mặc định của form
+            event.preventDefault(); // CHẶN LỖI CHÍ MẠNG: Chặn tuyệt đối hành vi tự động tải lại trang (Reload) khi nhấn submit form! [🗎1]
             
             const receiverInput = document.getElementById("targetReceiverInput").value.trim();
             const amountInput = parseInt(document.getElementById("transferAmountInput").value);
@@ -801,7 +951,7 @@
             area.insertBefore(row, area.firstChild);
         };
                 // =========================================================
-        // ĐỢT 16: BỘ NÃO VẬN HÀNH CHỢ TỰ DOANH ĐÁM MÂY (VÁ LỖI KHÔNG HIỆN SHOP)
+        // ĐỢT 19A: BỘ NÃO VẬN HÀNH CHỢ ĐÁM MÂY - ĐỒNG BỘ LUỒNG ĐĂNG TẢI SẢN PHẨM
         // =========================================================
 
         // --- HÀM TẢI VÀ ĐỒNG BỘ DANH SÁCH CHỢ DỊCH VỤ TỪ CLOUD ---
@@ -824,7 +974,7 @@
 
         // --- CẦU NỐI ĐĂNG TẢI SẢN PHẨM MỚI LÊN CHỢ KHÓA TRẦN DƯỚI 1000 AD ---
         window.executePublishNewServiceBridge = async function(event) {
-            event.preventDefault(); // Chặn hành vi tải lại trang mặc định của biểu mẫu
+            event.preventDefault(); // CHẶN LỖI CHÍ MẠNG: Ngăn chặn hành vi tự động tải lại trang (Reload) khi đăng sản phẩm! [🗎1]
             
             const title = document.getElementById("prodTitleInput").value.trim();
             const description = document.getElementById("prodDescInput").value.trim();
@@ -836,7 +986,7 @@
             if (res.success) {
                 showNotificationPopup("CHỢ TỰ DOANH", `Sản phẩm [${title}] của bạn đã được phát hành thành công với giá ${price} AD! 🛒`);
                 
-                // VÁ CHUẨN LỖI: Reset form, thu nhỏ dấu + và ép sảnh chợ tải lại ngay lập tức để hiện đồ lên shop! [🗎1]
+                // VÁ TRIỆT ĐỂ LỖI ẨN SHOP: Reset form, thu nhỏ dấu + và ép sảnh chợ tải lại ngay lập tức để hiện đồ lên shop! [🗎1]
                 document.getElementById("cityUploadProductForm").reset(); 
                 window.toggleNewServiceForm(); 
                 await window.loadMarketDataCloud(); 
@@ -845,12 +995,12 @@
             }
         };
                 // =========================================================
-        // ĐỢT 17: THUẬT TOÁN RENDERING ĐỒ HỌA CHỢ VÀ HỘP ĐÁNH GIÁ 100 SAO JSONB
+        // ĐỢT 19B: THUẬT TOÁN RENDERING ĐỒ HỌA CHỢ VÀ HỘP ĐÁNH GIÁ 100 SAO JSONB
         // =========================================================
         window.renderProductsToUI = function(products) {
             const grid = document.getElementById("marketProductsGrid");
             if (!grid) return;
-            grid.innerHTML = ""; // Dọn sạch dòng chữ "Đang đồng bộ..."
+            grid.innerHTML = ""; // Dọn sạch dòng chữ "Hệ thống đang đồng bộ..."
 
             if (products.length === 0) {
                 grid.innerHTML = `<p style="color:#718096; text-align:center; font-size:13px; margin-top:5px; font-style:italic;">Không tìm thấy dịch vụ hay hàng hóa nào đang đăng bán...</p>`;
@@ -920,7 +1070,7 @@
             }
         };
 
-        // Thuật toán gạt nút lọc nhanh sản phẩm nội bộ sảnh chợ con không cần gọi lại mây
+        // Thuật toán lọc nhanh sản phẩm nội bộ sảnh chợ con không gọi lại mây
         window.filterMarketProducts = function() {
             const keyword = document.getElementById("marketSearchInput").value.trim().toLowerCase();
             if (keyword === "") {
@@ -950,13 +1100,129 @@
             }
         };
                 // =========================================================
-        // ĐỢT 18: HẠ TẦNG PHÒNG CHAT SẢNH TỔNG VÀ ĐƯỜNG DÂY NÓNG ADMIN (WEBSOCKETS VÁ CHUẨN)
+        // ĐỢT 20A: BỘ NÃO VẬN HÀNH PHÒNG CHAT SẢNH TỔNG VÀ BỘ LỌC QUÉT MẠNG LƯỚI BẢO MẬT
         // =========================================================
+        window.fetchChatMessagesCloud = async function() {
+            const db = getDB();
+            const area = document.getElementById("cityLiveChatArea");
+            if (!db || !area) return;
+            try {
+                // Chỉ kéo các tin nhắn sảnh tổng (is_report = false), xếp theo thời gian gửi tăng dần
+                const { data: messages } = await db.from('city_chats').select('*').eq('is_report', false).order('created_at', { ascending: true }).limit(100);
+                if (messages) {
+                    area.innerHTML = ""; // Dọn sạch dòng chữ "Hệ thống đang mở cổng..."
+                    messages.forEach(msg => appendMessageToChatUI(msg));
+                    boxChatScrollToBottom();
+                }
+            } catch (err) { console.error(err); }
+        };
+
+        // Thuật toán vẽ bong bóng tin nhắn sảnh tổng phối màu kem cam đậm đà viền thô bản
+        function appendMessageToChatUI(msgObj) {
+            const area = document.getElementById("cityLiveChatArea");
+            if (!area || document.getElementById(`msg-id-ref-${msgObj.id}`)) return; // Chống vẽ lặp tin nhắn
+
+            const isMe = (msgObj.sender === CITY_STATE.LOGGED_IN_USER);
+            const wrapper = document.createElement("div");
+            wrapper.className = `msg-row ${isMe ? 'msg-me' : 'msg-other'}`;
+            wrapper.id = `msg-id-ref-${msgObj.id}`;
+            wrapper.style.marginBottom = "8px";
+
+            // Hiện nhãn tên cư dân nếu là người khác nhắn vào sảnh
+            if (!isMe) {
+                const nameLbl = document.createElement("div");
+                nameLbl.style.cssText = "font-size:11px; font-weight:900; color:#4a5568; margin-bottom:3px; padding-left:5px;";
+                nameLbl.innerText = `@${msgObj.sender}`;
+                // Tạo huy hiệu đỏ rực rỡ đặc trưng nếu chính Admin STDHenry nhắn tin vào sảnh tổng
+                if (msgObj.sender === 'STDHenry') {
+                    nameLbl.innerHTML += ` <span class="city-badge" style="background-color:#E63946; font-size:9px; padding:1px 5px; color:#ffffff; font-weight:900; box-shadow:1px 1px 0px #000000;">ADMIN</span>`;
+                }
+                wrapper.appendChild(nameLbl);
+            }
+
+            const bubble = document.createElement("div");
+            bubble.className = `msg-bubble ${isMe ? 'bubble-me' : 'bubble-other'}`;
+            bubble.innerText = msgObj.message;
+
+            const meta = document.createElement("div");
+            meta.style.cssText = "font-size:10px; color:#a0aec0; margin-top:3px; font-weight:bold;";
+            if (isMe) meta.style.textAlign = "right";
+            meta.innerText = new Date(msgObj.created_at).toLocaleTimeString("vi-VN", { hour: '2-digit', minute: '2-digit' });
+
+            wrapper.appendChild(bubble);
+            wrapper.appendChild(meta);
+            area.appendChild(wrapper);
+            
+            if (document.body.classList.contains('dark-theme')) {
+                bubble.style.borderColor = 'var(--white-pure)';
+            }
+        }
+
+        // Đẩy tin nhắn gõ từ form sảnh chủ lên sảnh tổng đám mây qua cổng WebSockets Realtime
+        window.executeSendGeneralMessageBridge = async function(event) {
+            event.preventDefault(); // CHẶN LỖI RELOAD: Giữ nguyên sảnh, không tải lại trang [🗎1]
+            const db = getDB();
+            const input = document.getElementById("cityChatInput");
+            const txt = input.value.trim();
+            if (!db || txt === "") return;
+            input.value = ""; // Dọn sạch thanh gõ lập tức cho mượt giao diện
+            
+            // Bắn thẳng lên bảng city_chats trên mây mới [🗎1]
+            await db.from('city_chats').insert([{ sender: CITY_STATE.LOGGED_IN_USER, message: txt, is_report: false }]);
+        };
+
+        // KÍCH HOẠT QUÉT MẠNG LƯỚI TOÀN CỤC CỦA HUB CHỦ ĐÃ VÁ ẨN SỐ DƯ VÀ EMAIL
+        window.executeGlobalSearchCloud = async function() {
+            const db = getDB();
+            const input = document.getElementById("globalSearchInput");
+            const area = document.getElementById("searchResultsArea");
+            if (!db || !input || !area) return;
+
+            const targetUser = input.value.trim();
+            if (targetUser === "") {
+                alert("Vui lòng nhập tên tài khoản cư dân cần quét tra cứu!");
+                return;
+            }
+
+            area.innerHTML = `<p style="color:#718096; text-align:center; font-size:13px; font-style:italic; margin-top:5px;">Hệ thống đang quét định vị dữ liệu mạng lưới...</p>`;
+
+            try {
+                // Thọc tay quét bảng city_users xem cư dân đó có tồn tại hoặc bật ẩn danh không [🗎1]
+                const { data: user, error } = await db.from('city_users').select('*').eq('username', targetUser).single();
+                
+                if (error || !user) {
+                    area.innerHTML = `<p style="color:#e63946; text-align:center; font-weight:900; font-size:13px; margin-top:20px;">🚨 KHÔNG TÌM THẤY: Cư dân @${targetUser} không tồn tại hoặc đã nhập tịch lậu!</p>`;
+                    return;
+                }
+
+                if (user.is_hidden) {
+                    area.innerHTML = `<p style="color:#718096; text-align:center; font-weight:900; font-size:13px; margin-top:20px;">🔒 BẢO MẬT: Cư dân @${targetUser} đã kích hoạt Chế độ ẩn danh. Trạm quét bị từ chối truy cập tài nguyên!</p>`;
+                    return;
+                }
+
+                // ĐÃ VÁ BẢO MẬT TUYỆT ĐỐI: Trình hiển thị giao diện chỉ kết xuất Tên và Bio, giấu kín hoàn toàn 100% Số dư và Email [🗎1]
+                area.innerHTML = `
+                    <div class="city-card" style="margin-bottom:0; padding:15px; border-style:dashed; box-shadow: 2px 2px 0px var(--black-pure); text-align:left;">
+                        <div style="font-weight:950; font-size:15px; color:var(--navy-deep); text-transform:uppercase; margin-bottom:8px;">🟢 QUÉT DANH TÍNH THÀNH CÔNG</div>
+                        <div style="font-size:13px; margin-bottom:4px; font-weight:700;">👤 Cư dân độc lập: <span style="color:#E63946;">@${user.username}</span></div>
+                        <div style="font-size:12px; font-style:italic; color:#4a5568; margin-top:6px; border-top:1px dashed #000000; padding-top:6px; font-weight:600;">" ${user.bio || 'Cư dân này chưa thiết lập dòng mô tả bản thân.'} "</div>
+                    </div>
+                `;
+                
+                if (document.body.classList.contains('dark-theme')) {
+                    area.querySelector('.city-card').style.boxShadow = '2px 2px 0px var(--white-pure)';
+                    area.querySelector('.city-card').style.borderColor = 'var(--white-pure)';
+                }
+
+            } catch (err) {
+                area.innerHTML = `<p style="color:#e63946; text-align:center; font-size:13px;">Lỗi đường truyền quét mạng lưới: ${err.message}</p>`;
+            }
+        };
                 // =========================================================
-        // ĐỢT 4: BỘ NÃO JAVASCRIPT MODULE ĐIỀU PHỐI CHAT RIÊNG VÀ ĐƯỜNG TRUYỀN ADMIN
+        // ĐỢT 20B: BỘ NÃO VẬN HÀNH KÊNH CHAT RIÊNG MẬT THOẠI VÀ ĐƠN BÁO CÁO ADMIN
         // =========================================================
         
-        // --- HÀM TẢI LỊCH SỬ TIN NHẮN CHAT RIÊNG / BÁO CÁO CÔ LẬP ---
+        // --- HÀM TẢI LỊCH SỬ TIN NHẮN CHAT RIÊNG / BÁO CÁO CÔ LẬP TỪ ĐÁM MÂY ---
         window.fetchPrivateChatMessagesCloud = async function() {
             const db = getDB();
             const area = document.getElementById("cityPrivateChatArea");
@@ -1035,7 +1301,7 @@
 
         // Đẩy tin nhắn mật thoại gửi đi sang cho Admin @STDHenry qua WebSockets
         window.executeSendPrivateMessageBridge = async function(event) {
-            event.preventDefault();
+            event.preventDefault(); // CHẶN LỖI RELOAD: Giữ nguyên sảnh, không tải lại trang [🗎1]
             const db = getDB();
             const input = document.getElementById("cityPrivateChatInput");
             const txt = input.value.trim();
@@ -1046,27 +1312,63 @@
             await db.from('city_chats').insert([{ sender: CITY_STATE.LOGGED_IN_USER, receiver: 'STDHenry', message: txt, is_report: false }]);
         };
 
-        // KÍCH HOẠT ĐỒNG BỘ WEBSOCKETS CHO CỬA SỔ CHAT RIÊNG & HOTLINE ADMIN [🗎1]
-        const privateDB = getDB();
-        if (privateDB) {
-            privateDB.channel('city_private_chats_realtime_ref')
+        // VÁ QUYỀN ADMIN & HOTLINE: Gửi đơn khiếu nại phát hỏa gửi đích danh lên Admin @STDHenry [🗎1]
+        window.executeSendEmergencyReportBridge = async function(event) {
+            event.preventDefault(); // CHẶN LỖI RELOAD: Giữ nguyên sảnh, không tải lại trang [🗎1]
+            const db = getDB();
+            const area = document.getElementById("reportContentInput");
+            const txt = area.value.trim();
+            if (!db || txt === "") return;
+            area.value = ""; // Dọn sạch ô nhập báo cáo
+
+            const { error } = await db.from('city_chats').insert([{ sender: CITY_STATE.LOGGED_IN_USER, receiver: 'STDHenry', message: txt, is_report: true }]);
+            if (!error) {
+                alert("🚨 Đơn báo cáo vi phạm đã được phát hỏa thành công gửi trực tiếp lên bàn Admin @STDHenry!");
+                window.toggleEmergencyReportFormBox(); // Tự thu gọn hộp điền đơn báo cáo cho ngăn nắp
+            }
+        };
+                // =========================================================
+        // ĐỢT 20C: KÍCH HOẠT LẮNG NGHE WEBSOCKETS REALTIME CHAT HAI CỬA SỔ VÀ ĐÓNG FILE
+        // =========================================================
+        const globalDB = getDB();
+        if (globalDB) {
+            globalDB.channel('city_chats_realtime_ref')
                 .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'city_chats' }, payload => {
                     const newChat = payload.new;
                     
-                    // Điều kiện lọt lưới: Vẽ tin nhắn lên sảnh nếu thuộc cuộc trò chuyện mật thoại hiện hành
+                    // Tình huống 1: Tin nhắn chat sảnh tổng công khai thông thường (Không chứa nhãn báo cáo, không có người nhận riêng)
+                    if (!newChat.is_report && !newChat.receiver) {
+                        appendMessageToChatUI(newChat);
+                        boxChatScrollToBottom();
+                    }
+                    
+                    // Tình huống 2: Luồng Chat Riêng tư / Hoặc đơn thư báo cáo khẩn cấp phát hỏa
+                    // Thuật toán kiểm tra trúng đích danh tính cuộc mật thoại giữa Cư dân và Admin [🗎1]
                     const isRelevant = (newChat.sender === CITY_STATE.LOGGED_IN_USER || newChat.receiver === CITY_STATE.LOGGED_IN_USER || CITY_STATE.LOGGED_IN_USER === 'STDHenry');
                     
                     if (isRelevant) {
-                        // Nếu là tin nhắn mật hoặc đơn thư báo cáo vi phạm, kích nổ nạp cơ học vào cửa sổ chat riêng [🗎1]
+                        // Nếu lọt lưới an toàn, kích nổ nạp cơ học bóng chat mật vào sảnh cửa sổ chat riêng [🗎1]
                         if (newChat.receiver === 'STDHenry' || newChat.sender === 'STDHenry' || newChat.is_report) {
                             appendPrivateMessageToUI(newChat);
                             boxPrivateChatScrollToBottom();
                         }
                     }
+
+                    // TÌNH HUỐNG VÁ ADMIN HOTLINE: Nếu có đơn khiếu nại phát hỏa nhảy Popup lên tài khoản Admin Henry [🗎1]
+                    if (newChat.is_report && newChat.receiver === 'STDHenry' && CITY_STATE.LOGGED_IN_USER === 'STDHenry') {
+                        showNotificationPopup("🚨 BÁO CÁO KHẨN", `Cư dân @${newChat.sender} vừa phát hỏa một đơn khiếu nại vi phạm lên hệ thống!`);
+                    }
                 })
                 .subscribe();
         }
 
+        // Thuật toán tự động cuộn sảnh phòng chat tổng xuống tận cùng đáy khi có tin mới
+        function boxChatScrollToBottom() {
+            const box = document.getElementById("cityLiveChatArea");
+            if (box) box.scrollTop = box.scrollHeight;
+        }
+
+        // Thuật toán tự động cuộn sảnh phòng chat riêng mật xuống tận cùng đáy khi có mật thoại mới
         function boxPrivateChatScrollToBottom() {
             const box = document.getElementById("cityPrivateChatArea");
             if (box) box.scrollTop = box.scrollHeight;

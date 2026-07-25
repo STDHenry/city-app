@@ -442,8 +442,13 @@
      ========================================================= -->
 <body>
 
+    <!-- =========================================================
+     ĐỢT 1: ĐẬP ĐI XÂY LẠI MẶT TIỀN - NAVBAR 5 TAB CHUẨN ĐỒ HỌA PHẲNG
+     ========================================================= -->
+<body>
+
     <div class="main-wrapper">
-        <!-- THANH NAVBAR TỔNG ĐIỀU HƯỚNG ĐẬM ĐÀ SẮC NÉT (VIỀN ĐEN DÀY) -->
+        <!-- ĐÃ ĐỒNG BỘ: Thanh Navbar 5 nút thô đậm, triệt tiêu hoàn toàn lỗi nhân đôi vỡ khung -->
         <div class="city-navbar">
             <div id="navTab-hub" class="nav-item active" onclick="switchHubTab('tab-hub')">🏠 Hub Chủ Mạng</div>
             <div id="navTab-guide" class="nav-item" onclick="switchHubTab('tab-guide')">📖 Sổ Tay</div>
@@ -452,81 +457,76 @@
             <div id="navTab-chat" class="nav-item" onclick="switchHubTab('tab-chat')">✉️ Phòng Chat</div>
         </div>
 
-        <!-- Hộp chứa các Toast Popup thông báo giật ngược lên từ góc màn hình -->
+        <!-- Trạm gác ngầm chứa các Toast Popup thông báo giật nổ góc màn hình -->
         <div id="notification-container"></div>
+        <!-- KHÓA ĐỢT 1: THANH ĐIỀU HƯỚNG MỚI ĐÃ THAY MÁU AN TOÀN. ĐỢT 2 SẼ BƠM TIẾP PHÂN KHU SỔ TAY (📖) VÀ TRẬN ĐỒ 6 Ô LƯỚI GRID HỢP MẪU -->
+
         <!-- =========================================================
              TAB MỚI: PHÂN KHU SỔ TAY HƯỚNG DẪN CƯ DÂN (📖) - ĐỢT 9
              ========================================================= -->
+                <!-- =========================================================
+             TAB MỚI: PHÂN KHU SỔ TAY HƯỚNG DẪN CƯ DÂN (📖) - ĐỢT 2
+             ========================================================= -->
         <div id="tab-guide" class="hub-body-tab">
             <div style="display: flex; flex-direction: column; gap: 20px; height: 100%;">
-                
-                <!-- Tiêu đề phân khu Sổ tay với viền đen thô bản sắc nét -->
                 <div class="city-title">📖 Sổ Tay Hướng Dẫn Cư Dân Independent City</div>
-                
-                <!-- Hộp chứa cuộn nội dung văn bản hướng dẫn phối tông màu thô đậm -->
                 <div class="city-card" style="box-shadow: 4px 4px 0px var(--black-pure); overflow-y: auto; max-height: 520px; padding: 30px; line-height: 1.8;">
                     <h3 style="margin-top: 0; color: var(--navy-deep); text-transform: uppercase; font-weight: 900; letter-spacing: 0.5px;">➔ Hướng dẫn nhập tịch và sinh tồn</h3>
-                    
                     <p style="font-weight: 900; color: #2d3748; text-transform: uppercase; font-size: 13px;">1. Cơ chế Single Sign-On (SSO) tự chế:</p>
                     <p style="font-size: 13px; padding-left: 15px; color: #4a5568; font-weight: 700; margin-top: -5px;">Mỗi khi đăng nhập thành công tại sảnh Gateway, hệ thống sẽ tự động găm chip nhận diện ngầm lên URL. Tuyệt đối không tự ý xóa đuôi <code>?id=...</code> trên thanh địa chỉ khi đang lướt mạng lưới để tránh bị đá văng ra sảnh.</p>
-                    
                     <p style="font-weight: 900; color: #2d3748; text-transform: uppercase; font-size: 13px; margin-top: 20px;">2. Vận hành luồng dòng tiền tệ AD:</p>
                     <p style="font-size: 13px; padding-left: 15px; color: #4a5568; font-weight: 700; margin-top: -5px;">Ví gốc được cấp hạn mức vốn cố định là 1.000.000 AD. Bạn có thể dùng tiền này để giao thương chéo tại sảnh Chợ hoặc thực hiện chuyển khoản liên cư dân bằng cách gõ chính xác Username người nhận. Quy chuẩn giá chợ khóa cứng giá trần nghiêm ngặt từ 1 đến 1000 AD [🗎1].</p>
-                    
                     <p style="font-weight: 900; color: #2d3748; text-transform: uppercase; font-size: 13px; margin-top: 20px;">3. Quy tắc bảo mật thông tin cá nhân mới:</p>
                     <p style="font-size: 13px; padding-left: 15px; color: #4a5568; font-weight: 700; margin-top: -5px;">Để bảo vệ quyền riêng tư tuyệt đối cho cư dân, hệ thống đã chính thức **Ẩn Số Dư Ví AD** và **Địa chỉ Email** khỏi trạm quét mạng lưới công khai của cư dân khác. Người khác tra cứu tài khoản chỉ nhìn thấy duy nhất Tên danh tính và dòng Mô tả cá nhân bản thân của bạn [🗎1].</p>
-                    
                     <h3 style="margin-top: 30px; color: #E63946; text-transform: uppercase; font-weight: 900; letter-spacing: 0.5px;">🚨 Kênh mật thoại và Chat riêng Admin</h3>
                     <p style="font-size: 13px; color: #4a5568; font-weight: 700; margin-top: -5px;">Mọi hành vi gian lận luồng tiền tệ hoặc spam sảnh chợ sẽ bị trục xuất khỏi mạng lưới. Hãy vào phân khu Phòng Chat, lật sang tab phụ **Chat Riêng Admin** để báo cáo khẩn, phát hỏa đơn khiếu nại vi phạm hoặc trực tiếp mật thoại với cơ gác sảnh @STDHenry [🗎1].</p>
                 </div>
-
             </div>
         </div>
-                <!-- =========================================================
-             TAB 1: KHÔNG GIAN HIỂN THỊ PHÂN KHU HUB CHỦ TRUNG TÂM (🏠) - ĐỢT 10
+
+        <!-- =========================================================
+             TAB 1: KHÔNG GIAN HIỂN THỊ PHÂN KHU HUB CHỦ TRUNG TÂM (🏠) - ĐỢT 2
              ========================================================= -->
         <div id="tab-hub" class="hub-body-tab active">
-            
-            <!-- TIÊU ĐỀ KHU VỰC CHUẨN PHOM ĐƯỜNG GẠCH ĐỎ CAM THEO ẢNH MẪU BẠN GỬI ✍️ -->
+            <!-- TIÊU ĐỀ KHU VỰC CHUẨN PHOM ĐƯỜNG GẠCH ĐỎ CAM THEO ẢNH MẪU CỦA BẠN ✍ -->
             <div class="services-title-section">
                 <div class="services-main-title">Dịch Vụ Của Chúng Tôi</div>
             </div>
 
-            <!-- DÀN 6 Ô LƯỚI GRID HỘP CHỮ NHẬT VUÔNG VỨC, NỀN KEM CAM ĐẬM ĐÀ, CLICK LÀ NHẢY CHUYỂN TAB LIÊN THÔNG -->
+            <!-- DÀN 6 Ô LƯỚI GRID CHỮ NHẬT VUÔNG VỨC NỀN KEM CAM ĐẬM ĐÀ CHUẨN XỊN -->
             <div class="services-grid-container">
-                <!-- Thẻ Grid 1: Điều hướng cơ học tự nhảy về phân khu Mua hàng bên Chợ -->
                 <div class="service-grid-card" onclick="jumpToHubServiceCard('tab-service', 'panel-buy')">
                     <div class="card-icon-box">🛒</div>
-                    <div class="card-text-lbl">Sảnh Chợ Mua Sắm</div>
+                    <div class="card-text-lbl">Sảnh Chợ Mua Sắm Dịch Vụ</div>
                 </div>
-                <!-- Thẻ Grid 2: Điều hướng cơ học tự nhảy về phân khu Đăng bán bên Chợ -->
                 <div class="service-grid-card" onclick="jumpToHubServiceCard('tab-service', 'panel-sell')">
                     <div class="card-icon-box">➕</div>
-                    <div class="card-text-lbl">Phát Hành Tin Bán</div>
+                    <div class="card-text-lbl">Phát Hành Tin Sản Phẩm</div>
                 </div>
-                <!-- Thẻ Grid 3: Chuyển đổi tab xem số dư tài khoản Ngân hàng AD -->
                 <div class="service-grid-card" onclick="switchHubTab('tab-bank')">
                     <div class="card-icon-box">🏦</div>
                     <div class="card-text-lbl">Ngân Hàng Trung Tâm</div>
                 </div>
-                <!-- Thẻ Grid 4: Chuyển đổi tab nhảy thẳng đến sảnh chuyển khoản liên cư dân -->
                 <div class="service-grid-card" onclick="switchHubTab('tab-bank')">
                     <div class="card-icon-box">💸</div>
                     <div class="card-text-lbl">Chuyển Tiền Liên Cư Dân</div>
                 </div>
-                <!-- Thẻ Grid 5: Chuyển đổi tab nhảy thẳng về sảnh gõ phòng chat tổng -->
                 <div class="service-grid-card" onclick="switchHubTab('tab-chat')">
                     <div class="card-icon-box">✉️</div>
                     <div class="card-text-lbl">Phòng Chat Sảnh Tổng</div>
                 </div>
-                <!-- Thẻ Grid 6: Chuyển đổi tab nhảy về sảnh chat riêng gửi hotline Admin -->
                 <div class="service-grid-card" onclick="switchHubTab('tab-chat')">
                     <div class="card-icon-box">🚨</div>
                     <div class="card-text-lbl">Đường Dây Nóng Admin</div>
                 </div>
             </div>
+        <!-- KHÓA ĐỢT 2 KHO 2: MẶT TIỀN VÀ 6 Ô GRID ĐÃ NẰM IM PHĂNG PHẮC CHUẨN ĐÉT. ĐỢT 3 SẼ BƠM TIẾP PHẦN KHUNG HAI CỘT PHÍA DƯỚI CỦA HUB CHỦ KÈM SIDEBAR HỒ SƠ -->
+
                         <!-- =========================================================
                  ĐỢT 11: BỐ CỤC PHÂN ĐÔI CỘT PHÍA DƯỚI CỦA KHÔNG GIAN HUB CHỦ
+                 ========================================================= -->
+                        <!-- =========================================================
+                 ĐỢT 3: BỐ CỤC PHÂN ĐÔI CỘT PHÍA DƯỚI CỦA KHÔNG GIAN HUB CHỦ
                  ========================================================= -->
             <div class="inner-two-col">
                 
@@ -540,13 +540,13 @@
                         </div>
                     </div>
                     
-                    <!-- Khung lưới hiển thị kết quả truy quét thông tin cư dân -->
+                    <!-- Khung hiển thị kết quả truy quét thông tin cư dân -->
                     <div id="searchResultsArea" style="flex: 1; border: 2px dashed var(--black-pure); padding: 20px; overflow-y: auto; min-height: 180px; background-color: var(--white-pure); box-sizing: border-box;">
                         <p style="color: #718096; font-size: 13px; font-style: italic; text-align: center; margin-top: 50px;">Thông tin chi tiết của cư dân sau khi quét mạng lưới sẽ bung tỏa tại đây...</p>
                     </div>
                 </div>
 
-                <!-- Cột bên phải: Sảnh hiển thị thông tin Hồ sơ Profile cá nhân và Cài đặt hệ thống -->
+                <!-- Cột bên phải: Sảnh hiển thị thông tin Hồ sơ Profile cá nhân bảo mật -->
                 <div class="inner-sidebar" style="box-sizing: border-box; flex: 0.9;">
                     <div style="font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid #000000; padding-bottom: 8px; margin-bottom: 20px; color: var(--navy-deep);" class="city-title-label-box">👤 Hồ Sơ Cư Dân Cá Nhân</div>
                     
@@ -554,16 +554,12 @@
                     <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 20px;">
                         <div style="width: 65px; height: 60px; border: 2px solid #000000; display: flex; align-items: center; justify-content: center; font-size: 28px; background-color: #e2e8f0; box-shadow: 3px 3px 0px var(--black-pure);" id="profileAvatarBox">👤</div>
                         <div>
-                            <span style="font-size: 11px; color: #718096; display: block; font-weight: bold; text-transform: uppercase; letter-spacing: 0.3px;">Username danh tính</span>
+                            <span style="font-size: 11px; color: #718096; display: block; font-weight: bold; text-transform: uppercase; letter-spacing: 0.3px;">Username danh tính của bạn</span>
                             <span id="profileUsername" style="font-weight: 950; font-size: 18px; color: var(--navy-deep);">Đang mở cổng định vị...</span>
                         </div>
                     </div>
                     
-                    <div style="margin-bottom: 15px;">
-                        <span style="font-size: 11px; color: #718096; display: block; font-weight: bold; text-transform: uppercase; letter-spacing: 0.3px;">Địa chỉ Hòm thư điện tử</span>
-                        <span id="profileEmail" style="font-size: 14px; font-weight: 800; word-break: break-all; color: var(--black-pure);">Đang đồng bộ dòng truyền...</span>
-                    </div>
-                    
+                    <!-- ĐÃ ĐỒNG BỘ: Chỉ giữ lại nhãn Mô tả cư dân, xóa sổ hoàn toàn 2 dòng Email và Ví AD bị lộ rò rỉ thông tin công khai [🗎1] -->
                     <div style="margin-bottom: 20px;">
                         <span style="font-size: 11px; color: #718096; display: block; font-weight: bold; text-transform: uppercase; letter-spacing: 0.3px;">Mô tả cư dân</span>
                         <span id="profileBio" style="font-size: 13px; font-style: italic; line-height: 1.5; font-weight: 700; color: #4A5568;">Đang giải mã profile từ đám mây...</span>
@@ -593,8 +589,27 @@
 
             </div> <!-- Thẻ đóng của inner-two-col -->
         </div> <!-- Thẻ đóng của tab-hub (Phân khu 1) -->
+        <!-- KHÓA ĐỢT 3 KHO 2: CỘT QUÉT CƯ DÂN VÀ SIDEBAR PROFILE BẢO MẬT ĐÃ HOÀN MỸ. ĐỢT 4 SẼ BƠM NỐT LỚP VỎ DIỆN MẠO CHO NGÂN HÀNG, CHỢ VÀ CHAT 2 CỬA SỔ ĐỂ ĐÓNG HÒM KHÔNG GIAN HTML -->
+
+                    
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; font-size: 13px;">
+                        <div>
+                            <span style="font-weight: 900; display: block; text-transform: uppercase; font-size: 12px; letter-spacing: 0.3px;">Chế độ ẩn danh:</span>
+                            <span style="font-size: 11px; color: #718096; font-weight: bold;">Giấu hồ sơ khỏi trạm quét</span>
+                        </div>
+                        <input type="checkbox" id="profileHiddenCheckbox" style="width: 24px; height: 22px; cursor: pointer;" onchange="updatePrivacyModeCloud()">
+                    </div>
+                    
+                    <button class="city-btn" style="width: 100%; border-color: #E63946; color: #E63946; font-weight: 950; padding: 14px; box-shadow: 4px 4px 0px #E63946;" onclick="triggerLogout()">🚪 Đăng xuất khỏi mạng lưới</button>
+                </div>
+
+            </div> <!-- Thẻ đóng của inner-two-col -->
+        </div> <!-- Thẻ đóng của tab-hub (Phân khu 1) -->
                 <!-- =========================================================
              TAB 2: RUỘT PHÂN KHU NGÂN HÀNG VÍ ĐIỆN TỬ AD (🏦) - ĐỢT 12
+             ========================================================= -->
+                <!-- =========================================================
+             TAB 2: RUỘT PHÂN KHU NGÂN HÀNG VÍ ĐIỆN TỬ AD (🏦) - ĐỢT 4A
              ========================================================= -->
         <div id="tab-bank" class="hub-body-tab">
             <div style="display: flex; flex-direction: column; gap: 25px; height: 100%;">
@@ -613,11 +628,10 @@
                 <!-- Cấu trúc hai cột bên dưới phân khu ngân hàng -->
                 <div class="inner-two-col" style="height: auto; gap: 30px;">
                     
-                    <!-- Cột trái: Biểu mẫu điền thông tin chuyển khoản nội bộ liên cư dân -->
+                    <!-- Cột trái: Biểu mẫu điền thông tin chuyển khoản nội bộ liên cư dân chặn lỗi reload trang [🗎1] -->
                     <div class="inner-main" style="border-right: 2px solid var(--black-pure); padding-right: 30px; gap: 0; flex: 1.2;">
                         <div style="font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid var(--black-pure); padding-bottom: 8px; margin-bottom: 20px; color: var(--navy-deep);">💸 Chuyển Khoản An Toàn Liên Cư Dân</div>
                         
-                        <!-- CỐT LÕI: Gọi trực tiếp hàm cầu nối toàn cục, chặn đứng hành vi làm mới trang (Reload) [🗎1] -->
                         <form id="cityTransferForm" onsubmit="executeTransaction(event)">
                             <div style="margin-bottom: 18px;">
                                 <label style="font-weight: 900; display: block; margin-bottom: 8px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.3px;">Tên tài khoản người nhận (Username):</label>
@@ -642,13 +656,15 @@
                 </div>
             </div>
         </div>
-                <!-- =========================================================
-             TAB 3: RUỘT PHÂN KHU CHỢ DỊCH VỤ TỰ DOANH (🛒) - ĐỢT 13
+        <!-- KHÓA ĐỢT 4A KHO 2: PHÂN KHU NGÂN HÀNG ĐÃ LÊN ĐẦY ĐỦ KHUNG VỎ SẮC NÉT. ĐỢT 4B SẼ BƠM TIẾP LỚP VỎ DIỆN MẠO CHO PHÂN KHU CHỢ DỊCH VỤ TỰ DOANH -->
+
+                       <!-- =========================================================
+             TAB 3: RUỘT PHÂN KHU CHỢ DỊCH VỤ TỰ DOANH (🛒) - ĐỢT 4B
              ========================================================= -->
         <div id="tab-service" class="hub-body-tab">
             <div style="display: flex; flex-direction: column; gap: 25px; height: 100%;">
                 
-                <!-- Tiêu đề phân khu Chợ tự doanh viền đen thô đậm -->
+                <!-- Tiêu đề phân khu Chợ tự doanh viền đen thô đậm sắc nét -->
                 <div class="city-title">🛒 Chợ Dịch Vụ Tự Doanh Independent City</div>
                 
                 <!-- Thanh gạt điều khiển phụ lật 2 chế độ Mua / Bán sắc nét viền đen dày -->
@@ -659,7 +675,7 @@
 
                 <!-- SUB-PANEL 1: KHU VỰC MUA HÀNG (Mặc định hiển thị sáng rõ) -->
                 <div id="panel-buy" style="display: flex; flex-direction: column; gap: 20px;">
-                    <!-- Thanh lọc tra cứu hàng hóa mỳ ăn liền đầu vào -->
+                    <!-- Thanh lọc tra cứu hàng hóa đầu vào -->
                     <div style="display: flex; gap: 12px;">
                         <input type="text" id="marketSearchInput" class="city-input" placeholder="Nhập tên sản phẩm hoặc từ khóa cần lọc nhanh trên sảnh chợ...">
                         <button class="city-btn" onclick="filterMarketProducts()">Lọc Đồ</button>
@@ -670,11 +686,12 @@
                         <p style="color: #718096; font-size: 13px; font-style: italic; text-align: center; margin-top: 60px;">Hệ thống đang đồng bộ danh mục hàng hóa thương mại từ đám mây mới...</p>
                     </div>
                 </div>
-                                <!-- SUB-PANEL 2: KHU VỰC ĐĂNG BÁN (Mặc định ẩn ngầm, bấm nút mới bung ra) -->
+
+                <!-- SUB-PANEL 2: KHU VỰC ĐĂNG BÁN (Mặc định ẩn ngầm, bấm nút mới bung ra) -->
                 <div id="panel-sell" style="display: none; flex-direction: column; gap: 20px;">
                     <div style="font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; color: var(--navy-deep);" class="city-subtitle-label-box">💼 Quản Lý Và Phát Hành Sản Phẩm Cá Nhân</div>
                     
-                    <!-- Nút bấm dấu cộng mở rộng thô thô đậm đậm đổ bóng khối phẳng đặc trưng -->
+                    <!-- Nút bấm dấu cộng mở rộng đổ bóng khối phẳng đặc trưng -->
                     <div style="font-size: 26px; font-weight: 950; width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--black-pure); background-color: var(--white-pure); cursor: pointer; transition: all 0.15s ease; box-shadow: 4px 4px 0px var(--black-pure);" class="add-plus-btn" onclick="toggleNewServiceForm()">+</div>
                     
                     <!-- Biểu mẫu nhập liệu thông tin sản phẩm (Bấm nút + vuông vức mới lật mở) -->
@@ -693,7 +710,7 @@
                                 <input type="url" id="prodImageInput" class="city-input" placeholder="Dán link ảnh Unsplash hoặc chuỗi SVG (Có thể để rỗng)...">
                             </div>
                             <div style="margin-bottom: 25px;">
-                                <label style="font-weight: 900; display: block; margin-bottom: 6px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.3px;">Giá niêm yết công khai (Bắt buộc chặn trần từ 1 đến 1000 AD) [🗎1]:</label>
+                                <label style="font-weight: 900; display: block; margin-bottom: 6px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.3px;">Giá niêm yết công khai (Bắt buộc chặn trần từ 1 đến 1000 AD):</label>
                                 <input type="number" id="prodPriceInput" class="city-input" min="1" max="1000" placeholder="Nhập hạn mức mức giá AD..." required>
                             </div>
                             <button type="submit" class="city-btn" style="padding: 14px; font-size: 14px; width: 100%;">Phát hành mặt hàng lên mạng lưới thành phố 🛒</button>
@@ -703,8 +720,10 @@
 
             </div> <!-- Thẻ đóng của cụm hộp chứa flex-direction: column phân khu chợ -->
         </div> <!-- Thẻ đóng của tab-service (Phân khu 3) -->
-                <!-- =========================================================
-             TAB 4: RUỘT PHÂN KHU PHÒNG CHAT HAI CỬA SỔ NÂNG CAO (✉️) - ĐỢT 15
+        <!-- KHÓA ĐỢT 4B KHO 2: PHÂN KHU CHỢ TỰ DOANH ĐÃ LÊN ĐẦY ĐỦ KHUNG VỎ SẮC NÉT. ĐỢT 4C SẼ BƠM TIẾP LỚP VỎ DIỆN MẠO 2 CỬA SỔ PHÒNG CHAT TỔNG VÀ RIÊNG ĐỂ KHÉP LẠI TOÀN BỘ KHUNG HTML THÔ -->
+
+                        <!-- =========================================================
+             TAB 4: RUỘT PHÂN KHU PHÒNG CHAT HAI CỬA SỔ NÂNG CAO (✉️) - ĐỢT 4C
              ========================================================= -->
         <div id="tab-chat" class="hub-body-tab">
             <div style="display: flex; flex-direction: column; gap: 20px; height: 100%;">
@@ -749,7 +768,7 @@
                     </div>
 
                     <div id="cityPrivateChatArea" style="flex: 1; border: 2px solid var(--black-pure); background-color: var(--gray-bg); padding: 20px; overflow-y: auto; max-height: 380px; display: flex; flex-direction: column; gap: 15px; min-height: 250px; box-sizing: border-box;">
-                        <p style="color: #718096; font-size: 13px; font-style: italic; text-align: center; margin-top: 100px;">Hệ thống đang đồng bộ phòng chat riêng tư bảo mật với Admin...</p>
+                        <p style="color: #718096; font-size: 13px; font-style: italic; text-align: center; margin-top: 100px;">Hệ thống đang đồng bộ phòng chat riêng tư bảo mật with Admin...</p>
                     </div>
                     <form id="cityPrivateChatSubmitForm" style="display: flex; gap: 12px;" onsubmit="sendPrivateMessageToAdmin(event)">
                         <input type="text" id="cityPrivateChatInput" class="city-input" placeholder="Nhắn tin riêng mật với Admin @STDHenry..." required autocomplete="off">
@@ -760,8 +779,9 @@
             </div>
         </div>
 
-    </div> <!-- THÈ ĐÓNG QUAN TRỌNG KẾT THÚC TOÀN BỘ KHỐI MAIN-WRAPPER TỔNG -->
-        <!-- =========================================================
+    </div> <!-- THẺ ĐÓNG KẾT THÚC KHỐI MAIN-WRAPPER TỔNG QUAN TRỌNG CHỐT KHUNG DIỆN MẠO -->
+
+            <!-- =========================================================
          BỘ NÃO JAVASCRIPT MODULE: KIỂM TRA CHIP NHẬN DIỆN SSO - ĐỢT 16
          ========================================================= -->
     <script type="module">
@@ -781,7 +801,7 @@
 
         // TỰ ĐỘNG KÍCH NỔ LUỒNG QUÉT NGAY KHI CƯ DÂN VỪA LỌT SẢNH MẠNG LÕI [🗎1]
         document.addEventListener("DOMContentLoaded", async () => {
-            // Bước A: Hoãn giờ ngầm siêu ngắn 0.1 giây (100ms) để tải tia chớp [🗎1]
+            // Bước A: Hoãn giờ ngầm siêu ngắn 0.1 giây (100ms) để tải dữ liệu tia chớp [🗎1]
             setTimeout(async () => {
                 if (!getDB()) {
                     alert("⏳ Trạm mạng lõi: Hệ thống đang kết nối hạ tầng đám mây... Vui lòng bấm F5 tải lại sảnh nhé!");
@@ -794,7 +814,7 @@
                 // LÁ CHẮN BẢO VỆ: Nếu chip nhận diện rỗng hoặc hết hạn, sập cửa trục xuất lập tức! [🗎1]
                 if (!authCheck.valid) {
                     alert(authCheck.message);
-                    window.location.href = "index.html"; // Đá văng về Gateway chủ
+                    window.location.href = "index.html"; // Đá văng trình duyệt quay về Gateway chủ
                     return;
                 }
 
@@ -809,6 +829,7 @@
 
             }, 100); // Đã rút ngắn xuống 100ms gạt công tắc tải dữ liệu siêu tốc! [🗎1]
         });
+        
                 // =========================================================
         // ĐỢT 17: THUẬT TOÁN ĐĂNG XUẤT XÓA SỔ MÃ CHIP VÀ BỘ NẠP DANH TÍNH CƯ DÂN
         // =========================================================
@@ -842,7 +863,8 @@
 
             // 1. QUÉT SẠCH DÒNG "ĐANG TẢI...": Đổ trực tiếp dữ liệu profile từ bộ não đám mây ra sảnh Hub Chủ
             document.getElementById("profileUsername").innerText = "@" + CITY_STATE.LOGGED_IN_USER;
-            document.getElementById("profileEmail").innerText = CITY_STATE.USER_EMAIL;
+            
+            // ĐÃ BẢO MẬT: Không còn đổ Email ra giao diện nữa vì sảnh HTML thô đợt 3 đã dọn dẹp nhãn này [🗎1]
             
             // Tra cứu thêm cột bio thực tế từ bảng city_users của dự án mây mới đổ ra màn hình
             try {
@@ -870,8 +892,12 @@
             // 4. MỞ CỔNG KẾT NỐI WEBSOCKET REALTIME CHO VÍ TIỀN NGÂN HÀNG (Sẽ định nghĩa ở đợt sau)
             await activateBankRealtimeWebSocket();
         }
+        
                 // =========================================================
         // ĐỢT 18: KÍCH HOẠT LẮNG NGHE VÍ TIỀN REALTIME VÀ CẦU CHUYỂN AD AN TOÀN
+        // =========================================================
+                // =========================================================
+        // ĐỢT 18A: BỘ NÃO VẬN HÀNH NGÂN HÀNG - LẮNG NGHE VÍ TIỀN REALTIME QUA WEBSOCKETS
         // =========================================================
         async function activateBankRealtimeWebSocket() {
             const db = getDB();
@@ -903,8 +929,12 @@
                 })
                 .subscribe();
         }
+        /* KHÓA ĐỢT 18A KHO 2: MẠCH CHÂN KHÔNG WEBSOCKET LẮNG NGHE DÒNG TIỀN ĐÃ KHÓA KHUNG AN TOÀN. ĐỢT 18B SẼ BƠM TIẾP CẦU NỐI CHUYỂN AD LIÊN CƯ DÂN CHẶN RELOAD TRANG */
 
-        // --- CẦU NỐI TRUNG GIAN THỰC THI GIAO DỊCH CHUYỂN KHOẢN AN TOÀN ---
+
+                // =========================================================
+        // ĐỢT 18B: CẦU NỐI TRUNG GIAN THỰC THI GIAO DỊCH CHUYỂN KHOẢN AN TOÀN
+        // =========================================================
         window.executeTransactionCloudBridge = async function(event) {
             event.preventDefault(); // CHẶN LỖI CHÍ MẠNG: Chặn tuyệt đối hành vi tự động tải lại trang (Reload) khi nhấn submit form! [🗎1]
             
@@ -950,6 +980,7 @@
             }
             area.insertBefore(row, area.firstChild);
         };
+        
                 // =========================================================
         // ĐỢT 19A: BỘ NÃO VẬN HÀNH CHỢ ĐÁM MÂY - ĐỒNG BỘ LUỒNG ĐĂNG TẢI SẢN PHẨM
         // =========================================================
@@ -1099,8 +1130,54 @@
                 alert(res.message); // Chặn cảnh báo nếu ví người mua thiếu tiền AD
             }
         };
+        window.executeGlobalSearchCloud = async function() {
+            const db = getDB();
+            const input = document.getElementById("globalSearchInput");
+            const area = document.getElementById("searchResultsArea");
+            if (!db || !input || !area) return;
+
+            const targetUser = input.value.trim();
+            if (targetUser === "") {
+                alert("Vui lòng nhập tên tài khoản cư dân cần quét tra cứu!");
+                return;
+            }
+
+            area.innerHTML = `<p style="color:#718096; text-align:center; font-size:13px; font-style:italic; margin-top:5px;">Hệ thống đang quét định vị dữ liệu mạng lưới...</p>`;
+
+            try {
+                // Thọc tay quét bảng city_users xem cư dân đó có tồn tại hoặc bật ẩn danh không [🗎1]
+                const { data: user, error } = await db.from('city_users').select('*').eq('username', targetUser).single();
+                
+                if (error || !user) {
+                    area.innerHTML = `<p style="color:#e63946; text-align:center; font-weight:900; font-size:13px; margin-top:20px;">🚨 KHÔNG TÌM THẤY: Cư dân @${targetUser} không tồn tại hoặc đã nhập tịch lậu!</p>`;
+                    return;
+                }
+
+                if (user.is_hidden) {
+                    area.innerHTML = `<p style="color:#718096; text-align:center; font-weight:900; font-size:13px; margin-top:20px;">🔒 BẢO MẬT: Cư dân @${targetUser} đã kích hoạt Chế độ ẩn danh. Trạm quét bị từ chối truy cập tài nguyên!</p>`;
+                    return;
+                }
+
+                // ĐÃ VÁ BẢO MẬT TUYỆT ĐỐI: Trình hiển thị giao diện chỉ kết xuất Tên và Bio, giấu kín hoàn toàn 100% Số dư và Email [🗎1]
+                area.innerHTML = `
+                    <div class="city-card" style="margin-bottom:0; padding:15px; border-style:dashed; box-shadow: 2px 2px 0px var(--black-pure); text-align:left;">
+                        <div style="font-weight:950; font-size:15px; color:var(--navy-deep); text-transform:uppercase; margin-bottom:8px;">🟢 QUÉT DANH TÍNH THÀNH CÔNG</div>
+                        <div style="font-size:13px; margin-bottom:6px; font-weight:700;">👤 Cư dân độc lập: <span style="color:#E63946;">@${user.username}</span></div>
+                        <div style="font-size:12px; font-style:italic; color:#4a5568; margin-top:6px; border-top:1px dashed #000000; padding-top:6px; font-weight:600;">" ${user.bio || 'Cư dân này chưa thiết lập dòng mô tả bản thân.'} "</div>
+                    </div>
+                `;
+                
+                if (document.body.classList.contains('dark-theme')) {
+                    area.querySelector('.city-card').style.boxShadow = '2px 2px 0px var(--white-pure)';
+                    area.querySelector('.city-card').style.borderColor = 'var(--white-pure)';
+                }
+
+            } catch (err) {
+                area.innerHTML = `<p style="color:#e63946; text-align:center; font-size:13px;">Lỗi đường truyền quét mạng lưới: ${err.message}</p>`;
+            }
+        };
                 // =========================================================
-        // ĐỢT 20A: BỘ NÃO VẬN HÀNH PHÒNG CHAT SẢNH TỔNG VÀ BỘ LỌC QUÉT MẠNG LƯỚI BẢO MẬT
+        // ĐỢT 20A: BỘ NÃO NẠP TIN NHẮN PHÒNG CHAT SẢNH TỔNG VÀ KÊNH MẬT THOẠI
         // =========================================================
         window.fetchChatMessagesCloud = async function() {
             const db = getDB();
@@ -1171,57 +1248,6 @@
             await db.from('city_chats').insert([{ sender: CITY_STATE.LOGGED_IN_USER, message: txt, is_report: false }]);
         };
 
-        // KÍCH HOẠT QUÉT MẠNG LƯỚI TOÀN CỤC CỦA HUB CHỦ ĐÃ VÁ ẨN SỐ DƯ VÀ EMAIL
-        window.executeGlobalSearchCloud = async function() {
-            const db = getDB();
-            const input = document.getElementById("globalSearchInput");
-            const area = document.getElementById("searchResultsArea");
-            if (!db || !input || !area) return;
-
-            const targetUser = input.value.trim();
-            if (targetUser === "") {
-                alert("Vui lòng nhập tên tài khoản cư dân cần quét tra cứu!");
-                return;
-            }
-
-            area.innerHTML = `<p style="color:#718096; text-align:center; font-size:13px; font-style:italic; margin-top:5px;">Hệ thống đang quét định vị dữ liệu mạng lưới...</p>`;
-
-            try {
-                // Thọc tay quét bảng city_users xem cư dân đó có tồn tại hoặc bật ẩn danh không [🗎1]
-                const { data: user, error } = await db.from('city_users').select('*').eq('username', targetUser).single();
-                
-                if (error || !user) {
-                    area.innerHTML = `<p style="color:#e63946; text-align:center; font-weight:900; font-size:13px; margin-top:20px;">🚨 KHÔNG TÌM THẤY: Cư dân @${targetUser} không tồn tại hoặc đã nhập tịch lậu!</p>`;
-                    return;
-                }
-
-                if (user.is_hidden) {
-                    area.innerHTML = `<p style="color:#718096; text-align:center; font-weight:900; font-size:13px; margin-top:20px;">🔒 BẢO MẬT: Cư dân @${targetUser} đã kích hoạt Chế độ ẩn danh. Trạm quét bị từ chối truy cập tài nguyên!</p>`;
-                    return;
-                }
-
-                // ĐÃ VÁ BẢO MẬT TUYỆT ĐỐI: Trình hiển thị giao diện chỉ kết xuất Tên và Bio, giấu kín hoàn toàn 100% Số dư và Email [🗎1]
-                area.innerHTML = `
-                    <div class="city-card" style="margin-bottom:0; padding:15px; border-style:dashed; box-shadow: 2px 2px 0px var(--black-pure); text-align:left;">
-                        <div style="font-weight:950; font-size:15px; color:var(--navy-deep); text-transform:uppercase; margin-bottom:8px;">🟢 QUÉT DANH TÍNH THÀNH CÔNG</div>
-                        <div style="font-size:13px; margin-bottom:4px; font-weight:700;">👤 Cư dân độc lập: <span style="color:#E63946;">@${user.username}</span></div>
-                        <div style="font-size:12px; font-style:italic; color:#4a5568; margin-top:6px; border-top:1px dashed #000000; padding-top:6px; font-weight:600;">" ${user.bio || 'Cư dân này chưa thiết lập dòng mô tả bản thân.'} "</div>
-                    </div>
-                `;
-                
-                if (document.body.classList.contains('dark-theme')) {
-                    area.querySelector('.city-card').style.boxShadow = '2px 2px 0px var(--white-pure)';
-                    area.querySelector('.city-card').style.borderColor = 'var(--white-pure)';
-                }
-
-            } catch (err) {
-                area.innerHTML = `<p style="color:#e63946; text-align:center; font-size:13px;">Lỗi đường truyền quét mạng lưới: ${err.message}</p>`;
-            }
-        };
-                // =========================================================
-        // ĐỢT 20B: BỘ NÃO VẬN HÀNH KÊNH CHAT RIÊNG MẬT THOẠI VÀ ĐƠN BÁO CÁO ADMIN
-        // =========================================================
-        
         // --- HÀM TẢI LỊCH SỬ TIN NHẮN CHAT RIÊNG / BÁO CÁO CÔ LẬP TỪ ĐÁM MÂY ---
         window.fetchPrivateChatMessagesCloud = async function() {
             const db = getDB();
@@ -1327,8 +1353,8 @@
                 window.toggleEmergencyReportFormBox(); // Tự thu gọn hộp điền đơn báo cáo cho ngăn nắp
             }
         };
-                // =========================================================
-        // ĐỢT 20C: KÍCH HOẠT LẮNG NGHE WEBSOCKETS REALTIME CHAT HAI CỬA SỔ VÀ ĐÓNG FILE
+        // =========================================================
+        // ĐỢT 20B: KÍCH HOẠT LẮNG NGHE ĐỒNG LOẠT PHÒNG CHAT 2 CỬA SỔ LUÂN PHIÊN WEBSOCKET REALTIME
         // =========================================================
         const globalDB = getDB();
         if (globalDB) {
@@ -1354,14 +1380,17 @@
                         }
                     }
 
-                    // TÌNH HUỐNG VÁ ADMIN HOTLINE: Nếu có đơn khiếu nại phát hỏa nhảy Popup lên tài khoản Admin Henry [🗎1]
+                    // TÌNH HUỐNG VÁ ADMIN HOTLINE: Nếu có đơn khiếu nại phát hỏa, kích popup thông báo đỏ lên nick Admin [🗎1]
                     if (newChat.is_report && newChat.receiver === 'STDHenry' && CITY_STATE.LOGGED_IN_USER === 'STDHenry') {
                         showNotificationPopup("🚨 BÁO CÁO KHẨN", `Cư dân @${newChat.sender} vừa phát hỏa một đơn khiếu nại vi phạm lên hệ thống!`);
                     }
                 })
                 .subscribe();
         }
-
+                // =========================================================
+        // ĐỢT 20C: THUẬT TOÁN TỰ CUỘN ĐÁY HỘP THOẠI VÀ CHỐT KHÓA TOÀN FILE
+        // =========================================================
+        
         // Thuật toán tự động cuộn sảnh phòng chat tổng xuống tận cùng đáy khi có tin mới
         function boxChatScrollToBottom() {
             const box = document.getElementById("cityLiveChatArea");

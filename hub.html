@@ -8,7 +8,7 @@
     <!-- ĐÃ ĐỒNG BỘ: Nhúng duy nhất đường link thư viện thần thánh từ dự án mini chat, chấp mọi loại CORB và TIMED_OUT -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     
-    <style>
+            <style>
         /* HỆ THỐNG BIẾN PHỐI MÀU VUÔNG VỨC, ĐẬM ĐÀ SẮC NÉT THEO GU TỐI GIẢN CAO CẤP */
         :root {
             --navy-deep: #001F3F;
@@ -27,20 +27,93 @@
             display: flex; justify-content: center; align-items: flex-start; min-height: 100vh;
         }
 
-        /* KHUNG XƯƠNG MỚI: Nới rộng tối đa 1300px Full màn hình, rộng rãi chuẩn web, không bó hẹp */
+        /* KHUNG XƯƠNG CỐT LÕI: HỘP CHỮ NHẬT VUÔNG VỨC DUY NHẤT Ở CHÍNH GIỮA MÀN HÌNH RỘNG 850PX [🗎1] */
         .main-wrapper {
-            width: 100%; max-width: 1300px; min-height: 850px; margin: 25px;
+            width: 100%; max-width: 850px; min-height: 750px; margin: 30px;
             border: var(--border-heavy); box-shadow: var(--shadow-flat);
             display: flex; flex-direction: column; position: relative; 
             background-color: var(--white-pure); box-sizing: border-box;
         }
 
-        /* HẠ TẦNG PHÒNG THỦ CHẾ ĐỘ BÓNG TỐI (DARK THEME) TOÀN DIỆN CHỐNG NHẠT GIAO DIỆN */
-        body.dark-theme { background-color: #121212; color: var(--white-pure); }
-        body.dark-theme .main-wrapper { 
-            border-color: var(--white-pure); background-color: #1a1a1a; 
-            box-shadow: 8px 8px 0px var(--white-pure); 
+        /* THANH NAVBAR 5 NÚT TREO ĐĂNG XUẤT TINH TẾ BÊN GÓC PHẢI */
+        .city-navbar {
+            display: flex; border-bottom: var(--border-heavy); background-color: var(--white-pure);
+            align-items: stretch; justify-content: space-between;
         }
+        .nav-left-group { display: flex; flex: 1; }
+        body.dark-theme .city-navbar { border-bottom-color: var(--white-pure); background-color: #1a1a1a; }
+
+        .nav-item {
+            flex: 1; padding: 16px 10px; text-align: center; font-weight: 900; cursor: pointer;
+            text-transform: uppercase; border-right: 2px solid var(--black-pure); font-size: 13px;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+            transition: all 0.15s ease-in-out; color: var(--black-pure); letter-spacing: 0.3px;
+        }
+        body.dark-theme .nav-item { border-right-color: var(--white-pure); color: var(--white-pure); }
+        .nav-item:hover, .nav-item.active { background-color: var(--navy-deep); color: var(--white-pure); }
+        body.dark-theme .nav-item:hover, body.dark-theme .nav-item.active { background-color: var(--white-pure); color: var(--black-pure); }
+
+        /* NÚT ĐĂNG XUẤT MỚI: Tinh giản găm chặt lên góc phải Navbar, ném bay nút dài cũ [🗎1] */
+        .nav-logout-btn {
+            padding: 0 20px; display: flex; align-items: center; justify-content: center;
+            font-weight: 950; font-size: 13px; text-transform: uppercase; cursor: pointer;
+            color: #E63946; border-left: 2px solid var(--black-pure); background-color: var(--white-pure);
+            transition: all 0.1s ease;
+        }
+        .nav-logout-btn:hover { background-color: #E63946; color: var(--white-pure); }
+        body.dark-theme .nav-logout-btn { border-left-color: var(--white-pure); background-color: #1a1a1a; }
+        body.dark-theme .nav-logout-btn:hover { background-color: #E63946; color: var(--white-pure); }
+
+        /* KHÔNG GIAN RUỘT: NẰM GỌN TRONG LÒNG KHUNG CHỨA, BẬT TAB NÀO HIỆN NẰM NGAY DƯỚI ĐÓ [🗎1] */
+        .hub-body-tab {
+            width: 100%; padding: 25px; box-sizing: border-box; display: none;
+        }
+        .hub-body-tab.active { display: block; }
+        
+        /* CẤU TRÚC FORM TRUNG TÂM NẰM TRONG KHUNG */
+        .city-title {
+            font-size: 18px; font-weight: 900; text-transform: uppercase; color: var(--navy-deep);
+            border-bottom: 2px solid var(--black-pure); padding-bottom: 6px; margin-bottom: 18px; display: flex; align-items: center; gap: 8px;
+        }
+        body.dark-theme .city-title { color: var(--white-pure); border-bottom-color: var(--white-pure); }
+        
+        .city-card { border: 2px solid var(--black-pure); padding: 20px; margin-bottom: 15px; background-color: var(--white-pure); }
+        body.dark-theme .city-card { border-color: var(--white-pure); background-color: #242424; }
+        
+        .city-input { width: 100%; padding: 11px; border: 2px solid var(--black-pure); box-sizing: border-box; font-size: 13px; font-weight: bold; background-color: var(--white-pure); }
+        body.dark-theme .city-input { border-color: var(--white-pure); background-color: #2d2d2d; color: var(--white-pure); }
+        .city-input:focus { outline: none; background-color: #F0F7FF; }
+        
+        .city-btn {
+            padding: 11px 20px; border: 2px solid var(--black-pure); background-color: var(--white-pure); color: var(--black-pure); font-weight: 900; font-size: 12px; text-transform: uppercase;
+            cursor: pointer; transition: all 0.1s ease; box-shadow: 3px 3px 0px var(--black-pure);
+        }
+        body.dark-theme .city-btn { border-color: var(--white-pure); background-color: #2d2d2d; color: var(--white-pure); box-shadow: 3px 3px 0px var(--white-pure); }
+        .city-btn:hover { background-color: var(--black-pure); color: var(--white-pure); transform: translate(1px, 1px); box-shadow: 2px 2px 0px var(--black-pure); }
+
+        /* ĐỒ HỌA THỂ LƯỚI GRID CARDS SẢNH TRƯỚC */
+        .services-title-section { text-align: center; margin-bottom: 25px; }
+        .services-main-title { font-size: 20px; font-weight: 900; text-transform: uppercase; color: var(--navy-deep); display: inline-block; position: relative; padding-bottom: 8px; }
+        body.dark-theme .services-main-title { color: var(--white-pure); }
+        .services-main-title::after { content: ''; position: absolute; bottom: 0; left: 25%; width: 50%; height: 3px; background-color: #E63946; }
+        .services-grid-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 25px; }
+        .service-grid-card { border: 2px solid var(--black-pure); background-color: var(--kem-orange); padding: 15px 5px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 110px; box-sizing: border-box; }
+        body.dark-theme .service-grid-card { border-color: var(--white-pure); background-color: #2d2d2d; color: var(--white-pure); }
+        .service-grid-card:hover { transform: translateY(-3px); box-shadow: 3px 3px 0px var(--black-pure); background-color: var(--navy-deep); color: var(--white-pure); }
+        .card-icon-box { font-size: 28px; margin-bottom: 8px; }
+        .card-text-lbl { font-size: 12px; font-weight: 800; color: #4A5568; }
+
+        /* PHOM BONG BÓNG CHAT VÀ PHÂN KHU HÀNG HÓA */
+        .msg-row { display: flex; flex-direction: column; width: 100%; }
+        .msg-me { align-items: flex-end; }
+        .msg-other { align-items: flex-start; }
+        .msg-bubble { max-width: 80%; padding: 10px 14px; border: 2px solid var(--black-pure); font-size: 13px; font-weight: bold; word-break: break-word; }
+        .bubble-me { background-color: var(--kem-orange); border-radius: 10px 10px 0px 10px; }
+        .bubble-other { background-color: var(--white-pure); border-radius: 10px 10px 10px 0px; }
+        
+        .city-badge { padding: 3px 6px; font-size: 10px; font-weight: 900; border: 1px solid var(--black-pure); color: var(--white-pure); text-transform: uppercase; }
+        body.dark-theme { background-color: #121212; color: var(--white-pure); }
+        body.dark-theme .main-wrapper { border-color: var(--white-pure); background-color: #1a1a1a; box-shadow: 8px 8px 0px var(--white-pure); }
     </style>
     </script>
     <style>
@@ -442,58 +515,63 @@
      ========================================================= -->
 <body>
 
-    <!-- =========================================================
-     ĐỢT 1: ĐẬP ĐI XÂY LẠI MẶT TIỀN - NAVBAR 5 TAB CHUẨN ĐỒ HỌA PHẲNG
+<!-- =========================================================
+     ĐỢT 2: THANH NAVBAR CẢI TIẾN, BẢO MẬT VÀ HUB CHỦ NẰM GỌN TRONG LÒNG KHUNG CHỨA [🗎1]
      ========================================================= -->
 <body>
 
     <div class="main-wrapper">
-        <!-- ĐÃ ĐỒNG BỘ: Thanh Navbar 5 nút thô đậm, triệt tiêu hoàn toàn lỗi nhân đôi vỡ khung -->
+        <!-- VÁ CHUẨN ĐỒ HỌA: Găm nút Đăng xuất góc phải, giải phóng toàn bộ không gian bị tràn vỡ [🗎1] -->
         <div class="city-navbar">
-            <div id="navTab-hub" class="nav-item active" onclick="switchHubTab('tab-hub')">🏠 Hub Chủ Mạng</div>
-            <div id="navTab-guide" class="nav-item" onclick="switchHubTab('tab-guide')">📖 Sổ Tay</div>
-            <div id="navTab-bank" class="nav-item" onclick="switchHubTab('tab-bank')">🏦 Ngân Hàng AD</div>
-            <div id="navTab-service" class="nav-item" onclick="switchHubTab('tab-service')">🛒 Sảnh Chợ</div>
-            <div id="navTab-chat" class="nav-item" onclick="switchHubTab('tab-chat')">✉️ Phòng Chat</div>
+            <div class="nav-left-group">
+                <div id="navTab-hub" class="nav-item active" onclick="switchHubTab('tab-hub')">🏠 Hub Chủ Mạng</div>
+                <div id="navTab-guide" class="nav-item" onclick="switchHubTab('tab-guide')">📖 Sổ Tay</div>
+                <div id="navTab-bank" class="nav-item" onclick="switchHubTab('tab-bank')">🏦 Ngân Hàng AD</div>
+                <div id="navTab-service" class="nav-item" onclick="switchHubTab('tab-service')">🛒 Sảnh Chợ</div>
+                <div id="navTab-chat" class="nav-item" onclick="switchHubTab('tab-chat')">✉️ Phòng Chat</div>
+            </div>
+            <!-- NÚT ĐĂNG XUẤT ĐÃ ĐƯỢC BỐC NÉM LÊN GÓC PHẢI NAV CHUẨN WEB CAO CẤP 🚪 [🗎1] -->
+            <div class="nav-logout-btn" onclick="triggerLogout()">🚪 Đăng Xuất</div>
         </div>
 
-        <!-- Trạm gác ngầm chứa các Toast Popup thông báo giật nổ góc màn hình -->
+        <!-- Hộp chứa các Toast Popup thông báo giật ra từ góc màn hình -->
         <div id="notification-container"></div>
-        <!-- KHÓA ĐỢT 1: THANH ĐIỀU HƯỚNG MỚI ĐÃ THAY MÁU AN TOÀN. ĐỢT 2 SẼ BƠM TIẾP PHÂN KHU SỔ TAY (📖) VÀ TRẬN ĐỒ 6 Ô LƯỚI GRID HỢP MẪU -->
 
-        <!-- =========================================================
-             TAB MỚI: PHÂN KHU SỔ TAY HƯỚNG DẪN CƯ DÂN (📖) - ĐỢT 9
-             ========================================================= -->
-                <!-- =========================================================
-             TAB MỚI: PHÂN KHU SỔ TAY HƯỚNG DẪN CƯ DÂN (📖) - ĐỢT 2
-             ========================================================= -->
-        <div id="tab-guide" class="hub-body-tab">
-            <div style="display: flex; flex-direction: column; gap: 20px; height: 100%;">
-                <div class="city-title">📖 Sổ Tay Hướng Dẫn Cư Dân Independent City</div>
-                <div class="city-card" style="box-shadow: 4px 4px 0px var(--black-pure); overflow-y: auto; max-height: 520px; padding: 30px; line-height: 1.8;">
-                    <h3 style="margin-top: 0; color: var(--navy-deep); text-transform: uppercase; font-weight: 900; letter-spacing: 0.5px;">➔ Hướng dẫn nhập tịch và sinh tồn</h3>
-                    <p style="font-weight: 900; color: #2d3748; text-transform: uppercase; font-size: 13px;">1. Cơ chế Single Sign-On (SSO) tự chế:</p>
-                    <p style="font-size: 13px; padding-left: 15px; color: #4a5568; font-weight: 700; margin-top: -5px;">Mỗi khi đăng nhập thành công tại sảnh Gateway, hệ thống sẽ tự động găm chip nhận diện ngầm lên URL. Tuyệt đối không tự ý xóa đuôi <code>?id=...</code> trên thanh địa chỉ khi đang lướt mạng lưới để tránh bị đá văng ra sảnh.</p>
-                    <p style="font-weight: 900; color: #2d3748; text-transform: uppercase; font-size: 13px; margin-top: 20px;">2. Vận hành luồng dòng tiền tệ AD:</p>
-                    <p style="font-size: 13px; padding-left: 15px; color: #4a5568; font-weight: 700; margin-top: -5px;">Ví gốc được cấp hạn mức vốn cố định là 1.000.000 AD. Bạn có thể dùng tiền này để giao thương chéo tại sảnh Chợ hoặc thực hiện chuyển khoản liên cư dân bằng cách gõ chính xác Username người nhận. Quy chuẩn giá chợ khóa cứng giá trần nghiêm ngặt từ 1 đến 1000 AD [🗎1].</p>
-                    <p style="font-weight: 900; color: #2d3748; text-transform: uppercase; font-size: 13px; margin-top: 20px;">3. Quy tắc bảo mật thông tin cá nhân mới:</p>
-                    <p style="font-size: 13px; padding-left: 15px; color: #4a5568; font-weight: 700; margin-top: -5px;">Để bảo vệ quyền riêng tư tuyệt đối cho cư dân, hệ thống đã chính thức **Ẩn Số Dư Ví AD** và **Địa chỉ Email** khỏi trạm quét mạng lưới công khai của cư dân khác. Người khác tra cứu tài khoản chỉ nhìn thấy duy nhất Tên danh tính và dòng Mô tả cá nhân bản thân của bạn [🗎1].</p>
-                    <h3 style="margin-top: 30px; color: #E63946; text-transform: uppercase; font-weight: 900; letter-spacing: 0.5px;">🚨 Kênh mật thoại và Chat riêng Admin</h3>
-                    <p style="font-size: 13px; color: #4a5568; font-weight: 700; margin-top: -5px;">Mọi hành vi gian lận luồng tiền tệ hoặc spam sảnh chợ sẽ bị trục xuất khỏi mạng lưới. Hãy vào phân khu Phòng Chat, lật sang tab phụ **Chat Riêng Admin** để báo cáo khẩn, phát hỏa đơn khiếu nại vi phạm hoặc trực tiếp mật thoại với cơ gác sảnh @STDHenry [🗎1].</p>
+        <!-- BẢNG CÀI ĐẶT TRUNG TÂM KHỐI PHẲNG (LẬP TỨC ĐỐI XỨNG NẰM TRONG KHUNG) [🗎1] -->
+        <div style="padding: 15px 25px; background-color: var(--gray-bg); border-bottom: 2px solid var(--black-pure); display: flex; align-items: center; justify-content: space-between; gap: 15px; box-sizing: border-box;">
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <div style="width: 42px; height: 38px; border: 2px solid #000000; display: flex; align-items: center; justify-content: center; font-size: 18px; background-color: #e2e8f0; box-shadow: 2px 2px 0px var(--black-pure);" id="profileAvatarBox">👤</div>
+                <div>
+                    <span id="profileUsername" style="font-weight: 950; font-size: 14px; color: var(--navy-deep); display: block;">Đang định vị...</span>
+                    <span id="profileBio" style="font-size: 11px; font-style: italic; font-weight: 700; color: #4A5568;">Đang giải mã profile đám mây...</span>
                 </div>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 12px; font-size: 12px;">
+                <!-- CHẾ ĐỘ ẨN DANH ĐƯỢC CHÈN TINH TẾ CẠNH KHU VỰC THTheme LÀM ĐẸP MẮT THEO ẢNH BẠN VẼ -->
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <span style="font-weight: 900; text-transform: uppercase; font-size: 10px; color: #4A5568;">Chế độ ẩn danh:</span>
+                    <input type="checkbox" id="profileHiddenCheckbox" style="width: 18px; height: 18px; cursor: pointer;" onchange="updatePrivacyModeCloud()">
+                </div>
+                
+                <span style="font-weight: 900; text-transform: uppercase; font-size: 10px; color: #4A5568;">Giao diện:</span>
+                <select id="themeSelect" class="city-input" style="width: 90px; padding: 4px; font-weight: 900; border-width: 2px; font-size: 11px;" onchange="changeSystemTheme()">
+                    <option value="light">☀️ Sáng</option>
+                    <option value="dark">🌙 Tối</option>
+                </select>
             </div>
         </div>
 
         <!-- =========================================================
-             TAB 1: KHÔNG GIAN HIỂN THỊ PHÂN KHU HUB CHỦ TRUNG TÂM (🏠) - ĐỢT 2
+             TAB 1: KHÔNG GIAN HUB CHỦ TRUNG TÂM (🏠) - NẰM TRONG KHUNG CHỨA [🗎1]
              ========================================================= -->
         <div id="tab-hub" class="hub-body-tab active">
-            <!-- TIÊU ĐỀ KHU VỰC CHUẨN PHOM ĐƯỜNG GẠCH ĐỎ CAM THEO ẢNH MẪU CỦA BẠN ✍ -->
+            <!-- TIÊU ĐỀ SECTION CHUẨN PHOM ĐƯỜNG GẠCH ĐỎ CAM THEO ẢNH MẪU ✍️ -->
             <div class="services-title-section">
                 <div class="services-main-title">Dịch Vụ Của Chúng Tôi</div>
             </div>
 
-            <!-- DÀN 6 Ô LƯỚI GRID CHỮ NHẬT VUÔNG VỨC NỀN KEM CAM ĐẬM ĐÀ CHUẨN XỊN -->
+            <!-- DÀN 6 Ô LƯỚI GRID ĐƯỢC CO GỌN CHIA THÀNH 3 CỘT CHO KHÍT PHOM MÀN HÌNH 850PX [🗎1] -->
             <div class="services-grid-container">
                 <div class="service-grid-card" onclick="jumpToHubServiceCard('tab-service', 'panel-buy')">
                     <div class="card-icon-box">🛒</div>
@@ -520,104 +598,25 @@
                     <div class="card-text-lbl">Đường Dây Nóng Admin</div>
                 </div>
             </div>
-        <!-- KHÓA ĐỢT 2 KHO 2: MẶT TIỀN VÀ 6 Ô GRID ĐÃ NẰM IM PHĂNG PHẮC CHUẨN ĐÉT. ĐỢT 3 SẼ BƠM TIẾP PHẦN KHUNG HAI CỘT PHÍA DƯỚI CỦA HUB CHỦ KÈM SIDEBAR HỒ SƠ -->
 
-                        <!-- =========================================================
-                 ĐỢT 11: BỐ CỤC PHÂN ĐÔI CỘT PHÍA DƯỚI CỦA KHÔNG GIAN HUB CHỦ
-                 ========================================================= -->
-                        <!-- =========================================================
-                 ĐỢT 3: BỐ CỤC PHÂN ĐÔI CỘT PHÍA DƯỚI CỦA KHÔNG GIAN HUB CHỦ
-                 ========================================================= -->
-            <div class="inner-two-col">
-                
-                <!-- Cột bên trái: Biểu mẫu tra cứu, quét thông tin cư dân toàn thành phố -->
-                <div class="inner-main">
-                    <div class="city-card" style="margin-bottom: 0; box-shadow: 4px 4px 0px var(--black-pure);">
-                        <label style="font-weight: 900; display: block; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 0.3px;">🔎 Quét danh tính cư dân trong mạng lưới thành phố:</label>
-                        <div style="display: flex; gap: 12px;">
-                            <input type="text" id="globalSearchInput" class="city-input" placeholder="Nhập chính xác Username danh tính cư dân cần tra cứu...">
-                            <button class="city-btn" onclick="triggerGlobalSearch()">Quét Mạng Lưới</button>
-                        </div>
-                    </div>
-                    
-                    <!-- Khung hiển thị kết quả truy quét thông tin cư dân -->
-                    <div id="searchResultsArea" style="flex: 1; border: 2px dashed var(--black-pure); padding: 20px; overflow-y: auto; min-height: 180px; background-color: var(--white-pure); box-sizing: border-box;">
-                        <p style="color: #718096; font-size: 13px; font-style: italic; text-align: center; margin-top: 50px;">Thông tin chi tiết của cư dân sau khi quét mạng lưới sẽ bung tỏa tại đây...</p>
-                    </div>
+            <!-- HỘP QUÉT CƯ DÂN ÉP NẰM GỌN TRONG LÒNG KHUNG CHỨA CHUẨN PHẲNG TRUNG TÂM -->
+            <div class="city-card" style="margin-bottom: 0;">
+                <label style="font-weight: 900; display: block; margin-bottom: 12px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.3px;">🔎 Quét danh tính cư dân trong mạng lưới thành phố:</label>
+                <div style="display: flex; gap: 12px; margin-bottom: 15px;">
+                    <input type="text" id="globalSearchInput" class="city-input" placeholder="Nhập chính xác Username danh tính cư dân cần tra cứu...">
+                    <button class="city-btn" onclick="triggerGlobalSearch()">Quét Mạng Lưới</button>
                 </div>
-
-                <!-- Cột bên phải: Sảnh hiển thị thông tin Hồ sơ Profile cá nhân bảo mật -->
-                <div class="inner-sidebar" style="box-sizing: border-box; flex: 0.9;">
-                    <div style="font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid #000000; padding-bottom: 8px; margin-bottom: 20px; color: var(--navy-deep);" class="city-title-label-box">👤 Hồ Sơ Cư Dân Cá Nhân</div>
-                    
-                    <!-- Khung Avatar đại diện vuông vức kết hợp nhãn tên đậm đà sắc nét -->
-                    <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 20px;">
-                        <div style="width: 65px; height: 60px; border: 2px solid #000000; display: flex; align-items: center; justify-content: center; font-size: 28px; background-color: #e2e8f0; box-shadow: 3px 3px 0px var(--black-pure);" id="profileAvatarBox">👤</div>
-                        <div>
-                            <span style="font-size: 11px; color: #718096; display: block; font-weight: bold; text-transform: uppercase; letter-spacing: 0.3px;">Username danh tính của bạn</span>
-                            <span id="profileUsername" style="font-weight: 950; font-size: 18px; color: var(--navy-deep);">Đang mở cổng định vị...</span>
-                        </div>
-                    </div>
-                    
-                    <!-- ĐÃ ĐỒNG BỘ: Chỉ giữ lại nhãn Mô tả cư dân, xóa sổ hoàn toàn 2 dòng Email và Ví AD bị lộ rò rỉ thông tin công khai [🗎1] -->
-                    <div style="margin-bottom: 20px;">
-                        <span style="font-size: 11px; color: #718096; display: block; font-weight: bold; text-transform: uppercase; letter-spacing: 0.3px;">Mô tả cư dân</span>
-                        <span id="profileBio" style="font-size: 13px; font-style: italic; line-height: 1.5; font-weight: 700; color: #4A5568;">Đang giải mã profile từ đám mây...</span>
-                    </div>
-
-                    <!-- Khu vực Bảng điều khiển trung tâm cài đặt hệ thống -->
-                    <div style="font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid #000000; padding-bottom: 8px; margin-top: 20px; margin-bottom: 20px; color: var(--navy-deep);" class="city-title-label-box">⚙️ Trung Tâm Hệ Thống</div>
-                    
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; font-size: 13px;">
-                        <span style="font-weight: 900; text-transform: uppercase; font-size: 12px; letter-spacing: 0.3px;">Chủ đề sảnh (Theme):</span>
-                        <select id="themeSelect" class="city-input" style="width: 120px; padding: 6px; font-weight: 900; border-width: 2px;" onchange="changeSystemTheme()">
-                            <option value="light">☀️ Ánh Sáng</option>
-                            <option value="dark">🌙 Bóng Tối</option>
-                        </select>
-                    </div>
-                    
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; font-size: 13px;">
-                        <div>
-                            <span style="font-weight: 900; display: block; text-transform: uppercase; font-size: 12px; letter-spacing: 0.3px;">Chế độ ẩn danh:</span>
-                            <span style="font-size: 11px; color: #718096; font-weight: bold;">Giấu hồ sơ khỏi trạm quét</span>
-                        </div>
-                        <input type="checkbox" id="profileHiddenCheckbox" style="width: 24px; height: 22px; cursor: pointer;" onchange="updatePrivacyModeCloud()">
-                    </div>
-                    
-                    <button class="city-btn" style="width: 100%; border-color: #E63946; color: #E63946; font-weight: 950; padding: 14px; box-shadow: 4px 4px 0px #E63946;" onclick="triggerLogout()">🚪 Đăng xuất khỏi mạng lưới</button>
+                <div id="searchResultsArea" style="border: 2px dashed var(--black-pure); padding: 15px; overflow-y: auto; min-height: 120px; background-color: var(--gray-bg); box-sizing: border-box;">
+                    <p style="color: #718096; font-size: 12px; font-style: italic; text-align: center; margin-top: 35px; font-weight: bold;">Thông tin chi tiết của cư dân sau khi quét mạng lưới sẽ bung tỏa tại đây...</p>
                 </div>
-
-            </div> <!-- Thẻ đóng của inner-two-col -->
-        </div> <!-- Thẻ đóng của tab-hub (Phân khu 1) -->
-        <!-- KHÓA ĐỢT 3 KHO 2: CỘT QUÉT CƯ DÂN VÀ SIDEBAR PROFILE BẢO MẬT ĐÃ HOÀN MỸ. ĐỢT 4 SẼ BƠM NỐT LỚP VỎ DIỆN MẠO CHO NGÂN HÀNG, CHỢ VÀ CHAT 2 CỬA SỔ ĐỂ ĐÓNG HÒM KHÔNG GIAN HTML -->
-
-                    
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; font-size: 13px;">
-                        <div>
-                            <span style="font-weight: 900; display: block; text-transform: uppercase; font-size: 12px; letter-spacing: 0.3px;">Chế độ ẩn danh:</span>
-                            <span style="font-size: 11px; color: #718096; font-weight: bold;">Giấu hồ sơ khỏi trạm quét</span>
-                        </div>
-                        <input type="checkbox" id="profileHiddenCheckbox" style="width: 24px; height: 22px; cursor: pointer;" onchange="updatePrivacyModeCloud()">
-                    </div>
-                    
-                    <button class="city-btn" style="width: 100%; border-color: #E63946; color: #E63946; font-weight: 950; padding: 14px; box-shadow: 4px 4px 0px #E63946;" onclick="triggerLogout()">🚪 Đăng xuất khỏi mạng lưới</button>
-                </div>
-
-            </div> <!-- Thẻ đóng của inner-two-col -->
-        </div> <!-- Thẻ đóng của tab-hub (Phân khu 1) -->
-                <!-- =========================================================
-             TAB 2: RUỘT PHÂN KHU NGÂN HÀNG VÍ ĐIỆN TỬ AD (🏦) - ĐỢT 12
-             ========================================================= -->
-                <!-- =========================================================
-             TAB 2: RUỘT PHÂN KHU NGÂN HÀNG VÍ ĐIỆN TỬ AD (🏦) - ĐỢT 4A
-             ========================================================= -->
+            </div>
+        </div>
+        
         <div id="tab-bank" class="hub-body-tab">
-            <div style="display: flex; flex-direction: column; gap: 25px; height: 100%;">
-                
-                <!-- Tiêu đề phân khu ngân hàng với viền đen dày dặn đậm đà -->
+            <div class="tab-centered-content">
                 <div class="city-title">🏦 Ngân Hàng Trung Tâm Independent City</div>
                 
-                <!-- Thẻ khổng lồ hiển thị dòng tiền tệ AD thời gian thực đã được phối đậm màu sắc nét -->
+                <!-- Hộp số dư khổng lồ căn giữa sáng loáng -->
                 <div style="border: 3px solid var(--black-pure); padding: 35px; background-color: var(--gray-bg); text-align: center; box-shadow: 4px 4px 0px var(--black-pure);" id="balanceCardBox">
                     <span style="font-size: 13px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; color: #4A5568; display: block; margin-bottom: 5px;">Số dư ví điện tử hiện tại của cư dân</span>
                     <div style="font-size: 42px; font-weight: 950; letter-spacing: 1px; color: var(--navy-deep);" class="live-balance-text-box">
@@ -625,56 +624,52 @@
                     </div>
                 </div>
 
-                <!-- Cấu trúc hai cột bên dưới phân khu ngân hàng -->
-                <div class="inner-two-col" style="height: auto; gap: 30px;">
-                    
-                    <!-- Cột trái: Biểu mẫu điền thông tin chuyển khoản nội bộ liên cư dân chặn lỗi reload trang [🗎1] -->
-                    <div class="inner-main" style="border-right: 2px solid var(--black-pure); padding-right: 30px; gap: 0; flex: 1.2;">
-                        <div style="font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid var(--black-pure); padding-bottom: 8px; margin-bottom: 20px; color: var(--navy-deep);">💸 Chuyển Khoản An Toàn Liên Cư Dân</div>
-                        
-                        <form id="cityTransferForm" onsubmit="executeTransaction(event)">
-                            <div style="margin-bottom: 18px;">
-                                <label style="font-weight: 900; display: block; margin-bottom: 8px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.3px;">Tên tài khoản người nhận (Username):</label>
-                                <input type="text" id="targetReceiverInput" class="city-input" placeholder="Nhập chính xác Username cư dân được chuyển..." required autocomplete="off">
-                            </div>
-                            <div style="margin-bottom: 25px;">
-                                <label style="font-weight: 900; display: block; margin-bottom: 8px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.3px;">Số tiền muốn chuyển (Đơn vị tính: AD):</label>
-                                <input type="number" id="transferAmountInput" class="city-input" min="1" placeholder="Nhập hạn mức số tiền muốn chuyển đi..." required>
-                            </div>
-                            <button type="submit" class="city-btn" style="width: 100%; padding: 14px; font-size: 14px;">Khởi tác thực thi chuyển khoản liên cư dân ⚡</button>
-                        </form>
-                    </div>
-                    
-                    <!-- Cột phải: Khung cuộn hiển thị lịch sử biến động dòng tiền nội bộ -->
-                    <div class="inner-sidebar" style="border-left: none; padding-left: 0; flex: 1;">
-                        <div style="font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid var(--black-pure); padding-bottom: 8px; margin-bottom: 20px; color: var(--navy-deep);">📜 Lịch Sử Biến Động Dòng Tiền</div>
-                        <div id="bankHistoryArea" style="flex: 1; overflow-y: auto; max-height: 250px; border: 2px dashed var(--black-pure); padding: 15px; min-height: 200px; background-color: var(--white-pure); box-sizing: border-box;">
-                            <p style="color: #718096; font-size: 12px; font-style: italic; text-align: center; margin-top: 80px;">Chưa ghi nhận biến động dòng tiền AD nào trong phiên làm việc này...</p>
+                <!-- Form điền thông tin chuyển khoản co cụm vào giữa -->
+                <div class="city-card" style="margin-bottom: 0;">
+                    <div style="font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid var(--black-pure); padding-bottom: 8px; margin-bottom: 20px; color: var(--navy-deep);">💸 Chuyển Khoản An Toàn Liên Cư Dân</div>
+                    <form id="cityTransferForm" onsubmit="executeTransaction(event)">
+                        <div style="margin-bottom: 18px;">
+                            <label style="font-weight: 900; display: block; margin-bottom: 8px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.3px;">Tên tài khoản người nhận (Username):</label>
+                            <input type="text" id="targetReceiverInput" class="city-input" placeholder="Nhập chính xác Username cư dân được chuyển..." required autocomplete="off">
                         </div>
-                    </div>
+                        <div style="margin-bottom: 25px;">
+                            <label style="font-weight: 900; display: block; margin-bottom: 8px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.3px;">Số tiền muốn chuyển (Đơn vị tính: AD):</label>
+                            <input type="number" id="transferAmountInput" class="city-input" min="1" placeholder="Nhập hạn mức số tiền muốn chuyển đi..." required>
+                        </div>
+                        <button type="submit" class="city-btn" style="width: 100%; padding: 14px; font-size: 14px;">Khởi tác thực thi chuyển khoản liên cư dân ⚡</button>
+                    </form>
+                </div>
 
+                <!-- Khung lịch sử dòng tiền dàn hàng ngang rộng rãi dưới form -->
+                <div class="city-card" style="margin-bottom: 0; padding: 20px;">
+                    <div style="font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid var(--black-pure); padding-bottom: 8px; margin-bottom: 15px; color: var(--navy-deep);">📜 Lịch Sử Biến Động Dòng Tiền Cá Nhân</div>
+                    <div id="bankHistoryArea" style="overflow-y: auto; max-height: 200px; border: 2px dashed var(--black-pure); padding: 15px; min-height: 120px; background-color: var(--white-pure); box-sizing: border-box;">
+                        <p style="color: #718096; font-size: 12px; font-style: italic; text-align: center; margin-top: 35px; font-weight: bold;">Chưa ghi nhận biến động dòng tiền AD nào trong phiên làm việc này...</p>
+                    </div>
                 </div>
             </div>
         </div>
-        <!-- KHÓA ĐỢT 4A KHO 2: PHÂN KHU NGÂN HÀNG ĐÃ LÊN ĐẦY ĐỦ KHUNG VỎ SẮC NÉT. ĐỢT 4B SẼ BƠM TIẾP LỚP VỎ DIỆN MẠO CHO PHÂN KHU CHỢ DỊCH VỤ TỰ DOANH -->
 
-                       <!-- =========================================================
-             TAB 3: RUỘT PHÂN KHU CHỢ DỊCH VỤ TỰ DOANH (🛒) - ĐỢT 4B
+        <!-- =========================================================
+             TAB 3: RUỘT PHÂN KHU CHỢ DỊCH VỤ TỰ DOANH (🛒) - CĂN TRUNG TÂM
+             ========================================================= -->
+                <!-- =========================================================
+             TAB 3: RUỘT PHÂN KHU CHỢ DỊCH VỤ TỰ DOANH (🛒) - ĐỢT 4B NẰM TRONG KHUNG [🗎1]
              ========================================================= -->
         <div id="tab-service" class="hub-body-tab">
-            <div style="display: flex; flex-direction: column; gap: 25px; height: 100%;">
+            <div style="display: flex; flex-direction: column; gap: 20px;">
                 
                 <!-- Tiêu đề phân khu Chợ tự doanh viền đen thô đậm sắc nét -->
                 <div class="city-title">🛒 Chợ Dịch Vụ Tự Doanh Independent City</div>
                 
                 <!-- Thanh gạt điều khiển phụ lật 2 chế độ Mua / Bán sắc nét viền đen dày -->
                 <div style="display: flex; border: 2px solid var(--black-pure); margin-bottom: 5px; box-shadow: 4px 4px 0px var(--black-pure);" id="marketCtrlBar">
-                    <div id="tabCtrlBuy" style="flex: 1; padding: 14px; text-align: center; font-weight: 900; cursor: pointer; text-transform: uppercase; font-size: 13px; letter-spacing: 0.5px;" class="active" onclick="switchMarketView('panel-buy')">🛍️ Khu Vực Mua Hàng</div>
-                    <div id="tabCtrlSell" style="flex: 1; padding: 14px; text-align: center; font-weight: 900; cursor: pointer; text-transform: uppercase; font-size: 13px; border-left: 2px solid var(--black-pure); letter-spacing: 0.5px;" onclick="switchMarketView('panel-sell')">💼 Khu Vực Đăng Bán</div>
+                    <div id="tabCtrlBuy" style="flex: 1; padding: 12px; text-align: center; font-weight: 900; cursor: pointer; text-transform: uppercase; font-size: 12px; letter-spacing: 0.3px;" class="active" onclick="switchMarketView('panel-buy')">🛍️ Khu Vực Mua Hàng</div>
+                    <div id="tabCtrlSell" style="flex: 1; padding: 12px; text-align: center; font-weight: 900; cursor: pointer; text-transform: uppercase; font-size: 12px; border-left: 2px solid var(--black-pure); letter-spacing: 0.3px;" onclick="switchMarketView('panel-sell')">💼 Khu Vực Đăng Bán</div>
                 </div>
 
-                <!-- SUB-PANEL 1: KHU VỰC MUA HÀNG (Mặc định hiển thị sáng rõ) -->
-                <div id="panel-buy" style="display: flex; flex-direction: column; gap: 20px;">
+                <!-- SUB-PANEL 1: KHU VỰC MUA HÀNG NẰM TRONG KHUNG TRẮNG -->
+                <div id="panel-buy" style="display: flex; flex-direction: column; gap: 15px; width: 100%;">
                     <!-- Thanh lọc tra cứu hàng hóa đầu vào -->
                     <div style="display: flex; gap: 12px;">
                         <input type="text" id="marketSearchInput" class="city-input" placeholder="Nhập tên sản phẩm hoặc từ khóa cần lọc nhanh trên sảnh chợ...">
@@ -682,108 +677,155 @@
                     </div>
                     
                     <!-- Lưới danh sách bốc hàng hóa từ đám mây nạp vào đồ họa vuông vức -->
-                    <div id="marketProductsGrid" style="overflow-y: auto; max-height: 420px; display: flex; flex-direction: column; gap: 15px; padding-right: 5px; min-height: 250px;">
-                        <p style="color: #718096; font-size: 13px; font-style: italic; text-align: center; margin-top: 60px;">Hệ thống đang đồng bộ danh mục hàng hóa thương mại từ đám mây mới...</p>
+                    <div id="marketProductsGrid" style="overflow-y: auto; max-height: 380px; display: flex; flex-direction: column; gap: 12px; min-height: 220px;">
+                        <p style="color: #718096; font-size: 12px; font-style: italic; text-align: center; margin-top: 60px; font-weight: bold;">Hệ thống đang đồng bộ danh mục hàng hóa thương mại từ đám mây mới...</p>
                     </div>
                 </div>
 
-                <!-- SUB-PANEL 2: KHU VỰC ĐĂNG BÁN (Mặc định ẩn ngầm, bấm nút mới bung ra) -->
-                <div id="panel-sell" style="display: none; flex-direction: column; gap: 20px;">
-                    <div style="font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; color: var(--navy-deep);" class="city-subtitle-label-box">💼 Quản Lý Và Phát Hành Sản Phẩm Cá Nhân</div>
+                <!-- SUB-PANEL 2: KHU VỰC ĐĂNG BÁN NẰM TRONG KHUNG TRẮNG -->
+                <div id="panel-sell" style="display: none; flex-direction: column; gap: 15px; width: 100%;">
+                    <div style="font-size: 13px; font-weight: 900; text-transform: uppercase; color: var(--navy-deep);" class="city-subtitle-label-box">💼 Quản Lý Và Phát Hành Sản Phẩm Cá Nhân</div>
                     
-                    <!-- Nút bấm dấu cộng mở rộng đổ bóng khối phẳng đặc trưng -->
-                    <div style="font-size: 26px; font-weight: 950; width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--black-pure); background-color: var(--white-pure); cursor: pointer; transition: all 0.15s ease; box-shadow: 4px 4px 0px var(--black-pure);" class="add-plus-btn" onclick="toggleNewServiceForm()">+</div>
+                    <!-- Nút bấm dấu cộng mở rộng thô thô đậm đậm đổ bóng khối phẳng đặc trưng -->
+                    <div style="font-size: 22px; font-weight: 950; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--black-pure); background-color: var(--white-pure); cursor: pointer; transition: all 0.15s ease; box-shadow: 3px 3px 0px var(--black-pure);" class="add-plus-btn" onclick="toggleNewServiceForm()">+</div>
                     
                     <!-- Biểu mẫu nhập liệu thông tin sản phẩm (Bấm nút + vuông vức mới lật mở) -->
-                    <div id="newServiceFormBox" class="city-card" style="display: none; padding: 25px; box-shadow: 4px 4px 0px var(--black-pure);">
+                    <div id="newServiceFormBox" class="city-card" style="display: none; padding: 20px; box-shadow: 3px 3px 0px var(--black-pure);">
                         <form id="cityUploadProductForm" onsubmit="publishNewService(event)">
-                            <div style="margin-bottom: 15px;">
-                                <label style="font-weight: 900; display: block; margin-bottom: 6px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.3px;">Tên mặt hàng hoặc tiêu đề dịch vụ:</label>
-                                <input type="text" id="prodTitleInput" class="city-input" placeholder="Ví dụ: Sách giáo khoa Toán 10 cũ, Thiết kế Logo..." required>
+                            <div style="margin-bottom: 12px;">
+                                <label style="font-weight: 900; display: block; margin-bottom: 6px; font-size: 12px; text-transform: uppercase;">Tên mặt hàng hoặc dịch vụ:</label>
+                                <input type="text" id="prodTitleInput" class="city-input" placeholder="Ví dụ: Sách giáo khoa Toán 10 cũ..." required>
                             </div>
-                            <div style="margin-bottom: 15px;">
-                                <label style="font-weight: 900; display: block; margin-bottom: 6px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.3px;">Mô tả chi tiết tình trạng / dịch vụ:</label>
-                                <textarea id="prodDescInput" class="city-input" style="height: 70px; font-family: inherit; resize: none; font-weight: bold;" placeholder="Ghi chú ngắn gọn về thông số hoặc cách thức liên hệ nhận đồ..." required></textarea>
+                            <div style="margin-bottom: 12px;">
+                                <label style="font-weight: 900; display: block; margin-bottom: 6px; font-size: 12px; text-transform: uppercase;">Mô tả chi tiết tình trạng:</label>
+                                <textarea id="prodDescInput" class="city-input" style="height: 60px; font-family: inherit; resize: none; font-weight: bold;" placeholder="Ghi chú ngắn gọn về thông số..." required></textarea>
                             </div>
-                            <div style="margin-bottom: 15px;">
-                                <label style="font-weight: 900; display: block; margin-bottom: 6px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.3px;">Đường dẫn hình ảnh minh họa (URL Ảnh):</label>
-                                <input type="url" id="prodImageInput" class="city-input" placeholder="Dán link ảnh Unsplash hoặc chuỗi SVG (Có thể để rỗng)...">
+                            <div style="margin-bottom: 12px;">
+                                <label style="font-weight: 900; display: block; margin-bottom: 6px; font-size: 12px; text-transform: uppercase;">URL Hình ảnh minh họa:</label>
+                                <input type="url" id="prodImageInput" class="city-input" placeholder="Dán link ảnh minh họa...">
                             </div>
-                            <div style="margin-bottom: 25px;">
-                                <label style="font-weight: 900; display: block; margin-bottom: 6px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.3px;">Giá niêm yết công khai (Bắt buộc chặn trần từ 1 đến 1000 AD):</label>
-                                <input type="number" id="prodPriceInput" class="city-input" min="1" max="1000" placeholder="Nhập hạn mức mức giá AD..." required>
+                            <div style="margin-bottom: 20px;">
+                                <label style="font-weight: 900; display: block; margin-bottom: 6px; font-size: 12px; text-transform: uppercase;">Giá niêm yết công khai (Chặn trần 1 đến 1000 AD):</label>
+                                <input type="number" id="prodPriceInput" class="city-input" min="1" max="1000" placeholder="Nhập số tiền AD..." required>
                             </div>
-                            <button type="submit" class="city-btn" style="padding: 14px; font-size: 14px; width: 100%;">Phát hành mặt hàng lên mạng lưới thành phố 🛒</button>
+                            <button type="submit" class="city-btn" style="padding: 12px; font-size: 13px; width: 100%;">Phát hành mặt hàng lên sảnh chợ 🛒</button>
                         </form>
                     </div>
                 </div>
 
-            </div> <!-- Thẻ đóng của cụm hộp chứa flex-direction: column phân khu chợ -->
-        </div> <!-- Thẻ đóng của tab-service (Phân khu 3) -->
-        <!-- KHÓA ĐỢT 4B KHO 2: PHÂN KHU CHỢ TỰ DOANH ĐÃ LÊN ĐẦY ĐỦ KHUNG VỎ SẮC NÉT. ĐỢT 4C SẼ BƠM TIẾP LỚP VỎ DIỆN MẠO 2 CỬA SỔ PHÒNG CHAT TỔNG VÀ RIÊNG ĐỂ KHÉP LẠI TOÀN BỘ KHUNG HTML THÔ -->
+            </div> tab">
+            <div class="city-title">📖 Sổ Tay Hướng Dẫn Cư Dân Independent City</div>
+            <div class="city-card" style="box-shadow: 4px 4px 0px var(--black-pure); overflow-y: auto; max-height: 480px; padding: 25px; line-height: 1.8; margin-bottom: 0;">
+                <h3 style="margin-top: 0; color: var(--navy-deep); text-transform: uppercase; font-weight: 900; letter-spacing: 0.5px; font-size: 15px;">➔ Hướng dẫn nhập tịch và sinh tồn</h3>
+                <p style="font-weight: 900; color: #2d3748; text-transform: uppercase; font-size: 12px;">1. Cơ chế Single Sign-On (SSO) tự chế:</p>
+                <p style="font-size: 12px; padding-left: 15px; color: #4a5568; font-weight: 700; margin-top: -5px;">Hệ thống tự động găm chip nhận diện ngầm lên URL. Tuyệt đối không tự ý xóa đuôi <code>?id=...</code> trên thanh địa chỉ khi đang lướt mạng lưới để tránh bị đá văng ra sảnh.</p>
+                <p style="font-weight: 900; color: #2d3748; text-transform: uppercase; font-size: 12px; margin-top: 15px;">2. Vận hành luồng dòng tiền tệ AD:</p>
+                <p style="font-size: 12px; padding-left: 15px; color: #4a5568; font-weight: 700; margin-top: -5px;">Ví gốc cấp hạn mức cố định 1.000.000 AD. Bạn có thể dùng tiền này giao thương chéo tại sảnh Chợ hoặc thực hiện chuyển khoản liên cư dân bằng Username chính xác. Quy chuẩn giá chợ khóa cứng giá trần từ 1 đến 1000 AD [🗎1].</p>
+                <p style="font-weight: 900; color: #2d3748; text-transform: uppercase; font-size: 12px; margin-top: 15px;">3. Quy tắc bảo mật thông tin cá nhân mới:</p>
+                <p style="font-size: 12px; padding-left: 15px; color: #4a5568; font-weight: 700; margin-top: -5px;">Hệ thống đã chính thức **Ẩn Số Dư Ví AD** và **Địa chỉ Email** khỏi trạm quét mạng lưới công khai của cư dân khác để bảo vệ quyền riêng tư tuyệt đối [🗎1].</p>
+            </div>
+        </div>
 
-                        <!-- =========================================================
-             TAB 4: RUỘT PHÂN KHU PHÒNG CHAT HAI CỬA SỔ NÂNG CAO (✉️) - ĐỢT 4C
+        <!-- =========================================================
+             TAB 2: RUỘT PHÂN KHU NGÂN HÀNG VÍ ĐIỆN TỬ AD (🏦) - NẰM TRONG KHUNG CHỨA [🗎1]
+             ========================================================= -->
+        <div id="tab-bank" class="hub-body-tab">
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                <div class="city-title">🏦 Ngân Hàng Trung Tâm Independent City</div>
+                
+                <!-- ĐÃ ĐỒNG BỘ: Hộp hiển thị dòng tiền AD chui tọt gọn gàng vào lòng khung trắng [🗎1] -->
+                <div style="border: 2px solid var(--black-pure); padding: 25px; background-color: var(--gray-bg); text-align: center; box-shadow: 4px 4px 0px var(--black-pure);" id="balanceCardBox">
+                    <span style="font-size: 12px; font-weight: 900; text-transform: uppercase; color: #4A5568; display: block; margin-bottom: 5px;">Số dư ví điện tử hiện tại của cư dân</span>
+                    <div style="font-size: 36px; font-weight: 950; color: var(--navy-deep);">
+                        <span id="liveBalanceAmount">1,000,000</span> <span style="font-size: 18px; font-weight: 800; color: var(--black-pure);">AD</span>
+                    </div>
+                </div>
+
+                <!-- Form điền thông tin chuyển khoản co cụm vào lòng hộp chứa [🗎1] -->
+                <div class="city-card" style="margin-bottom: 0;">
+                    <div style="font-size: 13px; font-weight: 900; text-transform: uppercase; border-bottom: 2px solid var(--black-pure); padding-bottom: 6px; margin-bottom: 15px; color: var(--navy-deep);">💸 Chuyển Khoản An Toàn Liên Cư Dân</div>
+                    <form id="cityTransferForm" onsubmit="executeTransaction(event)">
+                        <div style="margin-bottom: 15px;">
+                            <label style="font-weight: 900; display: block; margin-bottom: 6px; font-size: 12px; text-transform: uppercase;">Tên tài khoản người nhận (Username):</label>
+                            <input type="text" id="targetReceiverInput" class="city-input" placeholder="Nhập chính xác Username cư dân được chuyển..." required autocomplete="off">
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <label style="font-weight: 900; display: block; margin-bottom: 6px; font-size: 12px; text-transform: uppercase;">Số tiền muốn chuyển (Đơn vị tính: AD):</label>
+                            <input type="number" id="transferAmountInput" class="city-input" min="1" placeholder="Nhập hạn mức số tiền muốn chuyển đi..." required>
+                        </div>
+                        <button type="submit" class="city-btn" style="width: 100%; padding: 12px; font-size: 13px;">Khởi tác thực thi chuyển khoản liên cư dân ⚡</button>
+                    </form>
+                </div>
+
+                <!-- Khung lịch sử cuộn dòng tiền AD nằm gọn gàng bên dưới form -->
+                <div class="city-card" style="margin-bottom: 0; padding: 15px;">
+                    <div style="font-size: 13px; font-weight: 900; text-transform: uppercase; border-bottom: 2px solid var(--black-pure); padding-bottom: 6px; margin-bottom: 12px; color: var(--navy-deep);">📜 Lịch Sử Biến Động Dòng Tiền Cá Nhân</div>
+                    <div id="bankHistoryArea" style="overflow-y: auto; max-height: 180px; border: 2px dashed var(--black-pure); padding: 12px; min-height: 100px; background-color: var(--white-pure); box-sizing: border-box;">
+                        <p style="color: #718096; font-size: 11px; font-style: italic; text-align: center; margin-top: 25px; font-weight: bold;">Chưa ghi nhận biến động dòng tiền AD nào trong phiên làm việc này...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+                <!-- =========================================================
+             TAB 4: RUỘT PHÂN KHU PHÒNG CHAT HAI CỬA SỔ NÂNG CAO (✉️) - ĐỢT 4C NẰM TRONG KHUNG [🗎1]
              ========================================================= -->
         <div id="tab-chat" class="hub-body-tab">
-            <div style="display: flex; flex-direction: column; gap: 20px; height: 100%;">
+            <div style="display: flex; flex-direction: column; gap: 20px;">
                 
                 <!-- Tiêu đề phân khu Chat viền thô đậm đậm đà sắc nét -->
                 <div class="city-title">✉️ Trung Tâm Liên Lạc Independent City</div>
 
                 <!-- Thanh gạt phụ lật 2 chế độ: Chat Tổng sảnh công khai và Chat Riêng với Admin -->
                 <div style="display: flex; border: 2px solid var(--black-pure); margin-bottom: 5px; box-shadow: 4px 4px 0px var(--black-pure);" id="chatCtrlBar">
-                    <div id="tabCtrlChatGeneral" style="flex: 1; padding: 14px; text-align: center; font-weight: 900; cursor: pointer; text-transform: uppercase; font-size: 13px; letter-spacing: 0.5px;" class="active" onclick="switchChatView('panel-chat-general')">💬 Phòng Chat Tổng</div>
-                    <div id="tabCtrlChatPrivate" style="flex: 1; padding: 14px; text-align: center; font-weight: 900; cursor: pointer; text-transform: uppercase; font-size: 13px; border-left: 2px solid var(--black-pure); letter-spacing: 0.5px;" onclick="switchChatView('panel-chat-private')">🔒 Chat Riêng Admin</div>
+                    <div id="tabCtrlChatGeneral" style="flex: 1; padding: 12px; text-align: center; font-weight: 900; cursor: pointer; text-transform: uppercase; font-size: 12px; letter-spacing: 0.3px;" class="active" onclick="switchChatView('panel-chat-general')">💬 Phòng Chat Tổng</div>
+                    <div id="tabCtrlChatPrivate" style="flex: 1; padding: 12px; text-align: center; font-weight: 900; cursor: pointer; text-transform: uppercase; font-size: 12px; border-left: 2px solid var(--black-pure); letter-spacing: 0.3px;" onclick="switchChatView('panel-chat-private')">🔒 Chat Riêng Admin</div>
                 </div>
 
-                <!-- CỬA SỔ 1: PHÒNG CHAT TỔNG (Sảnh công khai toàn thành phố) -->
-                <div id="panel-chat-general" style="display: flex; flex-direction: column; gap: 15px;">
-                    <div id="cityLiveChatArea" style="flex: 1; border: 2px solid var(--black-pure); background-color: var(--gray-bg); padding: 20px; overflow-y: auto; max-height: 380px; display: flex; flex-direction: column; gap: 15px; min-height: 320px; box-sizing: border-box; box-shadow: inset 2px 2px 5px rgba(0,0,0,0.1);">
-                        <p style="color: #718096; font-size: 13px; font-style: italic; text-align: center; margin-top: 140px;">Hệ thống đang mở cổng WebSockets kết nối phòng chat tổng đám mây...</p>
+                <!-- CỬA SỔ 1: PHÒNG CHAT TỔNG NẰM TRONG KHUNG TRẮNG -->
+                <div id="panel-chat-general" style="display: flex; flex-direction: column; gap: 15px; width: 100%;">
+                    <div id="cityLiveChatArea" style="flex: 1; border: 2px solid var(--black-pure); background-color: var(--gray-bg); padding: 15px; overflow-y: auto; max-height: 350px; display: flex; flex-direction: column; gap: 12px; min-height: 280px; box-sizing: border-box; box-shadow: inset 2px 2px 5px rgba(0,0,0,0.1);">
+                        <p style="color: #718096; font-size: 12px; font-style: italic; text-align: center; margin-top: 110px; font-weight: bold;">Hệ thống đang mở cổng WebSockets kết nối phòng chat tổng đám mây...</p>
                     </div>
                     <form id="cityChatSubmitForm" style="display: flex; gap: 12px;" onsubmit="sendGeneralMessage(event)">
                         <input type="text" id="cityChatInput" class="city-input" placeholder="Nhập nội dung tin nhắn sảnh tổng..." required autocomplete="off">
-                        <button type="submit" class="city-btn" style="padding-left: 30px; padding-right: 30px;">Gửi</button>
+                        <button type="submit" class="city-btn" style="padding-left: 25px; padding-right: 25px;">Gửi</button>
                     </form>
                 </div>
 
-                <!-- CỬA SỔ 2: CHAT RIÊNG ADMIN (Đường truyền cô lập trực tiếp tới @STDHenry) -->
-                <div id="panel-chat-private" style="display: none; flex-direction: column; gap: 15px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed var(--black-pure); padding-bottom: 10px;">
-                        <div style="font-size: 13px; font-weight: 900; color: #E63946;">🛡️ KÊNH ĐƯỜNG TRUYỀN BẢO MẬT TRỰC TIẾP VỚI ADMIN @STDHenry</div>
+                <!-- CỬA SỔ 2: CHAT RIÊNG ADMIN NẰM TRONG KHUNG TRẮNG -->
+                <div id="panel-chat-private" style="display: none; flex-direction: column; gap: 15px; width: 100%;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed var(--black-pure); padding-bottom: 8px;">
+                        <div style="font-size: 12px; font-weight: 900; color: #E63946;">🛡️ KÊNH ĐƯỜNG TRUYỀN BẢO MẬT TRỰC TIẾP VỚI ADMIN @STDHenry</div>
                         <!-- NÚT BẤM BÁO CÁO VI PHẠM LỒNG THẲNG TRONG GIAO DIỆN CHAT RIÊNG -->
-                        <button type="button" class="city-btn" style="background-color: #E63946; color: #ffffff; border-color: #000000; padding: 8px 16px; font-size: 11px; box-shadow: 2px 2px 0px #000000;" onclick="toggleEmergencyReportFormBox()">🚨 Gửi Báo Cáo Khẩn</button>
+                        <button type="button" class="city-btn" style="background-color: #E63946; color: #ffffff; border-color: #000000; padding: 6px 12px; font-size: 10px; box-shadow: 2px 2px 0px #000000;" onclick="toggleEmergencyReportFormBox()">🚨 Gửi Báo Cáo Khẩn</button>
                     </div>
 
                     <!-- Biểu mẫu điền đơn báo cáo (Mặc định ẩn ngầm, bấm nút đỏ mới bung tỏa ra) -->
-                    <div id="emergencyReportFormBox" class="city-card" style="display: none; border-style: dashed; padding: 20px; margin-bottom: 5px; background-color: #FFF5E6;">
+                    <div id="emergencyReportFormBox" class="city-card" style="display: none; border-style: dashed; padding: 15px; margin-bottom: 5px; background-color: #FFF5E6; box-shadow: 2px 2px 0px #000000;">
                         <form id="cityReportForm" onsubmit="sendEmergencyReport(event)">
-                            <label style="font-weight: 900; display: block; margin-bottom: 8px; font-size: 12px; text-transform: uppercase;">✍️ Điền bằng chứng vi phạm tiền tệ hoặc sản phẩm sai quy chuẩn:</label>
+                            <label style="font-weight: 900; display: block; margin-bottom: 6px; font-size: 11px; text-transform: uppercase;">✍️ Điền bằng chứng vi phạm tiền tệ hoặc sản phẩm sai quy chuẩn:</label>
                             <div style="display: flex; gap: 10px;">
-                                <textarea id="reportContentInput" class="city-input" style="height: 60px; font-family: inherit; resize: none; font-size: 13px;" placeholder="Gõ nội dung hoặc tên cư dân vi phạm cụ thể tại đây..." required></textarea>
-                                <button type="submit" class="city-btn" style="font-size: 11px; padding: 10px; border-color: #000000; background-color: #000000; color: #ffffff;">Phát Hỏa Đơn</button>
+                                <textarea id="reportContentInput" class="city-input" style="height: 50px; font-family: inherit; resize: none; font-size: 12px;" placeholder="Gõ nội dung hoặc tên cư dân vi phạm cụ thể tại đây..." required></textarea>
+                                <button type="submit" class="city-btn" style="font-size: 11px; padding: 8px; border-color: #000000; background-color: #000000; color: #ffffff;">Phát Hỏa</button>
                             </div>
                         </form>
                     </div>
 
-                    <div id="cityPrivateChatArea" style="flex: 1; border: 2px solid var(--black-pure); background-color: var(--gray-bg); padding: 20px; overflow-y: auto; max-height: 380px; display: flex; flex-direction: column; gap: 15px; min-height: 250px; box-sizing: border-box;">
-                        <p style="color: #718096; font-size: 13px; font-style: italic; text-align: center; margin-top: 100px;">Hệ thống đang đồng bộ phòng chat riêng tư bảo mật with Admin...</p>
+                    <div id="cityPrivateChatArea" style="flex: 1; border: 2px solid var(--black-pure); background-color: var(--gray-bg); padding: 15px; overflow-y: auto; max-height: 350px; display: flex; flex-direction: column; gap: 12px; min-height: 220px; box-sizing: border-box;">
+                        <p style="color: #718096; font-size: 12px; font-style: italic; text-align: center; margin-top: 80px; font-weight: bold;">Hệ thống đang đồng bộ phòng chat riêng tư bảo mật với Admin...</p>
                     </div>
                     <form id="cityPrivateChatSubmitForm" style="display: flex; gap: 12px;" onsubmit="sendPrivateMessageToAdmin(event)">
                         <input type="text" id="cityPrivateChatInput" class="city-input" placeholder="Nhắn tin riêng mật với Admin @STDHenry..." required autocomplete="off">
-                        <button type="submit" class="city-btn" style="padding-left: 30px; padding-right: 30px;">Gửi Mật</button>
+                        <button type="submit" class="city-btn" style="padding-left: 25px; padding-right: 25px;">Gửi Mật</button>
                     </form>
                 </div>
 
             </div>
         </div>
 
-    </div> <!-- THẺ ĐÓNG KẾT THÚC KHỐI MAIN-WRAPPER TỔNG QUAN TRỌNG CHỐT KHUNG DIỆN MẠO -->
+    </div> <!-- THÈ ĐÓNG KẾT THÚC KHỐI MAIN-WRAPPER TỔNG CHÍNH THỨC KHÓA HÒM GIAO DIỆN LỌT LÒNG KHUNG TRẮNG [🗎1] -->
 
-            <!-- =========================================================
-         BỘ NÃO JAVASCRIPT MODULE: KIỂM TRA CHIP NHẬN DIỆN SSO - ĐỢT 16
-         ========================================================= -->
     <script type="module">
         // Nhập trạm liên thông dữ liệu đám mây và bộ nhớ đệm tập trung từ bộ não utils2.js
         import { 

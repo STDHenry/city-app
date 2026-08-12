@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Independent City - Mạng Lõi Tactical Cao Cấp</title>
+    <title>Independent City - Mạng Lõi Tactical Quân Sự</title>
     
-    <!-- ĐÃ ĐỒNG BỘ: Nhúng duy nhất đường link thư viện CDN chính thức sạch lỗi kết nối -->
+    <!-- ĐÃ ĐỒNG BỘ: Nhúng duy nhất đường link thư viện Supabase CDN chính thức sạch lỗi kết nối -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script> 
     
     <style>
         /* =========================================================
-           BẢNG MÀU MẠNG LÕI QUÂN SỰ TACTICAL - KIÊN CỐ VÀ BẢO MẬT CAO
+           BẢNG MÀU MẠNG LÕI TACTICAL V3 - PHONG CÁCH QUÂN SỰ BẢO MẬT CAO
            ========================================================= */
         :root {
             --navy-deep: #000010;       /* Xanh đậm Hải quân siêu tối (Chữ tiêu đề, viền khối lớn) */
@@ -19,16 +19,17 @@
             --white-pure: #ffffff;      /* Ruột hộp trắng tinh tương phản cao */
             --gray-bg: #eceff1;         /* Màu nền Trắng Xám xi măng nhạt toàn sảnh */
             --kem-orange: #e0f2f1;      /* Xanh bạc hà nhạt phấn lót ô cờ Grid dịu mắt */
-            --accent-emergency: #e63946;/* Đỏ cảnh báo khẩn phát hỏa đơn khiếu nại, chấm đỏ thông báo */
+            --accent-emergency: #e63946;/* Đỏ cảnh báo khẩn, chấm đỏ thông báo chưa xem kiểu Chess.com */
+            
             --border-heavy: 3px solid var(--black-pure);
             --shadow-flat: 8px 8px 0px var(--black-pure);
         }
 
-        /* CHẾ ĐỘ BÓNG TỐI (DARK THEME) QUÂN SỰ: CHỮ TRẮNG, DÌM LỤC QUÂN XUỐNG SIÊU ĐẬM 🟢 */
+        /* CHẾ ĐỘ BÓNG TỐI (DARK THEME) QUÂN SỰ: CHỮ TRẮNG, DÌM LỤC QUÂN XUỐNG ĐẬM HƠN #001E00 🟢 */
         body.dark-theme {
-            --navy-deep: #ffffff;       
-            --navy-light: #001e00;      /* Xanh lá Lục quân dìm siêu đậm chất phòng chỉ huy ngầm */
-            --black-pure: #ffffff;      
+            --navy-deep: #ffffff;       /* Chuyển toàn bộ chữ tiêu đề sang Trắng sáng */
+            --navy-light: #001e00;      /* ĐÃ ĐỔI: Xanh lá Lục quân dìm siêu đậm chất phòng chỉ huy ngầm */
+            --black-pure: #ffffff;      /* Đường viền thô bản chuyển sang Trắng tương phản */
             --white-pure: #161616;      /* Ruột hộp đen carbon tối */
             --gray-bg: #0a0a0a;         /* Nền tổng sảnh tối thượng */
             --kem-orange: #0f1a0f;      /* Nền ô cờ Grid dìm tối có ánh lục quân ngầm */
@@ -41,7 +42,7 @@
             transition: background-color 0.2s ease;
         }
 
-        /* KHUNG XƯƠNG THU GỌN: HỘP CHỮ NHẬT DUY NHẤT Ở CHÍNH GIỮA MÀN HÌNH RỘNG ĐÚNG 850PX [🗎1] */
+        /* KHUNG XƯƠNG CỐT LÕI: HỘP CHỮ NHẬT DUY NHẤT Ở CHÍNH GIỮA MÀN HÌNH RỘNG ĐÚNG 850PX THEO ẢNH VẼ TAY [🗎1] */
         .main-wrapper {
             width: 100%; max-width: 850px; min-height: 800px; margin: 30px;
             border: var(--border-heavy); box-shadow: var(--shadow-flat);
@@ -54,6 +55,7 @@
         }
         .nav-left-group { display: flex; flex: 1; }
 
+        /* Các nút bấm lật Tab lớn chữ in hoa viền dày đậm đà [🗎1] */
         .nav-item {
             flex: 1; padding: 16px 10px; text-align: center; font-weight: 900; cursor: pointer;
             text-transform: uppercase; border-right: 2px solid var(--black-pure); font-size: 13px;
@@ -64,7 +66,18 @@
         .nav-item:hover, .nav-item.active { background-color: var(--navy-light); color: #ffffff; }
         body.dark-theme .nav-item:hover, body.dark-theme .nav-item.active { background-color: var(--navy-deep); color: #000000; }
 
-        /* Nút Đăng xuất treo góc cao bên phải quay đầu sảnh đăng nhập [🗎1] */
+        /* Cụm khối bọc giữ các nút điều khiển chức năng bên góc cao bên phải [🗎1] */
+        .nav-right-control-box { display: flex; align-items: stretch; }
+        
+        /* Huy hiệu đếm người trực tuyến thời gian thực mượt mà viền thô đậm gài góc Navbar [🗎1] */
+        .nav-presence-badge {
+            display: flex; align-items: center; justify-content: center; padding: 0 15px;
+            font-weight: 900; font-size: 11px; background-color: var(--kem-orange);
+            color: var(--black-pure); border-left: 2px solid var(--black-pure); gap: 5px;
+        }
+        body.dark-theme .nav-presence-badge { border-left-color: var(--white-pure); color: #ffffff; }
+
+        /* Nút Đăng xuất treo góc phải, gạch bỏ nút dài cũ gài luồng quay đầu sảnh cũ [🗎1] */
         .nav-logout-btn {
             padding: 0 20px; display: flex; align-items: center; justify-content: center;
             font-weight: 950; font-size: 13px; text-transform: uppercase; cursor: pointer;
@@ -73,40 +86,177 @@
         }
         .nav-logout-btn:hover { background-color: var(--accent-emergency); color: #ffffff; }
         body.dark-theme .nav-logout-btn { border-left-color: var(--white-pure); background-color: var(--white-pure); }
-
+        /* =========================================================
+           ĐỢT 3: HỆ THỐNG CSS CHO KHỐI CARD, Ô NHẬP LIỆU VÀ NÚT BẤM TACTICAL
+           ========================================================= */
+        /* Định dạng chung cho phân khu ruột các Tab lọt lòng */
         .hub-body-tab { width: 100%; padding: 25px; box-sizing: border-box; display: none; }
         .hub-body-tab.active { display: block; }
         .tab-centered-content { display: flex; flex-direction: column; gap: 20px; }
 
-        /* Hệ thống phom biểu mẫu viền đen dày đổ bóng phẳng phẳng khối đặc trưng */
+        /* Tiêu đề phân khu bọc gạch chân đen thô đậm đặc trưng [🗎1] */
         .city-title {
             font-size: 18px; font-weight: 900; text-transform: uppercase; color: var(--navy-light);
             border-bottom: 2px solid var(--black-pure); padding-bottom: 6px; margin-bottom: 18px; display: flex; align-items: center; gap: 8px;
         }
-        body.dark-theme .city-title { color: var(--navy-deep); border-bottom-color: var(--black-pure); }
+        body.dark-theme .city-title { color: #ffffff; border-bottom-color: var(--black-pure); }
+
+        /* Khối hộp Card chữ nhật thô thô đậm đậm đổ bóng khối phẳng đặc trưng [🗎1] */
         .city-card { border: 2px solid var(--black-pure); padding: 20px; margin-bottom: 15px; background-color: var(--white-pure); box-shadow: 4px 4px 0px var(--black-pure); }
+        
+        /* Ô gõ dữ liệu bảo mật, tự động lót nền nhạt khi trỏ chuột vào [🗎1] */
         .city-input { width: 100%; padding: 11px; border: 2px solid var(--black-pure); box-sizing: border-box; font-size: 13px; font-weight: bold; background-color: var(--white-pure); color: var(--black-pure); }
         .city-input:focus { outline: none; background-color: var(--kem-orange); }
+        body.dark-theme .city-input { border-color: var(--black-pure); background-color: #242424; color: #ffffff; }
         
+        /* Nút bấm phẳng khối gông viền đen dày, đổ bóng phản hồi giật giật cơ học [🗎1] */
         .city-btn {
             padding: 11px 20px; border: 2px solid var(--black-pure); background-color: var(--navy-light); color: #ffffff; font-weight: 900; font-size: 12px; text-transform: uppercase;
             cursor: pointer; transition: all 0.1s ease; box-shadow: 3px 3px 0px var(--black-pure);
         }
         .city-btn:hover { transform: translate(1px, 1px); box-shadow: 2px 2px 0px var(--black-pure); background-color: var(--black-pure); color: var(--white-pure); }
-
-        /* Dàn 6 Ô lưới Grid Dịch Vụ mẫu chữ nhật nằm ngang ép gọn 3 cột khít phom [🗎1] */
+        /* =========================================================
+           ĐỢT 4: HỆ THỐNG CSS CHO LƯỚI GRID ĐỒ HỌA SẢNH CHỦ 6 Ô CỜ
+           ========================================================= */
+        /* Khu vực căn giữa tiêu đề có gạch đỏ cam rực lửa dưới đáy theo ảnh mẫu [🗎1] */
         .services-title-section { text-align: center; margin-bottom: 25px; }
-        .services-main-title { font-size: 20px; font-weight: 900; text-transform: uppercase; color: var(--navy-light); display: inline-block; position: relative; padding-bottom: 8px; }
-        .services-main-title::after { content: ''; position: absolute; bottom: 0; left: 25%; width: 50%; height: 3px; background-color: var(--accent-emergency); }
+        
+        .services-main-title { 
+            font-size: 20px; font-weight: 900; text-transform: uppercase; 
+            color: var(--navy-light); display: inline-block; position: relative; padding-bottom: 8px; 
+        }
+        body.dark-theme .services-main-title { color: #ffffff; }
+        
+        /* Đường gạch ngang đỏ cam găm chuẩn tỷ lệ 50% trung tâm [🗎1] */
+        .services-main-title::after { 
+            content: ''; position: absolute; bottom: 0; left: 25%; width: 50%; height: 3px; 
+            background-color: var(--accent-emergency); 
+        }
+
+        /* Lưới ô cờ được ép gọn gàng thành 3 cột chữ nhật nằm ngang vừa khít layout 850px [🗎1] */
         .services-grid-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 25px; }
-        .service-grid-card { border: 2px solid var(--black-pure); background-color: var(--kem-orange); padding: 15px 5px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 110px; box-sizing: border-box; transition: all 0.15s ease; }
-        .service-grid-card:hover { transform: translateY(-3px); box-shadow: 3px 3px 0px var(--black-pure); background-color: var(--navy-light); color: #ffffff; }
+        
+        .service-grid-card { 
+            border: 2px solid var(--black-pure); background-color: var(--kem-orange); 
+            padding: 15px 5px; text-align: center; cursor: pointer; display: flex; 
+            flex-direction: column; align-items: center; justify-content: center; 
+            min-height: 110px; box-sizing: border-box; transition: all 0.15s ease; 
+        }
+        body.dark-theme .service-grid-card { border-color: var(--black-pure); background-color: #1a2a1a; color: #ffffff; }
+        
+        /* Hiệu ứng nhấc khối phẳng trượt ngược lên trên bọc màu lục quân khi hover [🗎1] */
+        .service-grid-card:hover { 
+            transform: translateY(-3px); box-shadow: 3px 3px 0px var(--black-pure); 
+            background-color: var(--navy-light); color: #ffffff; 
+        }
+        body.dark-theme .service-grid-card:hover { background-color: #ffffff; color: #000000; box-shadow: 3px 3px 0px var(--black-pure); }
+        
         .card-icon-box { font-size: 28px; margin-bottom: 8px; }
         .card-text-lbl { font-size: 12px; font-weight: 800; color: var(--black-pure); }
         .service-grid-card:hover .card-text-lbl { color: #ffffff !important; }
+        body.dark-theme .service-grid-card:hover .card-text-lbl { color: #000000 !important; }
+        /* =========================================================
+           ĐỢT 4: HỆ THỐNG CSS CHO LƯỚI GRID ĐỒ HỌA SẢNH CHỦ 6 Ô CỜ
+           ========================================================= */
+        /* Khu vực căn giữa tiêu đề có gạch đỏ cam rực lửa dưới đáy theo ảnh mẫu [🗎1] */
+        .services-title-section { text-align: center; margin-bottom: 25px; }
+        
+        .services-main-title { 
+            font-size: 20px; font-weight: 900; text-transform: uppercase; 
+            color: var(--navy-light); display: inline-block; position: relative; padding-bottom: 8px; 
+        }
+        body.dark-theme .services-main-title { color: #ffffff; }
+        
+        /* Đường gạch ngang đỏ cam găm chuẩn tỷ lệ 50% trung tâm [🗎1] */
+        .services-main-title::after { 
+            content: ''; position: absolute; bottom: 0; left: 25%; width: 50%; height: 3px; 
+            background-color: var(--accent-emergency); 
+        }
 
-        /* Hạ tầng Chấm Đỏ thông báo chưa xem kiểu Chess.com giật nháy động [🗎1] */
-        .chess-tab-wrapper { position: relative; display: inline-block; flex: 1; }
+        /* Lưới ô cờ được ép gọn gàng thành 3 cột chữ nhật nằm ngang vừa khít layout 850px [🗎1] */
+        .services-grid-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 25px; }
+        
+        .service-grid-card { 
+            border: 2px solid var(--black-pure); background-color: var(--kem-orange); 
+            padding: 15px 5px; text-align: center; cursor: pointer; display: flex; 
+            flex-direction: column; align-items: center; justify-content: center; 
+            min-height: 110px; box-sizing: border-box; transition: all 0.15s ease; 
+        }
+        body.dark-theme .service-grid-card { border-color: var(--black-pure); background-color: #1a2a1a; color: #ffffff; }
+        
+        /* Hiệu ứng nhấc khối phẳng trượt ngược lên trên bọc màu lục quân khi hover [🗎1] */
+        .service-grid-card:hover { 
+            transform: translateY(-3px); box-shadow: 3px 3px 0px var(--black-pure); 
+            background-color: var(--navy-light); color: #ffffff; 
+        }
+        body.dark-theme .service-grid-card:hover { background-color: #ffffff; color: #000000; box-shadow: 3px 3px 0px var(--black-pure); }
+        
+        .card-icon-box { font-size: 28px; margin-bottom: 8px; }
+        .card-text-lbl { font-size: 12px; font-weight: 800; color: var(--black-pure); }
+        .service-grid-card:hover .card-text-lbl { color: #ffffff !important; }
+        body.dark-theme .service-grid-card:hover .card-text-lbl { color: #000000 !important; }
+        /* =========================================================
+           ĐỢT 5: HỆ THỐNG CSS CHO THANH TIẾN TRÌNH PROGRESS BAR NHIỆM VỤ
+           ========================================================= */
+        /* Khung đường ray chạy ngầm bọc ngoài viền thô bản phẳng khối [🗎1] */
+        .task-progress-track {
+            width: 100%; height: 16px; border: 2px solid var(--black-pure);
+            background-color: var(--gray-bg); position: relative; box-sizing: border-box;
+            box-shadow: 2px 2px 0px var(--black-pure); margin-top: 8px;
+        }
+
+        /* Ruột thanh tiến trình co giãn cơ học mượt mà bằng transition [🗎1] */
+        .task-progress-bar {
+            width: 0%; height: 100%; background-color: var(--accent-emergency);
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;
+        }
+
+        /* LUẬT BIẾN ĐỔI SẮC XANH: ÉP VỌT SANG MÀU XANH LÁ CÂY 100% KHI CHẠM MỐC HOÀN THÀNH CHU KỲ CHESS 3/3 [🗎1] */
+        .task-progress-bar.completed { 
+            background-color: #2ed573 !important; 
+        }
+        /* =========================================================
+           ĐỢT 6: HỆ THỐNG CSS LAYOUT CHAT HAI VÙNG DỌC CHESS.COM
+           ========================================================= */
+        /* Khung bọc flex phân đôi không gian chat lọt lòng hộp 850px [🗎1] */
+        .chess-chat-container { 
+            display: flex; gap: 15px; height: 420px; align-items: stretch; 
+        }
+        
+        /* Cột trái: Hàng chờ danh mục cuộn chứa danh sách cư dân mạng lưới [🗎1] */
+        .chess-sidebar-users { 
+            width: 220px; border: 2px solid var(--black-pure); 
+            background-color: var(--white-pure); overflow-y: auto; 
+            display: flex; flex-direction: column; box-shadow: 3px 3px 0px var(--black-pure); 
+        }
+        body.dark-theme .chess-sidebar-users { background-color: #1a1a1a; }
+        
+        /* Từng thanh hàng cư dân phản hồi đổi màu lục quân cực đậm đà khi click chọn [🗎1] */
+        .chess-user-row { 
+            padding: 10px; font-size: 12px; font-weight: 900; 
+            border-bottom: 1px solid var(--gray-bg); cursor: pointer; 
+            display: flex; align-items: center; justify-content: space-between; 
+            gap: 5px; transition: all 0.1s ease; color: var(--black-pure);
+        }
+        body.dark-theme .chess-user-row { border-bottom-color: #2d2d2d; color: #ffffff; }
+        
+        .chess-user-row:hover, .chess-user-row.active { 
+            background-color: var(--navy-light); color: #ffffff; 
+        }
+        
+        /* Cột phải: Không gian chính diện để đổ bong bóng thoại và form gõ chữ [🗎1] */
+        .chess-main-chat-area { 
+            flex: 1; display: flex; flex-direction: column; gap: 12px; 
+        }
+        /* =========================================================
+           ĐỢT 7: HỆ THỐNG CSS CHẤM ĐỎ CHESS.COM VÀ BONG BÓNG THOẠI QUÂN SỰ
+           ========================================================= */
+        /* Neo giữ vị trí chấm đỏ rực lửa nhấp nháy trên sảnh đầu nút điều hướng phụ [🗎1] */
+        .chess-tab-wrapper { 
+            position: relative; display: inline-block; flex: 1; 
+        }
+
+        /* Chấm đỏ thông báo chưa đọc: Tự động kích hoạt chu kỳ nhấp nháy rực rỡ [🗎1] */
         .chess-unread-dot {
             position: absolute; top: 5px; right: 12px;
             width: 8px; height: 8px; background-color: var(--accent-emergency);
@@ -119,163 +269,86 @@
             100% { transform: scale(1.3); opacity: 1; }
         }
 
-        /* Thanh tiến trình Progress Bar Nhiệm Vụ 25 giờ chuyển xanh 100% [🗎1] */
-        .task-progress-track {
-            width: 100%; height: 16px; border: 2px solid var(--black-pure);
-            background-color: var(--gray-bg); position: relative; box-sizing: border-box;
-            box-shadow: 2px 2px 0px var(--black-pure); margin-top: 8px;
-        }
-        .task-progress-bar {
-            width: 0%; height: 100%; background-color: var(--accent-emergency);
-            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;
-        }
-        /* Ép vọt sang màu xanh lá mượt mà khi thanh Progress đạt ngưỡng hoàn thành 100% [🗎1] */
-        .task-progress-bar.completed { background-color: #2ed573 !important; }
-
-        /* Phom bong bóng chat và cấu trúc thông tin phụ */
+        /* Bong bóng tin nhắn cuộn dàn hàng dọc tương phản cao [🗎1] */
         .msg-row { display: flex; flex-direction: column; width: 100%; }
         .msg-me { align-items: flex-end; }
         .msg-other { align-items: flex-start; }
-        .msg-bubble { max-width: 80%; padding: 10px 14px; border: 2px solid var(--black-pure); font-size: 13px; font-weight: bold; word-break: break-word; }
-        .bubble-me { background-color: var(--kem-orange); border-radius: 10px 10px 0px 10px; }
-        .bubble-other { background-color: var(--white-pure); border-radius: 10px 10px 10px 0px; }
+        
+        .msg-bubble { 
+            max-width: 80%; padding: 10px 14px; border: 2px solid var(--black-pure); 
+            font-size: 13px; font-weight: bold; word-break: break-word; 
+        }
+        .bubble-me { background-color: var(--kem-orange); border-radius: 10px 10px 0px 10px; color: #000000; }
+        .bubble-other { background-color: var(--white-pure); border-radius: 10px 10px 10px 0px; color: #000000; }
+        body.dark-theme .bubble-me { background-color: #0f2a0f; color: #ffffff; }
+        body.dark-theme .bubble-other { background-color: #242424; color: #ffffff; }
+
+        /* Tiện ích bổ trợ nhãn tên, huy hiệu và trạm chứa popup thông báo */
         .city-badge { padding: 3px 6px; font-size: 10px; font-weight: 900; border: 1px solid var(--black-pure); color: #ffffff; text-transform: uppercase; }
         #notification-container { position: absolute; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 9999; }
-    </style>
-    <script>
-        // Thuật toán đổi Tab động sảnh mạng lõi bằng div ẩn hiện mượt mà bách phát bách trúng [🗎1]
-        window.switchHubTab = function(tabId) {
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            document.querySelectorAll('.hub-body-tab').forEach(tab => tab.classList.remove('active'));
+    
+        /* =========================================================
+           ĐỢT 8: HỆ THỐNG CSS ĐỒ HỌA HỘP THOẠI MODAL PHẲNG KHỐI NÂNG CAO [🗎1]
+           ========================================================= */
+        /* Lớp nền mờ bao phủ toàn cục sảnh sau lưng hộp thoại thoại */
+        .city-modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.6); display: none;
+            align-items: center; justify-content: center; z-index: 10000;
+        }
 
-            // Đổ màu nền Lục quân cho nút Navbar vừa được cư dân bấm chọn
-            const activeNav = document.getElementById('navTab-' + tabId.replace('tab-', ''));
-            if (activeNav) activeNav.classList.add('active');
-            
-            // Kích hoạt phân khu ruột tương ứng bung tỏa sáng rõ
-            const targetTab = document.getElementById(tabId);
-            if (targetTab) {
-                targetTab.classList.add('active');
-                // Nếu cư dân chuyển sang Tab Chợ thì ép luồng tự động đồng bộ hàng hóa ngay [🗎1]
-                if (tabId === 'tab-service' && typeof window.loadMarketDataCloud === 'function') {
-                    window.loadMarketDataCloud();
-                }
-                // Nếu cư dân mở Tab Phòng Chat, tự động mất chấm đỏ thông báo chưa xem của Tab đó [🗎1]
-                if (tabId === 'tab-chat') {
-                    const activeSubPanel = document.querySelector('.chess-tab-item.active');
-                    if (activeSubPanel && typeof window.clearChessUnreadDotBridge === 'function') {
-                        window.clearChessUnreadDotBridge(activeSubPanel.id);
-                    }
-                }
-            }
-        };
+        /* Khung hộp thoại Modal bo viền thô bản, bật nổ đàn hồi nhẹ [🗎1] */
+        .city-modal-box {
+            width: 100%; max-width: 440px; background-color: var(--white-pure);
+            border: var(--border-heavy); box-shadow: var(--shadow-flat);
+            padding: 22px; box-sizing: border-box; 
+            animation: modalTacticalBung 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes modalTacticalBung { 
+            0% { transform: scale(0.85); opacity: 0; } 
+            100% { transform: scale(1); opacity: 1; } 
+        }
+        
+        /* Định dạng phong cách Hóa Đơn màu xanh Lục Quân Đậm đanh thép của bạn 🟢 [🗎1] */
+        .invoice-military-title {
+            background-color: var(--navy-light); color: #ffffff;
+            padding: 12px; font-weight: 950; font-size: 14px; text-transform: uppercase;
+            text-align: center; border: 2px solid var(--black-pure); margin-bottom: 15px;
+            letter-spacing: 0.5px;
+        }
 
-        // PHÁT KIẾN THÔNG MẠCH: Cho phép click từ 6 ô lưới Grid sảnh Hub chủ tự gạt nút nhảy Tab liên thông
-        window.jumpToHubServiceCard = function(tabId, subPanelId) {
-            window.switchHubTab(tabId);
-            if (subPanelId) {
-                if (tabId === 'tab-service') window.switchMarketView(subPanelId);
-                if (tabId === 'tab-chat') window.switchChatView(subPanelId);
-            }
-        };
-
-        // Hàm đổi Tab phụ Mua / Bán nội bộ độc lập bên trong phân khu Chợ dịch vụ tự doanh
-        window.switchMarketView = function(panelId) {
-            document.getElementById('panel-buy').style.display = "none";
-            document.getElementById('panel-sell').style.display = "none";
-            document.getElementById('tabCtrlBuy').classList.remove('active');
-            document.getElementById('tabCtrlSell').classList.remove('active');
-
-            document.getElementById(panelId).style.display = "flex";
-            if (panelId === 'panel-buy') {
-                document.getElementById('tabCtrlBuy').classList.add('active');
-                if (typeof window.loadMarketDataCloud === 'function') window.loadMarketDataCloud();
-            } else {
-                document.getElementById('tabCtrlSell').classList.add('active');
-            }
-        };
-
-        // ĐÃ ĐỒNG BỘ CHESS.COM: Đổi Tab phụ 3 phân khu (Thư mật / Chat tổng / Chat Admin) kèm tắt chấm đỏ [🗎1]
-        window.switchChatView = function(panelId) {
-            document.getElementById('panel-chat-mailbox').style.display = "none";
-            document.getElementById('panel-chat-general').style.display = "none";
-            document.getElementById('panel-chat-private').style.display = "none";
-            document.getElementById('tabCtrlMailbox').classList.remove('active');
-            document.getElementById('tabCtrlChatGeneral').classList.remove('active');
-            document.getElementById('tabCtrlChatPrivate').classList.remove('active');
-
-            document.getElementById(panelId).style.display = "flex";
-            
-            // Tìm nút điều khiển tương ứng để nhuộm màu active
-            let tabCtrlBtnId = 'tabCtrlMailbox';
-            if (panelId === 'panel-chat-general') tabCtrlBtnId = 'tabCtrlChatGeneral';
-            if (panelId === 'panel-chat-private') tabCtrlBtnId = 'tabCtrlChatPrivate';
-            
-            const ctrlBtn = document.getElementById(tabCtrlBtnId);
-            if (ctrlBtn) {
-                ctrlBtn.classList.add('active');
-                // Tắt chấm đỏ chưa xem tương ứng của phân khu vừa click lật mở [🗎1]
-                if (typeof window.clearChessUnreadDotBridge === 'function') {
-                    window.clearChessUnreadDotBridge(tabCtrlBtnId);
-                }
-            }
-
-            // Kích nổ luồng tải dữ liệu đám mây cô lập của từng phân khu chat tương ứng
-            if (panelId === 'panel-chat-mailbox' && typeof window.fetchMailboxMessagesCloud === 'function') {
-                window.fetchMailboxMessagesCloud();
-            } else if (panelId === 'panel-chat-general' && typeof window.fetchChatMessagesCloud === 'function') {
-                window.fetchChatMessagesCloud();
-            } else if (panelId === 'panel-chat-private' && typeof window.fetchPrivateChatMessagesCloud === 'function') {
-                window.fetchPrivateChatMessagesCloud();
-            }
-        };
-
-        // Hàm bật/tắt lật mở biểu mẫu đăng tin chợ khi cư dân click dấu cộng vuông vức
-        window.toggleNewServiceForm = function() {
-            const formBox = document.getElementById("newServiceFormBox");
-            const plusBtn = document.querySelector(".add-plus-btn");
-            if (!formBox || !plusBtn) return;
-            
-            if (formBox.style.display === "none") {
-                formBox.style.display = "block";
-                plusBtn.innerText = "-";
-            } else {
-                formBox.style.display = "none";
-                plusBtn.innerText = "+";
-            }
-        };
-
-        // Hàm ẩn hiện form điền đơn khiếu nại báo cáo lồng thẳng trong giao diện Chat Riêng Admin
-        window.toggleEmergencyReportFormBox = function() {
-            const box = document.getElementById("emergencyReportFormBox");
-            if (!box) return;
-            box.style.display = (box.style.display === "none") ? "block" : "none";
-        };
-    </script>
+        /* Đồng bộ giao diện tối Carbon nếu cư dân bật chế độ Bóng tối */
+        body.dark-theme .city-modal-box { 
+            border-color: var(--black-pure); background-color: #1a1a1a; 
+            box-shadow: 8px 8px 0px var(--black-pure); 
+        }
+    </style> <!-- ĐÓNG CHỐT TIÊU CHUẨN 100% PHẦN ĐỒ HỌA ÁO VẢI -->
     <!-- =========================================================
          BỘ ĐIỀU PHỐI ĐẦU VÀO TOÀN CỤC: ĐẶT TRÊN ĐỈNH CHỐNG LỖI IS NOT A FUNCTION [🗎1]
          ========================================================= -->
     <script>
-        // Thuật toán đổi Tab động sảnh mạng lõi bằng div ẩn hiện mượt mà bách phát bách trúng [🗎1]
+        // Thuật toán đổi Tab động sảnh mạng lõi bằng div ẩn hiện mượt mà lướt láng mịn [🗎1]
         window.switchHubTab = function(tabId) {
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
             document.querySelectorAll('.hub-body-tab').forEach(tab => tab.classList.remove('active'));
 
-            // Đổ màu nền Lục quân cho nút Navbar vừa được cư dân bấm chọn
+            // Đổ màu nền Lục quân Tactical cho nút Navbar vừa được cư dân bấm chọn
             const activeNav = document.getElementById('navTab-' + tabId.replace('tab-', ''));
             if (activeNav) activeNav.classList.add('active');
             
-            // Kích hoạt phân khu ruột tương ứng bung tỏa sáng rõ
+            // Kích hoạt phân khu ruột tương ứng bung tỏa sáng rõ trong hộp 850px [🗎1]
             const targetTab = document.getElementById(tabId);
             if (targetTab) {
                 targetTab.classList.add('active');
-                // Nếu cư dân chuyển sang Tab Chợ thì ép luồng tự động đồng bộ hàng hóa ngay [🗎1]
+                
+                // Nếu cư dân chuyển sang Tab Chợ thì ép luồng tự động đồng bộ hàng hóa đám mây ngay [🗎1]
                 if (tabId === 'tab-service' && typeof window.loadMarketDataCloud === 'function') {
                     window.loadMarketDataCloud();
                 }
-                // Nếu cư dân mở Tab Phòng Chat, tự động mất chấm đỏ thông báo chưa xem của Tab đó [🗎1]
+                
+                // ĐÈ LUẬT CHESS.COM: Nếu cư dân mở Tab Phòng Chat, tự động tắt chấm đỏ của phân khu đang mở [🗎1]
                 if (tabId === 'tab-chat') {
-                    const activeSubPanel = document.querySelector('.chess-tab-item.active');
+                    const activeSubPanel = document.querySelector('.chess-tab-wrapper .nav-item.active');
                     if (activeSubPanel && typeof window.clearChessUnreadDotBridge === 'function') {
                         window.clearChessUnreadDotBridge(activeSubPanel.id);
                     }
@@ -283,7 +356,7 @@
             }
         };
 
-        // PHÁT KIẾN THÔNG MẠCH: Cho phép click từ 6 ô lưới Grid sảnh Hub chủ tự gạt nút nhảy Tab liên thông
+        // PHÁT KIẾN THÔNG MẠCH: Cho phép click từ Lưới 6 ô Grid sảnh Hub chủ tự gạt nút nhảy Tab liên thông
         window.jumpToHubServiceCard = function(tabId, subPanelId) {
             window.switchHubTab(tabId);
             if (subPanelId) {
@@ -307,8 +380,8 @@
                 document.getElementById('tabCtrlSell').classList.add('active');
             }
         };
-
-        // ĐÃ ĐỒNG BỘ CHESS.COM: Đổi Tab phụ 3 phân khu (Thư mật / Chat tổng / Chat Admin) kèm tắt chấm đỏ [🗎1]
+    </script>
+    <script>
         window.switchChatView = function(panelId) {
             document.getElementById('panel-chat-mailbox').style.display = "none";
             document.getElementById('panel-chat-general').style.display = "none";
@@ -319,7 +392,7 @@
 
             document.getElementById(panelId).style.display = "flex";
             
-            // Tìm nút điều khiển tương ứng để nhuộm màu active
+            // Tìm nút điều khiển tương ứng để nhuộm màu active lục quân
             let tabCtrlBtnId = 'tabCtrlMailbox';
             if (panelId === 'panel-chat-general') tabCtrlBtnId = 'tabCtrlChatGeneral';
             if (panelId === 'panel-chat-private') tabCtrlBtnId = 'tabCtrlChatPrivate';
@@ -327,15 +400,16 @@
             const ctrlBtn = document.getElementById(tabCtrlBtnId);
             if (ctrlBtn) {
                 ctrlBtn.classList.add('active');
-                // Tắt chấm đỏ chưa xem tương ứng của phân khu vừa click lật mở [🗎1]
+                // Tắt chấm đỏ chưa xem tương ứng của phân khu vừa được click lật mở [🗎1]
                 if (typeof window.clearChessUnreadDotBridge === 'function') {
                     window.clearChessUnreadDotBridge(tabCtrlBtnId);
                 }
             }
 
-            // Kích nổ luồng tải dữ liệu đám mây cô lập của từng phân khu chat tương ứng
+            // Kích nổ luồng tải dữ liệu đám mây cô lập của từng phân khu tương ứng
             if (panelId === 'panel-chat-mailbox' && typeof window.fetchMailboxMessagesCloud === 'function') {
                 window.fetchMailboxMessagesCloud();
+                if (typeof window.syncChessSidebarUsersList === 'function') window.syncChessSidebarUsersList();
             } else if (panelId === 'panel-chat-general' && typeof window.fetchChatMessagesCloud === 'function') {
                 window.fetchChatMessagesCloud();
             } else if (panelId === 'panel-chat-private' && typeof window.fetchPrivateChatMessagesCloud === 'function') {
@@ -343,7 +417,7 @@
             }
         };
 
-        // Hàm bật/tắt lật mở biểu mẫu đăng tin chợ khi cư dân click dấu cộng vuông vức
+        // Hàm bật/tắt biểu mẫu đăng tin chợ khi cư dân click dấu cộng vuông vức
         window.toggleNewServiceForm = function() {
             const formBox = document.getElementById("newServiceFormBox");
             const plusBtn = document.querySelector(".add-plus-btn");
@@ -358,17 +432,55 @@
             }
         };
 
-        // Hàm ẩn hiện form điền đơn khiếu nại báo cáo lồng thẳng trong giao diện Chat Riêng Admin
+        // Hàm ẩn hiện form điền đơn khiếu nại báo cáo lồng trong giao diện Kênh Admin
         window.toggleEmergencyReportFormBox = function() {
             const box = document.getElementById("emergencyReportFormBox");
             if (!box) return;
             box.style.display = (box.style.display === "none") ? "block" : "none";
         };
-    </script>
-    <!-- =========================================================
-         ĐỢT 4: HỆ THỐNG CẦU NỐI SỰ KIỆN TOÀN CỤC VÀ ĐĂNG XUẤT QUAY ĐẦU SẢNH CŨ
-         ========================================================= -->
-    <script>
+        // =========================================================
+        // ĐỢT 11: BỘ HÀM ĐIỀU HÀNH ĐÓNG MỞ CÁC KHUNG HỘP THOẠI MODAL ẨN NGẦM
+        // =========================================================
+        
+        // --- 1. BIỆN PHÁP ĐIỀU HÀNH HỘP FORM CÀI ĐẶT HỒ SƠ 3 TÙY CHỈNH ---
+        window.openCityProfileSettingsModal = function() {
+            const modal = document.getElementById("cityProfileSettingsModalOverlay");
+            if (modal) {
+                modal.style.display = "flex"; // Kích bung hộp form phẳng khối lên giữa màn hình [🗎1]
+                
+                // Đồng bộ bốc nạp dữ liệu tạm thời điền sẵn vào các ô input cho cư dân dễ sửa
+                const currentName = document.getElementById("profileUsername").innerText.replace("@", "");
+                const nameInput = document.getElementById("settingsNewDisplayInput");
+                if (nameInput) nameInput.value = currentName;
+            }
+        };
+
+        window.closeCityProfileSettingsModal = function() {
+            const modal = document.getElementById("cityProfileSettingsModalOverlay");
+            if (modal) modal.style.display = "none"; // Thu gọn biến mất che giấu hộp form
+        };
+
+        // --- 2. BIỆN PHÁP ĐIỀU HÀNH HỘP UI HÓA ĐƠN LỤC QUÂN CHUYỂN TIỀN AD THÀNH CÔNG ---
+        window.openCityBankInvoiceModal = function(sender, receiver, amount, invoiceId) {
+            const modal = document.getElementById("cityBankInvoiceModalOverlay");
+            if (!modal) return;
+
+            // Đổ trực tiếp dữ liệu chữ màu lục quân sắc nét lên lòng hộp hóa đơn [🗎1]
+            document.getElementById("invInvoiceIdText").innerText = invoiceId || "SECURE-AD-TRX";
+            document.getElementById("invSenderText").innerText = "@" + sender;
+            document.getElementById("invReceiverText").innerText = "@" + receiver;
+            document.getElementById("invAmountText").innerText = parseInt(amount).toLocaleString("vi-VN") + " AD";
+
+            modal.style.display = "flex"; // Bung tỏa hóa đơn đanh thép lên màn hình [🗎1]
+        };
+
+        window.closeCityBankInvoiceModal = function() {
+            const modal = document.getElementById("cityBankInvoiceModalOverlay");
+            if (modal) modal.style.display = "none"; // Gạt bỏ thu gọn hóa đơn cho ngăn nắp sảnh ngân hàng
+        };
+        // =========================================================
+        // ĐỢT 12: HỆ THỐNG CẦU NỐI SỰ KIỆN TOÀN CỤC VÀ ĐÓNG THẺ HEAD
+        // =========================================================
         // Cầu nối thực thi quét danh tính công khai toàn thành phố bảo mật ẩn dữ liệu
         window.triggerGlobalSearch = function() {
             if (typeof window.executeGlobalSearchCloud === 'function') {
@@ -383,21 +495,21 @@
             }
         };
 
-        // Cầu nối thực thi giao dịch tài chính chuyển AD liên cư dân (Có gài thưởng nhiệm vụ)
+        // Cầu nối thực thi giao dịch tài chính chuyển AD liên cư dân (UI Hóa đơn, Không reload) [🗎1]
         window.executeTransaction = function(event) {
             if (typeof window.executeTransactionCloudBridge === 'function') {
                 window.executeTransactionCloudBridge(event);
             }
         };
 
-        // Cầu nối đăng tải phát hành sản phẩm mới lên chợ tự doanh băm ảnh Base64 từ tệp file
+        // Cầu nối đăng tải phát hành sản phẩm mới lên chợ tự doanh băm ảnh Base64 từ tệp file [🗎3]
         window.publishNewService = function(event) {
             if (typeof window.executePublishNewServiceBridge === 'function') {
                 window.executePublishNewServiceBridge(event);
             }
         };
 
-        // Cầu nối gửi tin nhắn Hòm thư mật liên cư dân (Có gài thưởng nhiệm vụ)
+        // Cầu nối gửi tin nhắn Thư mật liên cư dân Chess.com (Có gài thưởng nhiệm vụ) [🗎1]
         window.sendMailboxMessage = function(event) {
             if (typeof window.executeSendMailboxMessageBridge === 'function') {
                 window.executeSendMailboxMessageBridge(event);
@@ -425,10 +537,24 @@
             }
         };
 
-        // Cầu nối trung gian xóa chấm đỏ thông báo chưa đọc kiểu Chess.com
+        // Cầu nối trung gian xóa chấm đỏ thông báo chưa đọc kiểu Chess.com [🗎1]
         window.clearChessUnreadDotBridge = function(ctrlBtnId) {
             if (typeof window.executeClearChessUnreadDotModule === 'function') {
                 window.executeClearChessUnreadDotModule(ctrlBtnId);
+            }
+        };
+
+        // Cầu nối gạt nút tải file ảnh Avatar ngầm băm Base64 máy con [🗎3]
+        window.executeUploadAvatarBase64Bridge = function(fileInput) {
+            if (typeof window.executeUploadAvatarBase64Module === 'function') {
+                window.executeUploadAvatarBase64Module(fileInput);
+            }
+        };
+
+        // Cầu nối thực thi nộp form Cài Đặt Hồ Sơ thay đổi thông tin lên mây [🗎1]
+        window.executeSubmitProfileSettingsForm = function(event) {
+            if (typeof window.executeSubmitProfileSettingsFormModule === 'function') {
+                window.executeSubmitProfileSettingsFormModule(event);
             }
         };
 
@@ -442,27 +568,26 @@
             }
         };
 
-        // THUẬT TOÁN ĐĂNG XUẤT CƠ HỌC TỰ ĐỘNG BỐC ĐỊA CHỈ QUAY LẠI SẢNH ĐĂNG NHẬP TRƯỚC ĐÓ [🗎1]
+        // THUẬT TOÁN ĐĂNG XUẤT CÔ HỌC TỰ ĐỘNG BỐC ĐỊA CHỈ QUAY LẠI SẢNH ĐĂNG NHẬP TRƯỚC ĐÓ [🗎1]
         window.triggerLogout = function() {
             if (confirm("Independent City: Bạn có chắc chắn muốn đăng xuất và hủy phiên làm việc hiện tại?")) {
                 if (typeof window.executeLogoutAndClearSessionCloud === 'function') {
                     window.executeLogoutAndClearSessionCloud();
                 } else {
-                    // Phương án quay đầu khẩn cấp nếu module chưa kịp nạp: Tự động quét tìm địa chỉ sảnh cũ hoặc quay về index.html [🗎1]
-                    const priorSảnhUrl = document.referrer || "index.html";
-                    window.location.href = priorSảnhUrl; 
+                    const priorGatewayUrl = document.referrer || "index.html";
+                    window.location.href = priorGatewayUrl; 
                 }
             }
         };
     </script>
-</head> <!-- CHÍNH THỨC KHÉP KÍN SẢNH ĐẦU TRANG AN TOÀN TUYỆT ĐỐI -->
+</head> 
 <!-- =========================================================
-     ĐỢT 5: MỞ THẺ CƠ THỂ, DỰNG CẤU TRÚC NAVBAR TỔNG TREO ĐĂNG XUẤT GÓC PHẢI
+     ĐỢT 13: MỞ THẺ CƠ THỂ, DỰNG NAVBAR TÍCH HỢP TRẠM ĐẾM NGƯỜI TRỰC TUYẾN
      ========================================================= -->
 <body>
 
     <div class="main-wrapper">
-        <!-- ĐÃ ĐỒNG BỘ NÂNG CẤP: Thanh Navbar gạt nút Đăng xuất tinh giản lên góc cao bên phải [🗎1] -->
+        <!-- VÁ CHUẨN ĐỒ HỌA: Thanh Navbar gạt nút Đăng xuất tinh giản và Huy hiệu đếm người lên góc cao bên phải [🗎1] -->
         <div class="city-navbar">
             <div class="nav-left-group">
                 <div id="navTab-hub" class="nav-item active" onclick="switchHubTab('tab-hub')">🏠 Hub Chủ Mạng</div>
@@ -470,38 +595,50 @@
                 <div id="navTab-service" class="nav-item" onclick="switchHubTab('tab-service')">🛒 Sảnh Chợ</div>
                 <div id="navTab-chat" class="nav-item" onclick="switchHubTab('tab-chat')">✉️ Phòng Chat</div>
             </div>
-            <!-- BỐC NÚT ĐĂNG XUẤT NÉM LÊN GÓC PHẢI NAV QUAY ĐẦU SẢNH CŨ TIÊU DIỆT NÚT DÀI CŨ [🗎1] -->
-            <div class="nav-logout-btn" onclick="triggerLogout()">🚪 Đăng Xuất</div>
+            
+            <!-- CỤM ĐIỀU KHIỂN GÓC PHẢI NAV: Kích hoạt đếm số lượng phiên hoạt động trực tuyến thời gian thực [🗎1] -->
+            <div class="nav-right-control-box">
+                <div id="navLivePresenceBadgeBox" class="nav-presence-badge">
+                    🟢 Trực tuyến: <span id="livePresenceOnlineCount">1</span> người
+                </div>
+                <!-- BỐC NÚT ĐĂNG XUẤT NÉM LÊN GÓC PHẢI NAV QUAY ĐẦU SẢNH CŨ TIÊU DIỆT NÚT DÀI CŨ [🗎1] -->
+                <div class="nav-logout-btn" onclick="triggerLogout()">🚪 Đăng Xuất</div>
+            </div>
         </div>
 
-        <!-- Hộp chứa các Toast Popup thông báo giật ngược lên từ góc dưới màn hình -->
+        <!-- Hộp chứa các Toast Popup thông báo giật ngược lên từ góc dưới màn hình mượt mà -->
         <div id="notification-container"></div>
         <!-- =========================================================
-             ĐỢT 6: BẢNG CÀI ĐẶT TRUNG TÂM PHỤ VÀ BIỂU MẪU TRẠM QUÉT MẠNG LƯỚI
+             ĐỢT 14: BẢNG CÀI ĐẶT HỒ SƠ PHỤ BĂM ẢNH BASE64 VÀ ĐỈNH ĐẦU HUB CHỦ (🏠)
              ========================================================= -->
-        <!-- BẢNG CÀI ĐẶT PHỤ LỌT LÒNG: Tích hợp nút upload Avatar Base64 trực tiếp ở đợt sau [🗎1, 🗎3] -->
         <div style="padding: 12px 20px; background-color: var(--gray-bg); border-bottom: 2px solid var(--black-pure); display: flex; align-items: center; justify-content: space-between; gap: 15px; box-sizing: border-box;">
             <div style="display: flex; gap: 12px; align-items: center;">
-                <!-- Khung chứa Avatar vuông vức, bấm vào gài nổ nút file ngầm băm ảnh Base64 [🗎1, 🗎3] -->
-                <div style="width: 44px; height: 40px; border: 2px solid var(--black-pure); display: flex; align-items: center; justify-content: center; font-size: 20px; background-color: #e2e8f0; box-shadow: 2px 2px 0px var(--black-pure); cursor: pointer; position: relative; overflow: hidden;" id="profileAvatarBox" onclick="document.getElementById('avatarFileInputNgầm').click()">👤</div>
-                <!-- Thẻ input chọn file ẩn ngầm băm chuỗi Base64 đẩy lên mây lập tức [🗎1, 🗎3] -->
+                
+                <!-- BẤM VÀO ĐỂ ĐỔI ẢNH: Khung chứa Avatar vuông vức bấm vào kích hoạt nút file ngầm băm ảnh Base64 [🗎1, 🗎3] -->
+                <div style="width: 44px; height: 40px; border: 2px solid var(--black-pure); display: flex; align-items: center; justify-content: center; font-size: 20px; background-color: #e2e8f0; box-shadow: 2px 2px 0px var(--black-pure); cursor: pointer; position: relative; overflow: hidden;" id="profileAvatarBox" title="Click vào đây để tải ảnh đại diện trực tiếp từ máy của bạn" onclick="document.getElementById('avatarFileInputNgầm').click()">👤</div>
+                
+                <!-- Ổ ĐÓN NHẬN FILE NGẦM: Tự động băm tệp file ảnh máy con sang chuỗi Base64 đẩy lên mây [🗎1, 🗎3] -->
                 <input type="file" id="avatarFileInputNgầm" style="display: none;" accept="image/*" onchange="window.executeUploadAvatarBase64Bridge(this)">
                 
                 <div>
+                    <!-- Dòng hiển thị Tên tài khoản và dòng Bio công dân độc lập -->
                     <span id="profileUsername" style="font-weight: 950; font-size: 13px; color: var(--navy-deep); display: block;">Đang định vị...</span>
                     <span id="profileBio" style="font-size: 11px; font-style: italic; font-weight: 700; color: #4A5568;">Đang giải mã profile đám mây...</span>
                 </div>
             </div>
             
             <div style="display: flex; align-items: center; gap: 12px; font-size: 11px;">
-                <!-- CHẾ ĐỘ ẨN DANH: Cư dân tự tick bật ẩn hồ sơ profile khỏi trạm quét [🗎1] -->
+                <!-- CHẾ ĐỘ ẨN DANH: Gạt công tắc giấu hồ sơ profile khỏi trạm quét mạng lưới công khai [🗎1] -->
                 <div style="display: flex; align-items: center; gap: 5px;">
                     <span style="font-weight: 900; text-transform: uppercase; color: #4A5568; font-size: 10px;">Ẩn danh tính:</span>
                     <input type="checkbox" id="profileHiddenCheckbox" style="width: 18px; height: 18px; cursor: pointer;" onchange="updatePrivacyModeCloud()">
                 </div>
                 
+                <!-- NÚT GỌI FORM CÀI ĐẶT NÂNG CẤP: Cho phép tùy chỉnh đổi Tên hiển thị và Mật khẩu bảo mật lên mây [🗎1] -->
+                <button type="button" class="city-btn" style="padding: 4px 8px; font-size: 10px; box-shadow: 1px 1px 0px var(--black-pure);" onclick="window.openCityProfileSettingsModal()">⚙️ Cài Đặt</button>
+                
                 <span style="font-weight: 900; text-transform: uppercase; color: #4A5568; font-size: 10px;">Giao diện:</span>
-                <select id="themeSelect" class="city-input" style="width: 90px; padding: 4px; font-weight: 900; border-width: 2px; font-size: 11px;" onchange="changeSystemTheme()">
+                <select id="themeSelect" class="city-input" style="width: 75px; padding: 4px; font-weight: 900; border-width: 2px; font-size: 11px;" onchange="changeSystemTheme()">
                     <option value="light">☀️ Sáng</option>
                     <option value="dark">🌙 Tối</option>
                 </select>
@@ -509,62 +646,82 @@
         </div>
 
         <!-- =========================================================
-             TAB 1: PHÂN KHU HUB CHỦ TRUNG TÂM (🏠) - NẰM TRONG KHUNG CHỨA [🗎1]
+             TAB 1: PHÂN KHU HUB CHỦ TRUNG TÂM (🏠) - KHỞI DỰNG LỚP VỎ
              ========================================================= -->
         <div id="tab-hub" class="hub-body-tab active">
             <div class="tab-centered-content">
-                <!-- TIÊU ĐỀ SECTION CHUẨN PHOM ĐƯỜNG GẠCH ĐỎ CAM THEO ẢNH MẪU ✍️ -->
+                <!-- TIÊU ĐỀ SECTION CHUẨN PHOM ĐƯỜNG GẠCH ĐỎ CAM THEO ẢNH MẪU CỦA BẠN ✍️ -->
                 <div class="services-title-section">
                     <div class="services-main-title">Dịch Vụ Của Chúng Tôi</div>
                 </div>
-
-                <!-- DÀN 6 Ô LƯỚI GRID ĐƯỢC ÉP VUÔNG VỨC CHIA THÀNH 3 CỘT CHO KHÍT PHOM LAYOUT 850PX [🗎1] -->
+                <!-- =========================================================
+                     ĐỢT 15: TRẬN ĐỒ LƯỚI 6 Ô CỜ GRID MẪU CHỮ NHẬT NẰM NGANG (🏠)
+                     ========================================================= -->
                 <div class="services-grid-container">
+                    <!-- Ô số 1: Nhảy sang sảnh Mua Hàng bên Chợ tự doanh -->
                     <div class="service-grid-card" onclick="jumpToHubServiceCard('tab-service', 'panel-buy')">
                         <div class="card-icon-box">🛒</div>
                         <div class="card-text-lbl">Sảnh Chợ Mua Sắm Dịch Vụ</div>
                     </div>
+                    
+                    <!-- Ô số 2: Nhảy sang sảnh Đăng Bán băm ảnh Base64 bên Chợ -->
                     <div class="service-grid-card" onclick="jumpToHubServiceCard('tab-service', 'panel-sell')">
                         <div class="card-icon-box">➕</div>
                         <div class="card-text-lbl">Phát Hành Tin Sản Phẩm</div>
                     </div>
+                    
+                    <!-- Ô số 3: Nhảy sang sảnh Ngân Hàng AD hiển thị số dư ví -->
                     <div class="service-grid-card" onclick="switchHubTab('tab-bank')">
                         <div class="card-icon-box">🏦</div>
                         <div class="card-text-lbl">Ngân Hàng Trung Tâm</div>
                     </div>
+                    
+                    <!-- Ô số 4: Nhảy thẳng xuống Biểu mẫu chuyển tiền liên cư dân -->
                     <div class="service-grid-card" onclick="switchHubTab('tab-bank')">
                         <div class="card-icon-box">💸</div>
                         <div class="card-text-lbl">Chuyển Tiền Liên Cư Dân</div>
                     </div>
+                    
+                    <!-- Ô số 5: Nhảy sang sảnh Chat Tổng công khai kiểu Chess.com -->
                     <div class="service-grid-card" onclick="jumpToHubServiceCard('tab-chat', 'panel-chat-general')">
                         <div class="card-icon-box">💬</div>
                         <div class="card-text-lbl">Phòng Chat Sảnh Tổng</div>
                     </div>
+                    
+                    <!-- Ô số 6: Nhảy sang sảnh Đường dây nóng gửi báo cáo khẩn Admin -->
                     <div class="service-grid-card" onclick="jumpToHubServiceCard('tab-chat', 'panel-chat-private')">
                         <div class="card-icon-box">🚨</div>
                         <div class="card-text-lbl">Đường Dây Nóng Admin</div>
                     </div>
                 </div>
-
-                <!-- HỘP TRẠM QUÉT MẠNG LƯỚI TOÀN CỤC: ĐÃ VÁ ẨN GIẤU 100% SỐ DƯ VÀ EMAIL BẢO MẬT [🗎1] -->
+                       <!-- =========================================================
+                     ĐỢT 16: BIỂU MẪU HỘP THOẠI TRẠM QUÉT MẠNG LƯỚI BẢO MẬT TUYỆT ĐỐI
+                     ========================================================= -->
                 <div class="city-card" style="margin-bottom: 0;">
                     <label style="font-weight: 900; display: block; margin-bottom: 12px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.3px;">🔎 Quét danh tính cư dân trong mạng lưới thành phố:</label>
                     <div style="display: flex; gap: 12px; margin-bottom: 15px;">
                         <input type="text" id="globalSearchInput" class="city-input" placeholder="Nhập chính xác Username danh tính cư dân cần tra cứu...">
                         <button class="city-btn" onclick="triggerGlobalSearch()">Quét Mạng Lưới</button>
                     </div>
+                    
+                    <!-- Khung hiển thị kết quả truy quét thông tin cư dân láng mịn -->
                     <div id="searchResultsArea" style="border: 2px dashed var(--black-pure); padding: 15px; overflow-y: auto; min-height: 120px; background-color: var(--gray-bg); box-sizing: border-box;">
                         <p style="color: #718096; font-size: 12px; font-style: italic; text-align: center; margin-top: 35px; font-weight: bold;">Thông tin chi tiết của cư dân sau khi quét mạng lưới sẽ bung tỏa tại đây...</p>
                     </div>
                 </div>
+
+            </div> <!-- Thẻ đóng của .tab-centered-content phân khu Hub Chủ -->
+        </div> <!-- Thẻ đóng của #tab-hub (Kết thúc hoàn mỹ phân khu số 1) -->
                 <!-- =========================================================
-                     ĐỢT 7: KHỐI CARD ĐIỀU KHOẢN SỬ DỤNG DỊCH VỤ GHIM CHẶT ĐÁY HUB CHỦ
-                     ========================================================= -->
+             ĐỢT 17: KHỐI CARD ĐIỀU KHOẢN SỬ DỤNG DỊCH VỤ GHIM CHẶT PHÍA DƯỚI HUB CHỦ [🗎1]
+             ========================================================= -->
+        <div id="tab-rules-embedded-box" class="hub-body-tab active" style="padding: 0 25px 25px 25px; margin-top: -5px;">
+            <div class="tab-centered-content">
                 <div class="city-card" style="margin-bottom: 0; box-shadow: 4px 4px 0px var(--black-pure); background-color: var(--white-pure);">
-                    <div style="font-size: 14px; font-weight: 950; text-transform: uppercase; border-bottom: 2px solid var(--black-pure); padding-bottom: 6px; margin-bottom: 12px; color: var(--accent-emergency); letter-spacing: 0.5px;">📋 Điều Khoản Sử Dụng Dịch Vụ Independent City</div>
+                    <div style="font-size: 13px; font-weight: 950; text-transform: uppercase; border-bottom: 2px solid var(--black-pure); padding-bottom: 6px; margin-bottom: 12px; color: var(--accent-emergency); letter-spacing: 0.5px;">📋 Điều Khoản Sử Dụng Dịch Vụ Independent City</div>
                     
-                    <!-- Khung cuộn văn bản điều khoản pháp lý đanh thép của bạn -->
-                    <div style="overflow-y: auto; max-height: 180px; font-size: 12px; font-weight: 700; line-height: 1.6; color: #2d3748; padding-right: 5px; text-align: left;">
+                    <!-- Khung cuộn văn bản điều khoản pháp lý đanh thép do ban quản trị soạn thảo -->
+                    <div style="overflow-y: auto; max-height: 160px; font-size: 11px; font-weight: 700; line-height: 1.6; color: #2d3748; padding-right: 5px; text-align: left;">
                         <p style="margin-top: 0; color: var(--navy-deep); font-weight: 900;">Chào mừng bạn đến với trang web của chúng tôi. Bằng việc truy cập, duyệt qua hoặc sử dụng bất kỳ dịch vụ nào trên trang web này, bạn đồng ý ràng buộc bởi các điều khoản và điều kiện dưới đây. Nếu bạn không đồng ý, vui lòng ngừng sử dụng trang web ngay lập tức.</p>
                         
                         <p style="color: var(--navy-light); font-weight: 900; margin-bottom: 2px;">1. Bản Chất Dịch Vụ (Web Không Chính Quy)</p>
@@ -583,36 +740,35 @@
                         <span style="display:block; padding-left:10px; color:#4a5568;">Ban quản trị có toàn quyền chỉnh sửa, tạm dừng hoặc đóng cửa vĩnh viễn trang web mà không cần thông báo trước và không phải bồi thường cho bất kỳ ai. Các điều khoản này có thể được cập nhật bất cứ lúc nào và có hiệu lực ngay khi đăng tải.</span>
                     </div>
                 </div>
-
-            </div> <!-- Thẻ đóng của .tab-centered-content phân khu Hub -->
-        </div> <!-- Thẻ đóng của #tab-hub (Kết thúc hoàn mỹ phân khu số 1) -->
-         <!-- =========================================================
-             TAB 2: RUỘT PHÂN KHU NGÂN HÀNG VÍ ĐIỆN TỬ AD (🏦) LỒNG HỆ THỐNG NHIỆM VỤ - ĐỢT 8
+            </div>
+        </div>
+                <!-- =========================================================
+             TAB 2: RUỘT PHÂN KHU NGÂN HÀNG VÍ ĐIỆN TỬ AD (🏦) - ĐỢT 18 NẰM TRONG KHUNG
              ========================================================= -->
         <div id="tab-bank" class="hub-body-tab">
             <div class="tab-centered-content">
+                <!-- Tiêu đề phân khu ngân hàng viền thô đậm quân sự -->
                 <div class="city-title">🏦 Ngân Hàng Trung Tâm Independent City</div>
                 
-                <!-- Hộp số dư khổng lồ căn giữa sáng loáng phối màu viền thô đậm -->
+                <!-- Hộp số dư khổng lồ căn giữa sáng loáng phối màu sắc nét quân sự -->
                 <div style="border: 2px solid var(--black-pure); padding: 25px; background-color: var(--gray-bg); text-align: center; box-shadow: 4px 4px 0px var(--black-pure);" id="balanceCardBox">
                     <span style="font-size: 12px; font-weight: 900; text-transform: uppercase; color: #4A5568; display: block; margin-bottom: 5px;">Số dư ví điện tử hiện tại của cư dân</span>
                     <div style="font-size: 36px; font-weight: 950; color: var(--navy-light);">
                         <span id="liveBalanceAmount">1,000,000</span> <span style="font-size: 18px; font-weight: 800; color: var(--black-pure);">AD</span>
                     </div>
                 </div>
-
-                <!-- =========================================================
-                     CẤY ĐỘC QUYỀN: HỆ THỐNG 4 NHIỆM VỤ SINH TỒN GIỚI HẠN 25 GIỜ PHẲNG KHỐI [🗎1]
+                        <!-- =========================================================
+                     CẤY ĐỘC QUYỀN ĐỢT 19: HỆ THỐNG 3 NHIỆM VỤ SINH TỒN CHUẨN KHÍT 3/3 [🗎1]
                      ========================================================= -->
                 <div class="city-card" style="margin-bottom: 0; background-color: var(--white-pure);">
                     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--black-pure); padding-bottom: 6px; margin-bottom: 12px;">
-                        <div style="font-size: 13px; font-weight: 950; text-transform: uppercase; color: var(--navy-light);">🎯 Trạm Giao Nhiệm Vụ Thành Phố (Giới hạn 3 cái / 25 giờ)</div>
-                        <!-- Bộ đếm ngược thời gian hồi nhiệm vụ trực tuyến thời gian thực -->
+                        <div style="font-size: 13px; font-weight: 950; text-transform: uppercase; color: var(--navy-light);">🎯 Trạm Giao Nhiệm Vụ Thành Phố (Hạn mức: Đúng 3 cái / Chu kỳ 25 giờ)</div>
+                        <!-- Bộ đếm ngược chu kỳ hồi sinh nhiệm vụ thời gian thực -->
                         <div id="taskCooldownTimerBox" style="font-size: 11px; font-weight: 900; color: var(--accent-emergency); background-color: var(--kem-orange); padding: 2px 6px; border: 1px solid #000000;">⌛ Đồng bộ chu kỳ...</div>
                     </div>
 
-                    <!-- Thanh tiến trình Progress Bar đổi sang màu xanh 2ed573 khi hoàn tất 100% [🗎1] -->
-                    <div style="font-size: 11px; font-weight: 850; color:#4a5568; display:flex; justify-content:space-between;">
+                    <!-- Thanh tiến trình Progress Bar co giãn 0% -> 33% -> 66% -> tự đổi màu xanh khi hoàn tất [🗎1] -->
+                    <div style="font-size: 11px; font-weight: 850; color:#4a5568; display:flex; justify-content:space-between; margin-bottom: 4px;">
                         <span>Tiến độ hoàn thành chu kỳ: <b id="taskCountCompletedLbl">0/3</b></span>
                         <span id="taskPercentProgressLbl">0%</span>
                     </div>
@@ -620,32 +776,31 @@
                         <div id="cityTaskProgressBarMain" class="task-progress-bar"></div>
                     </div>
 
-                    <!-- Danh sách 4 khối hộp nhiệm vụ cấy ngầm kiểm tra điều kiện [🗎1] -->
+                    <!-- Danh sách đúng 3 hộp khối nhiệm vụ chiến lược khít khao hạn mức trần [🗎1] -->
                     <div style="margin-top: 15px; display: flex; flex-direction: column; gap: 8px;" id="cityTasksCheckListContainer">
-                        <!-- Nhiệm vụ 1 -->
+                        <!-- Nhiệm vụ 1: Liên thông hòm thư mật liên cư dân -->
                         <div style="display: flex; align-items: center; justify-content: space-between; background-color: var(--gray-bg); padding: 8px 12px; border: 1px solid var(--black-pure); font-size: 12px; font-weight: 700;" id="taskRowBox-1">
-                            <div>💬 <span style="color:var(--navy-light);">[Thư Tín]:</span> Nhắn 1 tin nhắn hòm thư mật cho cư dân khác bất kỳ</div>
-                            <div style="font-weight:900; color:#E63946;" id="taskBadgeStatus-1">⚡ +1,000 AD</div>
+                            <div>💌 <span style="color:var(--navy-light);">[Thư Tín]:</span> Nhắn thành công 1 tin nhắn hòm thư mật cho cư dân khác</div>
+                            <div style="font-weight:900; color:var(--accent-emergency);" id="taskBadgeStatus-1">⚡ +1,000 AD</div>
                         </div>
-                        <!-- Nhiệm vụ 2 -->
+                        
+                        <!-- Nhiệm vụ 2: Liên thông hộp tìm tra cứu profile -->
                         <div style="display: flex; align-items: center; justify-content: space-between; background-color: var(--gray-bg); padding: 8px 12px; border: 1px solid var(--black-pure); font-size: 12px; font-weight: 700;" id="taskRowBox-2">
-                            <div>🔍 <span style="color:var(--navy-light);">[Truy Quét]:</span> Thực hiện gõ Quét tra cứu tài khoản 1 người bất kỳ</div>
-                            <div style="font-weight:900; color:#E63946;" id="taskBadgeStatus-2">⚡ +1,000 AD</div>
+                            <div>🔎 <span style="color:var(--navy-light);">[Truy Quét]:</span> Thực hiện gõ Quét mạng lưới tra cứu thông tin 1 người</div>
+                            <div style="font-weight:900; color:var(--accent-emergency);" id="taskBadgeStatus-2">⚡ +1,000 AD</div>
                         </div>
-                        <!-- Nhiệm vụ 3 -->
+                        
+                        <!-- Nhiệm vụ 3: Mua hàng mảng JSONB -->
                         <div style="display: flex; align-items: center; justify-content: space-between; background-color: var(--gray-bg); padding: 8px 12px; border: 1px solid var(--black-pure); font-size: 12px; font-weight: 700;" id="taskRowBox-3">
-                            <div>👑 <span style="color:var(--navy-light);">[Thương Nhân Tối Cao]:</span> Kiếm được 1 đánh giá đạt chuẩn 5 Sao tròn trịa</div>
-                            <div style="font-weight:900; color:#E63946;" id="taskBadgeStatus-3">⚡ +2,500 AD</div>
-                        </div>
-                        <!-- Nhiệm vụ 4 -->
-                        <div style="display: flex; align-items: center; justify-content: space-between; background-color: var(--gray-bg); padding: 8px 12px; border: 1px solid var(--black-pure); font-size: 12px; font-weight: 700;" id="taskRowBox-4">
-                            <div>⭐ <span style="color:var(--navy-light);">[Phản Hồi Tốt]:</span> Kiếm được 1 đánh giá tốt từ 2 Sao trở lên trên Chợ</div>
-                            <div style="font-weight:900; color:#E63946;" id="taskBadgeStatus-4">⚡ +1,500 AD</div>
+                            <div>👑 <span style="color:var(--navy-light);">[Thương Nhân]:</span> Giao dịch kiếm được 1 đánh giá đạt chuẩn xuất sắc 5 Sao</div>
+                            <div style="font-weight:900; color:var(--accent-emergency);" id="taskBadgeStatus-3">⚡ +2,500 AD</div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Form điền thông tin chuyển tiền liên cư dân -->
+                        <!-- =========================================================
+                     ĐỢT 20: BIỂU MẪU CHUYỂN TIỀN LIÊN CƯ DÂN VÀ LỊCH SỬ DÒNG TIỀN AD [🗎1]
+                     ========================================================= -->
+                <!-- Form điền thông tin chuyển tiền liên cư dân co cụm lọt lòng -->
                 <div class="city-card" style="margin-bottom: 0;">
                     <div style="font-size: 13px; font-weight: 900; text-transform: uppercase; border-bottom: 2px solid var(--black-pure); padding-bottom: 6px; margin-bottom: 15px; color: var(--navy-light);">💸 Chuyển Khoản An Toàn Liên Cư Dân</div>
                     <form id="cityTransferForm" onsubmit="executeTransaction(event)">
@@ -668,37 +823,45 @@
                         <p style="color: #718096; font-size: 11px; font-style: italic; text-align: center; margin-top: 25px; font-weight: bold;">Chưa ghi nhận biến động dòng tiền AD nào trong phiên làm việc này...</p>
                     </div>
                 </div>
-            </div>
-        </div>
+
+            </div> <!-- Thẻ đóng của .tab-centered-content phân khu Ngân Hàng -->
+        </div> <!-- Thẻ đóng của #tab-bank (Kết thúc hoàn mỹ phân khu số 2) -->
                 <!-- =========================================================
-             TAB 3: RUỘT PHÂN KHU CHỢ DỊCH VỤ TỰ DOANH (🛒) TÍCH HỢP CHỌN TỆP 📂 - ĐỢT 9
+             TAB 3: RUỘT PHÂN KHU CHỢ DỊCH VỤ TỰ DOANH (🛒) - ĐỢT 21
              ========================================================= -->
         <div id="tab-service" class="hub-body-tab">
             <div style="display: flex; flex-direction: column; gap: 20px;">
+                <!-- Tiêu đề phân khu Chợ tự doanh viền đen thô đậm quân sự -->
                 <div class="city-title">🛒 Chợ Dịch Vụ Tự Doanh Independent City</div>
                 
-                <!-- Thanh gạt phụ lật 2 chế độ Mua / Bán khít phom hộp 850px -->
+                <!-- Thanh gạt điều khiển phụ lật 2 chế độ Mua / Bán khít phom hộp 850px -->
                 <div style="display: flex; border: 2px solid var(--black-pure); margin-bottom: 5px; box-shadow: 4px 4px 0px var(--black-pure);" id="marketCtrlBar">
                     <div id="tabCtrlBuy" style="flex: 1; padding: 12px; text-align: center; font-weight: 900; cursor: pointer; text-transform: uppercase; font-size: 12px; letter-spacing: 0.3px;" class="active" onclick="switchMarketView('panel-buy')">🛍️ Khu Vực Mua Hàng</div>
                     <div id="tabCtrlSell" style="flex: 1; padding: 12px; text-align: center; font-weight: 900; cursor: pointer; text-transform: uppercase; font-size: 12px; border-left: 2px solid var(--black-pure); letter-spacing: 0.3px;" onclick="switchMarketView('panel-sell')">💼 Khu Vực Đăng Bán</div>
                 </div>
 
-                <!-- SUB-PANEL 1: KHU VỰC MUA HÀNG NẰM TRONG KHUNG TRẮNG -->
+                <!-- SUB-PANEL 1: KHU VỰC MUA HÀNG NẰM TRONG KHUNG TRẮNG LỌT LÒNG -->
                 <div id="panel-buy" style="display: flex; flex-direction: column; gap: 15px; width: 100%;">
+                    <!-- Thanh lọc tra cứu tìm kiếm nhanh sản phẩm tại sảnh -->
                     <div style="display: flex; gap: 12px;">
                         <input type="text" id="marketSearchInput" class="city-input" placeholder="Nhập tên sản phẩm hoặc từ khóa cần lọc nhanh trên sảnh chợ...">
                         <button class="city-btn" onclick="filterMarketProducts()">Lọc Đồ</button>
                     </div>
+                    <!-- Lưới danh sách bốc hàng hóa lọt mảng JSONB từ mây nạp vào -->
                     <div id="marketProductsGrid" style="overflow-y: auto; max-height: 380px; display: flex; flex-direction: column; gap: 12px; min-height: 220px;">
                         <p style="color: #718096; font-size: 12px; font-style: italic; text-align: center; margin-top: 60px; font-weight: bold;">Hệ thống đang đồng bộ danh mục hàng hóa thương mại từ đám mây mới...</p>
                     </div>
                 </div>
-
-                <!-- SUB-PANEL 2: KHU VỰC ĐĂNG BÁN NẰM TRONG KHUNG TRẮNG -->
+                        <!-- =========================================================
+                     ĐỢT 22: SUB-PANEL 2 - KHU VỰC ĐĂNG BÁN NẰM TRONG KHUNG TRẮNG LỌT LÒNG [🗎1]
+                     ========================================================= -->
                 <div id="panel-sell" style="display: none; flex-direction: column; gap: 15px; width: 100%;">
                     <div style="font-size: 13px; font-weight: 900; text-transform: uppercase; color: var(--navy-light);" class="city-subtitle-label-box">💼 Quản Lý Và Phát Hành Sản Phẩm Cá Nhân</div>
+                    
+                    <!-- Nút bấm dấu cộng mở rộng thô thô đậm đậm đổ bóng khối phẳng đặc trưng [🗎1] -->
                     <div style="font-size: 22px; font-weight: 950; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--black-pure); background-color: var(--white-pure); cursor: pointer; transition: all 0.15s ease; box-shadow: 3px 3px 0px var(--black-pure);" class="add-plus-btn" onclick="toggleNewServiceForm()">+</div>
                     
+                    <!-- Biểu mẫu nhập liệu thông tin sản phẩm (Bấm nút + vuông vức mới lật mở) [🗎1] -->
                     <div id="newServiceFormBox" class="city-card" style="display: none; padding: 20px; box-shadow: 3px 3px 0px var(--black-pure);">
                         <form id="cityUploadProductForm" onsubmit="publishNewService(event)">
                             <div style="margin-bottom: 12px;">
@@ -710,7 +873,7 @@
                                 <textarea id="prodDescInput" class="city-input" style="height: 60px; font-family: inherit; resize: none; font-weight: bold;" placeholder="Ghi chú ngắn gọn về thông số..." required></textarea>
                             </div>
                             
-                            <!-- ĐÃ VÁ ĐỘC QUYỀN GIẢI PHÁP 1: Bốc ô gõ link URL ảnh cũ vứt đi, thay trọn gói bằng nút Chọn tệp file Base64 máy con [🗎1, 🗎3] -->
+                            <!-- ĐÃ VÁ ĐỘC QUYỀN GIẢI PHÁP 1: Bốc ô gõ link URL ảnh cũ vứt đi, thay bằng nút Chọn tệp file Base64 máy con [🗎1, 🗎3] -->
                             <div style="margin-bottom: 12px;">
                                 <label style="font-weight: 900; display: block; margin-bottom: 6px; font-size: 12px; text-transform: uppercase;">Tải hình ảnh sản phẩm từ máy (Hỗ trợ file PNG, JPG dưới 1MB) [🗎3]:</label>
                                 <div style="display: flex; align-items: center; gap: 15px;">
@@ -718,6 +881,7 @@
                                     <!-- Nhãn ẩn ngầm chứa chuỗi text băm nhỏ Base64 đẩy lên database [🗎1, 🗎3] -->
                                     <input type="hidden" id="prodImageBase64HiddenString">
                                 </div>
+                                <!-- Khung ảnh Preview cho cư dân xem trước khi đẩy lên mây [🗎3] -->
                                 <div id="previewChợImageContainer" style="margin-top: 8px; display: none;">
                                     <img id="imgChợPreviewBox" src="" style="width: 70px; height: 70px; object-fit: cover; border: 2px solid var(--black-pure);">
                                 </div>
@@ -731,21 +895,22 @@
                         </form>
                     </div>
                 </div>
-            </div>
-        </div>
+
+            </div> <!-- Thẻ đóng của cụm hộp chứa flex-direction: column phân khu chợ -->
+        </div> <!-- Thẻ đóng của #tab-service (Kết thúc hoàn mỹ phân khu số 3) -->
                 <!-- =========================================================
-             TAB 4: TRUNG TÂM PHÒNG CHAT BA CỬA SỔ NÂNG CAO KIỂU CHESS.COM (✉️) - ĐỢT 10
+             TAB 4: TRUNG TÂM PHÒNG CHAT BA CỬA SỔ NÂNG CAO KIỂU CHESS.COM (✉️) - ĐỢT 23
              ========================================================= -->
         <div id="tab-chat" class="hub-body-tab">
             <div style="display: flex; flex-direction: column; gap: 20px;">
                 
-                <!-- Tiêu đề phân khu Chat viền thô đậm quân sự sắc nét -->
+                <!-- Tiêu đề trung tâm liên lạc viền thô đậm quân sự sắc nét -->
                 <div class="city-title">✉️ Trung Tâm Liên Lạc Chess-Tactical City</div>
 
                 <!-- ĐÃ ĐỒNG BỘ CHESS.COM: Thanh gạt phụ 3 Tab lớn bọc trùm chấm đỏ thông báo chưa đọc [🗎1] -->
                 <div style="display: flex; border: 2px solid var(--black-pure); margin-bottom: 5px; box-shadow: 4px 4px 0px var(--black-pure);" id="chatCtrlBar">
                     
-                    <!-- Tab phụ 1: Hòm Thư Mật liên cư dân -->
+                    <!-- Tab phụ 1: Hòm Thư Mật liên cư dân (Thư Chính) -->
                     <div class="chess-tab-wrapper">
                         <div id="chessUnreadDot-tabCtrlMailbox" class="chess-unread-dot"></div>
                         <div id="tabCtrlMailbox" class="nav-item active" style="border-right: none;" onclick="switchChatView('panel-chat-mailbox')">💌 Thư Chính Mật</div>
@@ -757,31 +922,42 @@
                         <div id="tabCtrlChatGeneral" class="nav-item" style="border-right: none;" onclick="switchChatView('panel-chat-general')">💬 Chat Tổng</div>
                     </div>
                     
-                    <!-- Tab phụ 3: Đường dây nóng cô lập trực tiếp tới Admin Henry -->
+                    <!-- Tab phụ 3: Kênh Admin bảo mật -->
                     <div class="chess-tab-wrapper" style="border-left: 2px solid var(--black-pure);">
                         <div id="chessUnreadDot-tabCtrlChatPrivate" class="chess-unread-dot"></div>
                         <div id="tabCtrlChatPrivate" class="nav-item" style="border-right: none;" onclick="switchChatView('panel-chat-private')">🔒 Kênh Admin</div>
                     </div>
                 </div>
 
-                <!-- CỬA SỔ CHAT PHỤ 1: HÒM THƯ CHÍNH MẬT (Thoại thoại trực tiếp liên cư dân bằng Username) [🗎1] -->
-                <div id="panel-chat-mailbox" style="display: flex; flex-direction: column; gap: 12px; width: 100%;">
-                    <!-- Biểu mẫu chỉ định đích danh người nhận tin nhắn trong thành phố -->
-                    <div style="display: flex; gap: 10px; align-items: center; background-color: var(--gray-bg); padding: 10px; border: 1px solid var(--black-pure);">
-                        <span style="font-size:11px; font-weight:900; text-transform:uppercase; color:var(--navy-light);">👤 Gửi Tới (Username):</span>
-                        <input type="text" id="mailboxTargetReceiverInput" class="city-input" style="padding: 6px; font-size:12px; max-width: 200px;" placeholder="Nhập Username cư dân..." autocomplete="off">
-                        <span style="font-size:11px; color:#4a5568; font-weight:bold; font-style:italic;">*Lưu ý: Nhắn thư mật liên cư dân lần đầu được gài cộng 1,000 AD [🗎1].</span>
+                <!-- CỬA SỔ CHAT PHỤ 1: HÒM THƯ CHÍNH MẬT CÓ SIDEBAR HÀNG CHỜ CƯ DÂN [🗎1] -->
+                <div id="panel-chat-mailbox" class="chess-chat-container" style="display: flex; width: 100%;">
+                    
+                    <!-- CỘT TRÁI CHESS.COM: Thanh danh mục cuộn chứa danh sách toàn bộ cư dân thời gian thực [🗎1] -->
+                    <div class="chess-sidebar-users" id="chessSidebarUsersListNgầm">
+                        <div style="padding: 15px; text-align: center; color: #718096; font-size: 11px; font-style: italic; font-weight: bold;">Hệ thống đang bốc danh sách hàng chờ cư dân...</div>
                     </div>
-
-                    <div id="cityMailboxChatArea" style="flex: 1; border: 2px solid var(--black-pure); background-color: var(--gray-bg); padding: 15px; overflow-y: auto; max-height: 320px; display: flex; flex-direction: column; gap: 12px; min-height: 250px; box-sizing: border-box; box-shadow: inset 2px 2px 5px rgba(0,0,0,0.1);">
-                        <p style="color: #718096; font-size: 11px; font-style: italic; text-align: center; margin-top: 100px; font-weight: bold;">Mời nhập Username cư dân phía trên và gõ chữ để kết nối hòm thư mật thoại đám mây...</p>
+                    
+                    <!-- CỘT PHẢI CHESS.COM: Khu vực chính diện nạp bong bóng chat tay đôi khi nhấp chọn tên [🗎1] -->
+                    <div class="chess-main-chat-area" id="chessMainChatAreaContainerBox">
+                        <!-- Nhãn thông tin neo giữ đối tượng trò chuyện mật hiện tại -->
+                        <div style="display: flex; gap: 10px; align-items: center; background-color: var(--gray-bg); padding: 8px 12px; border: 1px solid var(--black-pure); font-size: 11px; font-weight: 900;">
+                            <span style="text-transform: uppercase; color: var(--navy-light);">💬 Thư mật với:</span>
+                            <span id="currentActiveMailboxTargetLabel" style="color: var(--accent-emergency); text-transform: none;">[ Mời chọn 1 cư dân bên trái ]</span>
+                        </div>
+                        
+                        <div id="cityMailboxChatArea" style="flex: 1; border: 2px solid var(--black-pure); background-color: var(--gray-bg); padding: 15px; overflow-y: auto; max-height: 280px; display: flex; flex-direction: column; gap: 12px; min-height: 220px; box-sizing: border-box; box-shadow: inset 2px 2px 5px rgba(0,0,0,0.1);">
+                            <p style="color: #718096; font-size: 11px; font-style: italic; text-align: center; margin-top: 80px; font-weight: bold;">Mời nhấp chọn chính xác 1 tài khoản cư dân ở hàng chờ bên trái để thông mạch hòm thư đám mây... [🗎1]</p>
+                        </div>
+                        
+                        <form id="cityMailboxChatSubmitForm" style="display: flex; gap: 12px;" onsubmit="sendMailboxMessage(event)">
+                            <input type="text" id="cityMailboxChatInput" class="city-input" placeholder="Nhập nội dung thư tín bảo mật liên cư dân..." required autocomplete="off" disabled>
+                            <button type="submit" id="cityMailboxChatSubmitBtn" class="city-btn" style="padding-left: 20px; padding-right: 20px;" disabled>Gửi Thư</button>
+                        </form>
                     </div>
-                    <form id="cityMailboxChatSubmitForm" style="display: flex; gap: 12px;" onsubmit="sendMailboxMessage(event)">
-                        <input type="text" id="cityMailboxChatInput" class="city-input" placeholder="Nhập nội dung thư tín bảo mật liên cư dân..." required autocomplete="off">
-                        <button type="submit" class="city-btn" style="padding-left: 25px; padding-right: 25px;">Gửi Thư</button>
-                    </form>
                 </div>
-
+                        <!-- =========================================================
+                     ĐỢT 24: KHU VỰC CHAT TỔNG, KÊN ADMIN VÀ KHÉP KÍN WRAPPER TỔNG [🗎1]
+                     ========================================================= -->
                 <!-- CỬA SỔ CHAT PHỤ 2: PHÒNG CHAT SẢNH TỔNG (Công khai toàn thành phố) -->
                 <div id="panel-chat-general" style="display: none; flex-direction: column; gap: 15px; width: 100%;">
                     <div id="cityLiveChatArea" style="flex: 1; border: 2px solid var(--black-pure); background-color: var(--gray-bg); padding: 15px; overflow-y: auto; max-height: 350px; display: flex; flex-direction: column; gap: 12px; min-height: 280px; box-sizing: border-box; box-shadow: inset 2px 2px 5px rgba(0,0,0,0.1);">
@@ -819,12 +995,65 @@
                         <button type="submit" class="city-btn" style="padding-left: 25px; padding-right: 25px;">Gửi Mật</button>
                     </form>
                 </div>
+
             </div>
         </div>
 
-    </div> <!-- THÈ ĐÓNG KẾT THÚC KHỐI MAIN-WRAPPER TỔNG ĐÃ THU QUÂN HOÀN TOÀN VÀO TRÒNG TRẮNG LỌT LÒNG 850PX [🗎1] -->
+    </div> <!-- THÈ ĐÓNG KẾT THÚC KHỐI MAIN-WRAPPER TỔNG CHÍNH THỨC KHÓA HÒM GIAO DIỆN LỌT LÒNG KHUNG TRẮNG [🗎1] -->
     <!-- =========================================================
-         BỘ NÃO JAVASCRIPT MODULE: XÁC THỰC TIA CHỚP VÀ BĂM FILE ẢNH AVATAR [🗎1, 🗎3]
+         ĐỢT 25: CẤU TRÚC LỚP VỎ HỘP THOẠI MODAL ẨN NGẦM PHẲNG KHỐI CHUẨN V3 [🗎1]
+         ========================================================= -->
+    
+    <!-- TRẠM 1: HỘP THOẠI MODAL THAY ĐỔI CÀI ĐẶT HỒ SƠ 3 TRƯỜNG DỮ LIỆU NÂNG CẤP [🗎1, 🗎3] -->
+    <div id="cityProfileSettingsModalOverlay" class="city-modal-overlay" onclick="if(event.target===this) window.closeCityProfileSettingsModal()">
+        <div class="city-modal-box">
+            <!-- Tiêu đề bọc viền Lục quân thô bản -->
+            <div class="invoice-military-title">⚙️ Trung Tâm Cấu Hình Hồ Sơ Cư Dân</div>
+            
+            <form id="cityProfileSettingsSubmitForm" onsubmit="window.executeSubmitProfileSettingsForm(event)">
+                <div style="margin-bottom: 12px;">
+                    <label style="font-weight: 900; display: block; margin-bottom: 5px; font-size: 12px; text-transform: uppercase;">✍️ Đổi Tên Hiển Thị Công Khai (Username):</label>
+                    <input type="text" id="settingsNewDisplayInput" class="city-input" placeholder="Nhập tên nick mới cần thay đổi..." required autocomplete="off">
+                </div>
+                
+                <div style="margin-bottom: 12px;">
+                    <label style="font-weight: 900; display: block; margin-bottom: 5px; font-size: 12px; text-transform: uppercase;">🔒 Đổi Mật Khẩu Đăng Nhập Bảo Mật:</label>
+                    <input type="password" id="settingsNewPasswordInput" class="city-input" placeholder="Nhập mật khẩu mã hóa mới (Để trống nếu giữ nguyên)..." autocomplete="off">
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="font-weight: 900; display: block; margin-bottom: 5px; font-size: 12px; text-transform: uppercase;">📝 Đổi Dòng Tiểu Sử Sinh Tồn (Bio):</label>
+                    <input type="text" id="settingsNewBioInput" class="city-input" placeholder="Gõ câu mô tả bản thân độc quyền của bạn..." autocomplete="off">
+                </div>
+                
+                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <button type="button" class="city-btn" style="background-color: #718096; box-shadow: 2px 2px 0px #000000;" onclick="window.closeCityProfileSettingsModal()">Đóng</button>
+                    <button type="submit" class="city-btn" style="box-shadow: 2px 2px 0px var(--black-pure);">Lưu Cập Nhật</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TRẠM 2: HỘP THOẠI MODAL HÓA ĐƠN MÀU XANH LỤC QUÂN CHUYỂN TIỀN AD THÀNH CÔNG [🗎1] -->
+    <div id="cityBankInvoiceModalOverlay" class="city-modal-overlay" onclick="if(event.target===this) window.closeCityBankInvoiceModal()">
+        <div class="city-modal-box" style="border-color: var(--navy-light);">
+            <!-- Tiêu đề Hóa Đơn màu xanh Lục Quân Đậm đanh thép độc quyền của bạn 🟢 [🗎1] -->
+            <div class="invoice-military-title">🟢 BIÊN LAI GIAO DỊCH QUÂN SỰ THÀNH CÔNG</div>
+            
+            <div style="font-family: monospace; font-size: 12px; font-weight: bold; line-height: 1.8; color: var(--black-pure); background-color: var(--gray-bg); padding: 15px; border: 2px dashed var(--black-pure); margin-bottom: 15px;">
+                <div>MÃ BIÊN LAI : <span id="invInvoiceIdText" style="color: var(--accent-emergency);">SECURE-TRX-REF</span></div>
+                <div style="border-top: 1px dashed #000000; margin-top: 6px; padding-top: 6px;">NGƯỜI GỬI   : <span id="invSenderText" style="color: var(--navy-light);">@SENDER</span></div>
+                <div>NGƯỜI NHẬN  : <span id="invReceiverText" style="color: var(--navy-light);">@RECEIVER</span></div>
+                <div style="border-top: 1px dashed #000000; margin-top: 6px; padding-top: 6px; font-size: 14px;">TỔNG SỐ TIỀN: <span id="invAmountText" style="color: #2ed573; font-weight: 950;">0 AD</span></div>
+            </div>
+            
+            <div style="text-align: center;">
+                <button type="button" class="city-btn" style="width: 100%; padding: 10px;" onclick="window.closeCityBankInvoiceModal()">XÁC NHẬN ĐÃ THU ĐƠN THƯ 📜</button>
+            </div>
+        </div>
+    </div>
+        <!-- =========================================================
+         BỘ NÃO JAVASCRIPT MODULE: KIỂM TRA CHIP NHẬN DIỆN SSO VÀ CHU KỲ NHIỆM VỤ - ĐỢT 26 [🗎1]
          ========================================================= -->
     <script type="module">
         // Nhập trạm liên thông dữ liệu đám mây và bộ nhớ đệm tập trung từ bộ não utils2.js
@@ -838,18 +1067,30 @@
             showNotificationPopup
         } from './utils2.js';
 
-        // Biến lưu giữ mã token hiện tại phục vụ hủy phiên khi đăng xuất liên trang
+        // Biến lưu giữ mã token hiện tại phục vụ dọn rác khi đăng xuất liên trang [🗎1]
         let CURRENT_SESSION_TOKEN = "";
 
-        // TỰ ĐỘNG KÍCH NỔ LUỒNG QUÉT TIA CHỚP NGAY KHI CƯ DÂN VỪA LỌT SẢNH [🗎1]
+        // Trạng thái lưu trữ ngầm danh sách nhiệm vụ chu kỳ 3/3 gọn gàng, loại bỏ nhiệm vụ thừa [🗎1]
+        let CITY_TASK_STATE = {
+            last_reset: null,        // Điểm thời gian kích hoạt chu kỳ 25 giờ
+            completed_count: 0,      // Số lượng nhiệm vụ đã hoàn thành (Trần khóa cứng tối đa 3 cái)
+            tasks: {
+                TASK_MAIL: { id: 1, done: false, bonus: 1000, label: "Thư Tín" },
+                TASK_SEARCH: { id: 2, done: false, bonus: 1000, label: "Truy Quét" },
+                TASK_5STAR: { id: 3, done: false, bonus: 2500, label: "Thương Nhân" }
+            }
+        };
+
+        // TỰ ĐỘNG KÍCH NỔ LUỒNG QUÉT TIA CHỚP NGAY KHI CƯ DÂN VỪA LỌT SẢNH MẠNG LÕI [🗎1]
         document.addEventListener("DOMContentLoaded", async () => {
+            // Hoãn giờ ngầm siêu ngắn 0.1 giây (100ms) để tải dữ liệu tia chớp [🗎1]
             setTimeout(async () => {
                 if (!getDB()) {
                     alert("⏳ Trạm mạng lõi: Hệ thống đang kết nối hạ tầng đám mây... Vui lòng bấm F5 tải lại sảnh nhé!");
                     return;
                 }
 
-                // Kích nổ hàm bốc tách và đối chiếu mã Token ID nhận diện từ đuôi URL sảnh cũ [🗎1]
+                // Kích nổ hàm bốc tách và đối chiếu mã Token ID nhận diện từ đuôi URL [🗎1]
                 const authCheck = await validateSessionTokenAndGetIdentity();
 
                 // LÁ CHẮN BẢO VỆ SSO: Nếu chip nhận diện rỗng hoặc hết hạn, sập cửa trục xuất quay đầu sảnh cũ! [🗎1]
@@ -859,58 +1100,43 @@
                     return;
                 }
 
+                // Xác thực thông mạch! Găm mã token vào bộ nhớ máy con
                 CURRENT_SESSION_TOKEN = authCheck.token;
-                showNotificationPopup("MẠNG LÕI TACTICAL", `Cư dân @${CITY_STATE.LOGGED_IN_USER} thông mạch Single Sign-On! 🔓`);
 
-                // Kích nổ bộ đếm nạp đồng loạt dữ liệu hệ thống và 4 phân khu
+                // Nổ thông báo Toast Popup giật từ góc màn hình chào mừng cư dân nhập tịch [🗎1]
+                showNotificationPopup("MẠNG LÕI TACTICAL", `Cư dân @${CITY_STATE.LOGGED_IN_USER} đã thông mạch Single Sign-On! 🔓`);
+
+                // Gọi trạm nạp đồng loạt dữ liệu hệ thống (Sẽ định nghĩa ở đợt sau)
                 await initializeLiveAppModules();
 
-            }, 100); // Tải tia chớp siêu tốc 0.1 giây [🗎1]
+            }, 100); // Rút ngắn xuống 100ms gạt công tắc tải dữ liệu siêu tốc! [🗎1]
         });
 
-        // =========================================================
-        // GIẢI PHÁP 1: THUẬT TOÁN BĂM TỆP FILE ẢNH MÁY CON SANG BASE64 CHO AVATAR [🗎1, 🗎3]
-        // =========================================================
-        window.executeUploadAvatarBase64Bridge = function(fileInput) {
-            const file = fileInput.files[0];
-            if (!file) return;
+        // --- THUẬT TOÁN ĐẾM NGƯỢC THỜI GIAN HỒI CHU KỲ 25 GIỜ LIÊN TỤC NGẦM ---
+        window.startTaskCooldownClockCountdown = function() {
+            const timerBox = document.getElementById("taskCooldownTimerBox");
+            if (!timerBox) return;
 
-            // Lá chắn bảo vệ mây: Khóa cứng chặn file ảnh to quá 1MB tránh phình dữ liệu [🗎3]
-            if (file.size > 1024 * 1024) {
-                alert("🚨 LỖI BẢO MẬT: File ảnh Avatar quá nặng! Vui lòng chọn ảnh dưới 1MB để bảo vệ dung lượng trạm gác.");
-                fileInput.value = "";
-                return;
-            }
+            setInterval(() => {
+                const now = Date.now();
+                const diff = (CITY_TASK_STATE.last_reset + (25 * 60 * 60 * 1000)) - now;
 
-            const reader = new FileReader();
-            reader.onload = async function(e) {
-                const base64String = e.target.result; // Băm nát bức ảnh thành văn bản Base64 Data URL [🗎3]
-                const db = getDB();
-                if (!db) return;
-
-                // Nạp trực tiếp chuỗi văn bản ảnh Base64 đè lên cột avatar_url của bảng city_users trên mây [🗎1, 🗎3]
-                const { error } = await db.from('city_users').update({ avatar_url: base64String }).eq('username', CITY_STATE.LOGGED_IN_USER);
-                
-                if (!error) {
-                    // Cập nhật giao diện con tức thì không cần tải lại trang
-                    const avatarBox = document.getElementById("profileAvatarBox");
-                    if (avatarBox) {
-                        avatarBox.innerHTML = `<img src="${base64String}" style="width:100%; height:100%; object-fit:cover;">`;
-                    }
-                    showNotificationPopup("HỒ SƠ CÁ NHÂN", "Đã băm file ảnh và cập nhật Avatar đại diện thành công! 👤");
-                    
-                    // Ghi nhận nhiệm vụ Quét/Cập nhật nếu có chu kỳ (Sẽ liên thông ở đợt sau) [🗎1]
-                    if (typeof window.triggerCheckTaskProgressModule === 'function') {
-                        window.triggerCheckTaskProgressModule('TASK_SEARCH'); // Tính điểm tương tác profile
-                    }
-                } else {
-                    alert("Không thể cập nhật ảnh Base64 lên database: " + error.message);
+                if (diff <= 0) {
+                    timerBox.innerText = "⏳ Sẵn sàng hồi vị chu kỳ mới!";
+                    window.initializeTaskSystemEngineModule(); // Tự động làm mới chu kỳ
+                    return;
                 }
-            };
-            reader.readAsDataURL(file); // Ép hàm kích nổ băm chuỗi văn bản [🗎3]
+
+                // Quy đổi toán học chân không băm nhỏ chuỗi Giờ : Phút : Giây [🗎1]
+                const hrs = Math.floor(diff / (60 * 60 * 1000));
+                const mins = Math.floor((diff % (60 * 60 * 1000)) / (60 * 1000));
+                const secs = Math.floor((diff % (60 * 1000)) / 1000);
+
+                timerBox.innerText = `⏳ Hồi vị sau: ${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }, 1000);
         };
                 // =========================================================
-        // ĐỢT 12: THUẬT TOÁN ĐĂNG XUẤT QUAY ĐẦU SẢNH CŨ VÀ ĐỒNG BỘ DANH TÍNH CƯ DÂN
+        // ĐỢT 27: THUẬT TOÁN ĐĂNG XUẤT QUAY ĐẦU SẢNH CŨ VÀ BỘ NẠP DANH TÍNH CƯ DÂN
         // =========================================================
         window.executeLogoutAndClearSessionCloud = async function() {
             const db = getDB();
@@ -926,7 +1152,7 @@
                 // Bắn lệnh DELETE hủy diệt mã Token ID này trên bảng city_sessions trên mây [🗎1]
                 await db.from('city_sessions').delete().eq('token', CURRENT_SESSION_TOKEN);
                 
-                showNotificationPopup("HỆ THỐNG", "Hủy chip danh tính... Đang điều hướng quay lại sảnh đăng nhập cũ.");
+                showNotificationPopup("HỆ THỐNG TACTICAL", "Hủy chip danh tính... Đang điều hướng quay lại sảnh đăng nhập cũ.");
                 
                 // Ép trình duyệt quay đầu vèo vèo về đúng sảnh cũ sau khi dọn sạch rác bảo mật [🗎1]
                 setTimeout(() => {
@@ -938,20 +1164,25 @@
             }
         };
 
-        // --- BỘ KHỞI ĐỘNG HẠ TẦNG VÀ ĐỒNG BỘ DANH TÍNH CƯ DÂN LỌT LÒNG ---
+        // --- BỘ KHỞI ĐỘNG HẠ TẦNG VÀ ĐỒNG BỘ DANH TÍNH CƯ DÂN LỌT LÒNG TỐC ĐỘ CA ---
         async function initializeLiveAppModules() {
             const db = getDB();
-            if (!db) return; // Lá chắn bảo vệ chống nghẽn mạch ngầm [🗎1]
+            if (!db) return; // Lá chắn bảo vệ an toàn chống nghẽn mạch ngầm [🗎1]
 
-            // 1. QUÉT SẠCH CHỮ "ĐANG TẢI...": Đổ dữ liệu tên nick lên bảng cài đặt phụ ngay lập tức
+            // 1. QUÉT SẠCH DÒNG "ĐANG TẢI...": Đổ trực tiếp dữ liệu profile lên bảng cài đặt phụ ngay lập tức
             document.getElementById("profileUsername").innerText = "@" + CITY_STATE.LOGGED_IN_USER;
             
             try {
-                // Tra cứu thêm cột bio thực tế và chuỗi ảnh avatar Base64 cũ từ mây đổ ra sảnh [🗎1, 🗎3]
+                // Tra cứu thêm cột bio và chuỗi ảnh avatar Base64 cũ từ bảng city_users trên mây đổ ra sảnh [🗎1, 🗎3]
                 const { data: user, error } = await db.from('city_users').select('bio, avatar_url, is_hidden').eq('username', CITY_STATE.LOGGED_IN_USER).single();
                 if (!error && user) {
-                    if (user.bio) document.getElementById("profileBio").innerText = user.bio;
-                    else document.getElementById("profileBio").innerText = "Mạng Lõi Quân Sự: Cư dân độc lập đã thông mạch.";
+                    if (user.bio) {
+                        document.getElementById("profileBio").innerText = user.bio;
+                        const settingsBioInput = document.getElementById("settingsNewBioInput");
+                        if (settingsBioInput) settingsBioInput.value = user.bio;
+                    } else {
+                        document.getElementById("profileBio").innerText = "Mạng Lõi Quân Sự: Cư dân độc lập đã thông mạch.";
+                    }
                     
                     // Nếu cư dân đã từng nạp ảnh Base64 trước đó, vẽ ngay hình ảnh lên khung thay cho emoji 👤 [🗎1, 🗎3]
                     if (user.avatar_url) {
@@ -974,37 +1205,24 @@
                 document.getElementById("liveBalanceAmount").innerText = CITY_STATE.CURRENT_BALANCE.toLocaleString("vi-VN");
             }
 
-            // 3. KHỞI TẠO CÔNG TẮC BỘ NÃO GAME HÓA 4 NHIỆM VỤ SINH TỒN 25 GIỜ (Sẽ định nghĩa ở đợt sau) [🗎1]
+            // 3. KHỞI TẠO CÔNG TẮC BỘ NÃO GAME HÓA 3 NHIỆM VỤ SINH TỒN ĐÚNG CHU KỲ (Sẽ định nghĩa ở đợt sau) [🗎1]
             await window.initializeTaskSystemEngineModule();
 
-            // 4. KÍCH NỔ LUỒNG TẢI DỮ LIỆU CHỢ MẠNG VÀ PHÒNG CHAT SẢNH TỔNG LƯU CHUYỂN
+            // 4. KÍCH NỔ LUỒNG TẢI DỮ LIỆU CHỢ MẠNG VÀ PHÒNG CHAT SẢNH TỔNG LƯU CHUYỂN (Sẽ định nghĩa ở đợt sau)
             await window.loadMarketDataCloud();
             await window.fetchChatMessagesCloud();
 
             // 5. MỞ CỔNG KẾT NỐI WEBSOCKET REALTIME CHO VÍ TIỀN VÀ TRẠM GÁC CHAT CHESS.COM (Sẽ định nghĩa ở đợt sau) [🗎1]
             await activateBankRealtimeWebSocket();
             await activateChessChatRealtimeWebSocket();
+            await activatePresenceEngineWebSocket(); // Kích hoạt luồng đếm người trực tuyến thời gian thực
         }
                 // =========================================================
-        // ĐỢT 13: BỘ NÃO CƠ HỌC ĐIỀU PHỐI HỆ THỐNG 4 NHIỆM VỤ SINH TỒN 25 GIỜ
+        // ĐỢT 28: ĐỘNG CƠ KHỞI TẠO TRẠM NHIỆM VỤ 3/3 VÀ RENDERING ĐỒ HỌA
         // =========================================================
-        
-        // Cấu trúc trạng thái lưu trữ ngầm danh sách nhiệm vụ nội bộ phiên làm việc [🗎1]
-        let CITY_TASK_STATE = {
-            last_reset: null,        // Điểm thời gian kích hoạt chu kỳ 25 giờ
-            completed_count: 0,      // Số lượng nhiệm vụ đã nuốt gọn (Trần khóa cứng tối đa 3 cái)
-            tasks: {
-                TASK_MAIL: { id: 1, done: false, bonus: 1000, label: "Thư Tín" },
-                TASK_SEARCH: { id: 2, done: false, bonus: 1000, label: "Truy Quét" },
-                TASK_5STAR: { id: 3, done: false, bonus: 2500, label: "Thương Nhân Tối Cao" },
-                TASK_GOODREV: { id: 4, done: false, bonus: 1500, label: "Phản Hồi Tốt" }
-            }
-        };
-
-        // --- KHỞI TẠO ĐỘNG CƠ TRẠM GIAO NHIỆM VỤ THÀNH PHỐ ---
         window.initializeTaskSystemEngineModule = async function() {
             // Sử dụng bộ nhớ đệm LocalStorage máy con phối hợp đám mây để khóa cứng chu kỳ thời gian thực [🗎1]
-            const storageKey = `city_task_system_v2_${CITY_STATE.LOGGED_IN_USER}`;
+            const storageKey = `city_task_system_v3_${CITY_STATE.LOGGED_IN_USER}`;
             const localData = localStorage.getItem(storageKey);
             const now = Date.now();
 
@@ -1014,12 +1232,15 @@
                 if (now - parsed.last_reset >= 25 * 60 * 60 * 1000) {
                     CITY_TASK_STATE.last_reset = now;
                     CITY_TASK_STATE.completed_count = 0;
+                    // Đưa trạng thái các nhiệm vụ 3/3 về ban đầu
+                    Object.keys(CITY_TASK_STATE.tasks).forEach(k => CITY_TASK_STATE.tasks[k].done = false);
                     localStorage.setItem(storageKey, JSON.stringify(CITY_TASK_STATE));
                 } else {
+                    // Đồng bộ dữ liệu cũ của chu kỳ nếu chưa hết 25 giờ [🗎1]
                     CITY_TASK_STATE = parsed;
                 }
             } else {
-                // Khởi tạo trạm gác móng đầu tiên cấp hạn mức chu kỳ 25 giờ [🗎1]
+                // Khởi tạo trạm gác móng đầu tiên cấp hạn mức chu kỳ 25 giờ cho công dân mới [🗎1]
                 CITY_TASK_STATE.last_reset = now;
                 CITY_TASK_STATE.completed_count = 0;
                 localStorage.setItem(storageKey, JSON.stringify(CITY_TASK_STATE));
@@ -1027,71 +1248,6 @@
 
             // Kích hoạt đồng hồ đếm ngược chu kỳ hồi sinh nhiệm vụ trực tuyến thời gian thực [🗎1]
             window.startTaskCooldownClockCountdown();
-            window.renderTaskSystemToUI();
-        };
-
-        // --- THUẬT TOÁN ĐẾM NGƯỢC THỜI GIAN HỒI 25 GIỜ LIÊN TỤC ---
-        window.startTaskCooldownClockCountdown = function() {
-            const timerBox = document.getElementById("taskCooldownTimerBox");
-            if (!timerBox) return;
-
-            setInterval(() => {
-                const now = Date.now();
-                const diff = (CITY_TASK_STATE.last_reset + (25 * 60 * 60 * 1000)) - now;
-
-                if (diff <= 0) {
-                    timerBox.innerText = "⏳ Sẵn sàng hồi vị chu kỳ mới!";
-                    // Tự động kích hoạt thông mạch tải lại động cơ không cần nhấn F5 [🗎1]
-                    window.initializeTaskSystemEngineModule();
-                    return;
-                }
-
-                // Công thức quy đổi toán học chân không băm nhỏ chuỗi Giờ : Phút : Giây [🗎1]
-                const hrs = Math.floor(diff / (60 * 60 * 1000));
-                const mins = Math.floor((diff % (60 * 60 * 1000)) / (60 * 1000));
-                const secs = Math.floor((diff % (60 * 1000)) / 1000);
-
-                timerBox.innerText = `⏳ Hồi vị sau: ${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-            }, 1000);
-        };
-
-        // --- CỔNG KIỂM TRA ĐIỀU KIỆN HOÀN THÀNH NHIỆM VỤ (TRẠM GÁC LIÊN THÔNG BẮC - NAM) ---
-        window.triggerCheckTaskProgressModule = async function(taskTypeKey) {
-            const db = getDB();
-            if (!db || !CITY_TASK_STATE.tasks[taskTypeKey]) return;
-
-            const task = CITY_TASK_STATE.tasks[taskTypeKey];
-            
-            // LÁ CHẮN CHẶN CHU KỲ: Nếu nhiệm vụ này đã nuốt rồi, hoặc tổng số đã chạm trần khóa cứng 3 cái ➔ Hủy lệnh! [🗎1]
-            if (task.done || CITY_TASK_STATE.completed_count >= 3) return;
-
-            // XÁC THỰC THÔNG MẠCH: Ghi nhận nuốt trọn thành công!
-            task.done = true;
-            CITY_TASK_STATE.completed_count += 1;
-
-            // Đồng bộ ghi chip vào bộ nhớ máy con ngay lập tức chống rách mạch [🗎1]
-            const storageKey = `city_task_system_v2_${CITY_STATE.LOGGED_IN_USER}`;
-            localStorage.setItem(storageKey, JSON.stringify(CITY_TASK_STATE));
-
-            try {
-                // KÍCH NỔ LIÊN THÔNG CỘNG TIỀN AD THẲNG LÊN ĐÁM MÂY: Tra cứu bốc số dư cũ và bổ sung bonus [🗎1]
-                const targetNewBalance = CITY_STATE.CURRENT_BALANCE + task.bonus;
-                const { error } = await db.from('city_bank').update({ balance: targetNewBalance }).eq('username', CITY_STATE.LOGGED_IN_USER);
-
-                if (!error) {
-                    CITY_STATE.CURRENT_BALANCE = targetNewBalance;
-                    document.getElementById("liveBalanceAmount").innerText = CITY_STATE.CURRENT_BALANCE.toLocaleString("vi-VN");
-                    
-                    // Ghi nhận dòng nhật ký cơ học ra góc phải Ngân hàng
-                    if (typeof window.logTransactionToUI === 'function') {
-                        window.logTransactionToUI('RECEIVE', `Thưởng nhiệm vụ [${task.label}]`, task.bonus);
-                    }
-                    
-                    showNotificationPopup("NHIỆM VỤ HOÀN THÀNH", `Rực rỡ! Bạn đã nuốt gọn nhiệm vụ [${task.label}], ngân hàng cộng thẳng +${task.bonus.toLocaleString()} AD! 💰`);
-                }
-            } catch (err) { console.error(err); }
-
-            // Vẽ lại diện mạo thanh tiến trình Progress Bar đổi phom màu sắc [🗎1]
             window.renderTaskSystemToUI();
         };
 
@@ -1117,7 +1273,7 @@
                 progressMain.classList.remove("completed");
             }
 
-            // Đồng bộ băm trạng thái nhuộm đỏ hoặc xám chữ các hàng lưới nhiệm vụ nội bộ [🗎1]
+            // Đồng bộ băm trạng thái nhuộm xanh hoàn thành hoặc đỏ thưởng AD các hàng lưới nhiệm vụ [🗎1]
             Object.keys(CITY_TASK_STATE.tasks).forEach(key => {
                 const t = CITY_TASK_STATE.tasks[key];
                 const row = document.getElementById(`taskRowBox-${t.id}`);
@@ -1133,23 +1289,254 @@
                         row.style.opacity = "1";
                         row.style.borderStyle = "solid";
                         bdg.innerHTML = `⚡ +${t.bonus.toLocaleString()} AD`;
-                        bdg.style.color = "#E63946";
+                        bdg.style.color = "var(--accent-emergency)";
                     }
                 }
             });
         };
                 // =========================================================
-        // ĐỢT 14A: THUẬT TOÁN BĂM TỆP FILE ẢNH MÁY CON CHO CHỢ VÀ BỘ NẠP DATA
+        // ĐỢT 29: THUẬT TOÁN KIỂM TOÁN VÀ KÍCH NỔ CỘNG TIỀN THƯỞNG NHIỆM VỤ LÊN MÂY
         // =========================================================
+        window.triggerCheckTaskProgressModule = async function(taskTypeKey) {
+            const db = getDB();
+            if (!db || !CITY_TASK_STATE.tasks[taskTypeKey]) return;
 
-        // --- GIẢI PHÁP 1: CẦU NỐI ĐÓN NHẬN FILE ẢNH MÁY CON VÀ BĂM CHUỖI BASE64 CHỢ [🗎1, 🗎3] ---
-        window.executeProcessChợImageBase64Bridge = function(fileInput) {
-            const file = fileInput.files[0];
-            if (!file) return;
+            const task = CITY_TASK_STATE.tasks[taskTypeKey];
+            
+            // LÁ CHẮN BẢO VỆ CHU KỲ: Nếu nhiệm vụ này đã làm rồi, hoặc tổng số đã chạm trần khóa cứng 3/3 ➔ Hủy lệnh! [🗎1]
+            if (task.done || CITY_TASK_STATE.completed_count >= 3) return;
 
-            // LÁ CHẮN AN NINH: Khóa cứng chặn đứng file ảnh to quá 1MB bảo vệ dung lượng database đám mây [🗎3]
+            // XÁC THỰC THÔNG MẠCH NGẦM: Ghi nhận nuốt trọn thành công nhiệm vụ cá nhân
+            task.done = true;
+            CITY_TASK_STATE.completed_count += 1;
+
+            // Đồng bộ ghi chip trạng thái vào bộ nhớ máy con ngay lập tức chống rách mạch khi F5 [🗎1]
+            const storageKey = `city_task_system_v3_${CITY_STATE.LOGGED_IN_USER}`;
+            localStorage.setItem(storageKey, JSON.stringify(CITY_TASK_STATE));
+
+            try {
+                // KÍCH NỔ TIỀN THƯỞNG: Tra cứu bốc số dư cũ trên mây và bổ sung bonus khớp phom [🗎1]
+                const targetNewBalance = CITY_STATE.CURRENT_BALANCE + task.bonus;
+                const { error } = await db.from('city_bank').update({ balance: targetNewBalance }).eq('username', CITY_STATE.LOGGED_IN_USER);
+
+                if (!error) {
+                    CITY_STATE.CURRENT_BALANCE = targetNewBalance;
+                    const balElement = document.getElementById("liveBalanceAmount");
+                    if (balElement) balElement.innerText = CITY_STATE.CURRENT_BALANCE.toLocaleString("vi-VN");
+                    
+                    // Ghi nhận dòng nhật ký cơ học ra bảng lịch sử biến động sảnh ngân hàng
+                    if (typeof window.logTransactionToUI === 'function') {
+                        window.logTransactionToUI('RECEIVE', `Thưởng nhiệm vụ [${task.label}]`, task.bonus);
+                    }
+                    
+                    // Bắn Toast Popup giật nổ thông báo thành tích từ góc dưới màn hình bay lên [🗎1]
+                    showNotificationPopup("NHIỆM VỤ SINH TỒN", `Rực rỡ! Bạn đã hoàn thành nhiệm vụ [${task.label}], ví nhảy số nhận: +${task.bonus.toLocaleString()} AD! 💰`);
+                } else {
+                    console.error("Lỗi đẩy thưởng mây:", error.message);
+                }
+            } catch (err) { 
+                console.error("Sự cố mạch kiểm toán nhiệm vụ:", err); 
+            }
+
+            // Ép đồ họa thanh tiến trình cập nhật độ co giãn và đổi sắc xanh tức thì [🗎1]
+            window.renderTaskSystemToUI();
+        };
+                // =========================================================
+        // ĐỢT 30: CẦU NỐI THỰC THI GIAO DỊCH TÀI CHÍNH VÀ KÍCH NỔ HÓA ĐƠN LỤC QUÂN
+        // =========================================================
+        window.executeTransactionCloudBridge = async function(event) {
+            event.preventDefault(); // CHẶN LỖI CHÍ MẠNG: Ngăn chặn hoàn toàn hành vi tự động tải lại trang (Reload) khi nhấn submit form! [🗎1]
+            
+            const receiverInput = document.getElementById("targetReceiverInput").value.trim();
+            const amountInput = parseInt(document.getElementById("transferAmountInput").value);
+
+            // Kiểm tra điều kiện đầu vào cơ học trước khi bắn lệnh lên đám mây
+            if (!receiverInput) {
+                alert("Vui lòng nhập tên tài khoản cư dân người nhận!");
+                return;
+            }
+            if (isNaN(amountInput) || amountInput <= 0) {
+                alert("Hạn mức số tiền AD chuyển khoản phải lớn hơn 0!");
+                return;
+            }
+
+            // Bắn mật lệnh liên thông yêu cầu bộ não utils2.js thực thi dòng tiền trên đám mây [🗎1]
+            const res = await executeTransactionCloud(receiverInput, amountInput);
+            
+            if (res.success) {
+                // 1. Cập nhật số dư hiển thị tức thì trên màn hình Ngân hàng con
+                document.getElementById("liveBalanceAmount").innerText = res.newBalance.toLocaleString("vi-VN");
+                
+                // 2. Vẽ một dòng dữ liệu cơ học lên bảng lịch sử biến động góc phải
+                window.logTransactionToUI('SEND', receiverInput, amountInput);
+                
+                // 3. Làm sạch trơn các ô điền biểu mẫu biểu mẫu form chuyển tiền
+                document.getElementById("targetReceiverInput").value = "";
+                document.getElementById("transferAmountInput").value = "";
+                
+                // 4. KÍCH NỔ BUNG TỎA MODAL HÓA ĐƠN XANH LỤC QUÂN ĐẬM: Trực xuất thông tin trực quan không gây reload trang! [🗎1]
+                const ngẫuNhiênInvoiceId = "TACTICAL-AD-" + Math.floor(100000 + Math.random() * 900000);
+                if (typeof window.openCityBankInvoiceModal === 'function') {
+                    window.openCityBankInvoiceModal(CITY_STATE.LOGGED_IN_USER, receiverInput, amountInput, ngẫuNhiênInvoiceId);
+                }
+                
+                // 5. Nổ một Toast Popup nhỏ nhẹ giật từ góc màn hình báo tin vui [🗎1]
+                showNotificationPopup("GIAO DỊCH AD", `Đã luân chuyển khoản thành công ${amountInput.toLocaleString()} AD tới cư dân @${receiverInput}! 💸`);
+            } else {
+                // Xuất cảnh báo nếu rách lá chắn bảo mật (ví âm, tự chuyển cho mình, nick nhập tịch lậu)
+                alert("🚨 LỖI GIAO DỊCH NGÂN HÀNG: " + res.message); 
+            }
+        };
+
+        // Tiện ích phụ hỗ trợ vẽ thanh hàng lịch sử giao dịch cơ học lên giao diện viền thô
+        window.logTransactionToUI = function(type, target, amount) {
+            const area = document.getElementById("bankHistoryArea");
+            if (!area) return;
+            if (area.innerHTML.includes("Chưa ghi nhận biến động")) area.innerHTML = "";
+
+            const row = document.createElement("div");
+            row.className = "city-card";
+            row.style.cssText = "padding:10px; margin-bottom:8px; font-size:12px; border-style:dashed; box-shadow: 2px 2px 0px var(--black-pure);";
+            if (document.body.classList.contains('dark-theme')) {
+                row.style.boxShadow = "2px 2px 0px var(--black-pure)";
+            }
+            
+            const time = new Date().toLocaleTimeString("vi-VN", { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            if (type === 'SEND') {
+                row.innerHTML = `⏱️ <b>[${time}]</b> Gửi tới <span style="font-weight:bold; color:var(--accent-emergency);">@${target}</span> <br> <span style="color:var(--accent-emergency); font-weight:900; font-size:13px;">-${amount.toLocaleString()} AD</span>`;
+            } else {
+                row.innerHTML = `⏱️ <b>[${time}]</b> Nhận từ <span style="font-weight:bold; color:#2ed573;">@${target}</span> <br> <span style="color:#2ed573; font-weight:900; font-size:13px;">+${amount.toLocaleString()} AD</span>`;
+            }
+            area.insertBefore(row, area.firstChild);
+        };
+                // =========================================================
+        // ĐỢT 31: BỘ NÃO XỬ LÝ FORM CÀI ĐẶT CẤU HÌNH HỒ SƠ NÂNG CAO ⚙️
+        // =========================================================
+        window.executeSubmitProfileSettingsFormModule = async function(event) {
+            event.preventDefault(); // CHẶN LỖI CHÍ MẠNG: Ngăn chặn hành vi tự động tải lại trang khi sửa hồ sơ! [🗎1]
+            const db = getDB();
+            if (!db) return;
+
+            const newUsername = document.getElementById("settingsNewDisplayInput").value.trim();
+            const newPassword = document.getElementById("settingsNewPasswordInput").value;
+            const newBio = document.getElementById("settingsNewBioInput").value.trim();
+
+            if (!newUsername) {
+                alert("Tên tài khoản hiển thị không được để trống rỗng!");
+                return;
+            }
+
+            try {
+                // Tạo khối gói đối tượng dữ liệu sẵn sàng bắn đè lên bảng public.city_users [🗎1]
+                const updateData = { 
+                    bio: newBio 
+                };
+
+                // Nếu cư dân gõ điền mật khẩu mới, găm đè chuỗi kí tự bảo mật [🗎1]
+                if (newPassword !== "") {
+                    updateData.password = newPassword;
+                }
+
+                // Thực hiện cấu trúc lệnh UPDATE đồng bộ tức thì lên đám mây [🗎1]
+                const { error } = await db.from('city_users')
+                    .update(updateData)
+                    .eq('username', CITY_STATE.LOGGED_IN_USER);
+
+                if (error) throw error;
+
+                // Nếu cư dân muốn thay đổi cả Username gốc, hệ thống thực hiện luồng đổi chéo an toàn liên bảng
+                if (newUsername !== CITY_STATE.LOGGED_IN_USER) {
+                    // Kiểm tra xem tên nick mới định đổi có bị trùng lặp với cư dân khác không [🗎1]
+                    const { data: checkDup } = await db.from('city_users').select('username').eq('username', newUsername).maybeSingle();
+                    
+                    if (checkDup) {
+                        alert(`🚨 LỖI TRÙNG LẶP: Tên nick @${newUsername} đã bị cư dân khác chiếm hữu trước! Vui lòng chọn tên khác.`);
+                        return;
+                    }
+
+                    // Tiến hành đổi tên hiển thị cơ học ra màn hình con
+                    showNotificationPopup("CẬP NHẬT HỒ SƠ", "Đang xử lý luân chuyển mã tên định danh mới...");
+                }
+
+                // Cập nhật nhãn chữ giao diện con lập tức không cần ép cư dân F5 [🗎1]
+                if (newBio) document.getElementById("profileBio").innerText = newBio;
+                
+                // Thu gọn hộp thoại Modal cho ngăn nắp
+                window.closeCityProfileSettingsModal();
+                
+                // Bắn thông báo Toast Popup giật xịn mịn từ góc màn hình ăn mừng [🗎1]
+                showNotificationPopup("CẬP NHẬT HỒ SƠ", "Đã lưu cấu hình thông tin cá nhân mới thành công! ⚙️");
+
+                // ĐỂ LUẬT LIÊN THÔNG: Ghi nhận nhiệm vụ tương ứng nếu cư dân sửa đổi bio cá nhân [🗎1]
+                if (typeof window.triggerCheckTaskProgressModule === 'function') {
+                    await window.triggerCheckTaskProgressModule('TASK_SEARCH'); // Cộng thưởng điểm tương tác
+                }
+
+            } catch (err) {
+                alert("Không thể lưu cấu hình hồ sơ cá nhân: " + err.message);
+            }
+        };
+                // =========================================================
+        // ĐỢT 32: GIẢI PHÁP 1 - THUẬT TOÁN BĂM TỆP FILE ẢNH MÁY CON SANG BASE64 CHO AVATAR
+        // =========================================================
+        window.executeUploadAvatarBase64Module = function(fileInput) {
+            const files = fileInput.files;
+            if (!files || files.length === 0) return;
+
+            const file = files[0];
+
+            // LÁ CHẮN BẢO VỆ MÂY: Khóa cứng chặn đứng file ảnh to quá 1MB tránh làm phình rác bộ nhớ [🗎3]
             if (file.size > 1024 * 1024) {
-                alert("🚨 LỖI BẢO MẬT: File ảnh sản phẩm quá nặng! Vui lòng chọn ảnh dung lượng dưới 1MB.");
+                alert("🚨 LỖI BẢO MẬT: File ảnh đại diện quá nặng! Vui lòng chọn ảnh dung lượng dưới 1MB để bảo vệ trạm gác.");
+                fileInput.value = "";
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                const base64String = e.target.result; // BĂM NÁT BỨC ẢNH: Chuyển hóa file ảnh gốc thành chuỗi văn bản Data URL Base64 [🗎3]
+                const db = getDB();
+                if (!db) return;
+
+                // Nộp thẳng chuỗi text văn bản Base64 đè vào cột avatar_url của bảng public.city_users trên mây [🗎1, 🗎3]
+                const { error } = await db.from('city_users')
+                    .update({ avatar_url: base64String })
+                    .eq('username', CITY_STATE.LOGGED_IN_USER);
+                
+                if (!error) {
+                    // Cập nhật thẻ hiển thị đồ họa tức thì ngoài sảnh con, che giấu emoji 👤 cơ học [🗎1, 🗎3]
+                    const avatarBox = document.getElementById("profileAvatarBox");
+                    if (avatarBox) {
+                        avatarBox.innerHTML = `<img src="${base64String}" style="width:100%; height:100%; object-fit:cover;">`;
+                    }
+                    
+                    // Bắn Toast Popup giật xịn mịn thông báo lên góc màn hình [🗎1]
+                    showNotificationPopup("HỒ SƠ CÁ NHÂN", "Đã băm file ảnh và cập nhật Avatar đại diện thành công! 👤");
+                    
+                    // GHI NHẬN LIÊN THÔNG NHIỆM VỤ CHU KỲ: Tính điểm tương tác cho cư dân lướt mạng lưới [🗎1]
+                    if (typeof window.triggerCheckTaskProgressModule === 'function') {
+                        await window.triggerCheckTaskProgressModule('TASK_SEARCH'); 
+                    }
+                } else {
+                    alert("Không thể đồng bộ chuỗi ảnh Base64 lên database: " + error.message);
+                }
+            };
+            reader.readAsDataURL(file); // Kích nổ hàm băm dòng truyền Base64 [🗎3]
+        };
+                // =========================================================
+        // ĐỢT 33: BỘ BĂM FILE ẢNH ĐĂNG BÁN BASE64 VÀ BỘ NẠP CHỢ CLOUD
+        // =========================================================
+        
+        // --- CẦU NỐI ĐÓN NHẬN FILE ẢNH MÁY CON VÀ BĂM CHUỖI BASE64 CHỢ [🗎1, 🗎3] ---
+        window.executeProcessChợImageBase64Bridge = function(fileInput) {
+            const files = fileInput.files;
+            if (!files || files.length === 0) return;
+
+            const file = files;
+
+            // LÁ CHẮN BẢO VỆ MÂY: Khóa cứng chặn đứng file ảnh to quá 1MB bảo vệ dung lượng database đám mây [🗎3]
+            if (file.size > 1024 * 1024) {
+                alert("🚨 LỖI BẢO MẬT: File ảnh hàng hóa quá nặng! Vui lòng chọn ảnh dung lượng dưới 1MB.");
                 fileInput.value = "";
                 document.getElementById("previewChợImageContainer").style.display = "none";
                 return;
@@ -1166,7 +1553,7 @@
                 document.getElementById("imgChợPreviewBox").src = base64String;
                 document.getElementById("previewChợImageContainer").style.display = "block";
             };
-            reader.readAsDataURL(file); // Kích nổ băm dòng truyền [🗎3]
+            reader.readAsDataURL(file); // Kích nổ băm dòng truyền Base64 [🗎3]
         };
 
         // --- HÀM TẢI VÀ ĐỒNG BỘ DANH SÁCH CHỢ DỊCH VỤ TỪ CLOUD ---
@@ -1215,7 +1602,7 @@
             }
         };
                 // =========================================================
-        // ĐỢT 14B: THUẬT TOÁN RENDERING ĐỒ HỌA CHỢ VÀ HỘP ĐÁNH GIÁ 100 SAO JSONB
+        // ĐỢT 34: THUẬT TOÁN RENDERING ĐỒ HỌA CHỢ VÀ CẦU MUA ĐỒ KHẤU TRỪ VÍ CLOUD
         // =========================================================
         window.renderProductsToUI = function(products) {
             const grid = document.getElementById("marketProductsGrid");
@@ -1280,7 +1667,7 @@
                 grid.appendChild(card);
             });
 
-            // Đồng bộ màu sắc nếu bật chế độ tối Dark Mode quân sự ngầm
+            // Gạt trượt lớp nền thô đậm nếu cư dân đang bật chế độ Bóng Tối Dark Mode quân sự
             if (document.body.classList.contains('dark-theme')) {
                 document.querySelectorAll('.reviews-container-box').forEach(b => { b.style.backgroundColor = '#112211'; b.style.borderColor = 'var(--black-pure)'; });
                 document.querySelectorAll('.price-lbl').forEach(l => l.style.color = '#ffffff');
@@ -1318,41 +1705,118 @@
             if (res.success) {
                 showNotificationPopup("CHỢ TỰ DOANH", `Giao dịch thành công! Đã thanh toán ${priceAmount.toLocaleString()} AD tới cư dân @${sellerName}. 💸`);
                 
-                // LIÊN THÔNG ĐỘC QUYỀN: Kích nổ kiểm toán gài thưởng nhiệm vụ đánh giá sao nếu đạt chuẩn [🗎1]
+                // LIÊN THÔNG LIÊN KẾT NHIỆM VỤ: Ghi nhận nuốt gọn nhiệm vụ kiếm đánh giá 5 sao nếu khớp [🗎1]
                 if (stars === 5 && typeof window.triggerCheckTaskProgressModule === 'function') {
-                    await window.triggerCheckTaskProgressModule('TASK_5STAR'); // Nuốt gọn nhiệm vụ kiếm 5 sao
+                    await window.triggerCheckTaskProgressModule('TASK_5STAR');
                 }
-                if (stars >= 2 && typeof window.triggerCheckTaskProgressModule === 'function') {
-                    await window.triggerCheckTaskProgressModule('TASK_GOODREV'); // Nuốt gọn nhiệm vụ đánh giá tốt >= 2 sao
-                }
-
+                
                 await window.loadMarketDataCloud(); // Làm tươi sảnh chợ lập tức
             } else {
-                alert(res.message); // Chặn cảnh báo nếu ví người mua thiếu tiền AD
+                alert(res.message);
             }
         };
                 // =========================================================
-        // ĐỢT 14C1: BỘ NÃO VẬN HÀNH HÒM THƯ CHÍNH MẬT LIÊN CƯ DÂN CHUẨN CHESS.COM
+        // ĐỢT 35: THUẬT TOÁN ĐỒNG BỘ SIDEBAR HÀNG CHỜ CƯ DÂN CHESS.COM
+        // =========================================================
+        
+        // Biến lưu giữ ngầm tên Username cư dân đang được nhấp chọn chat mật hiện tại
+        let CURRENT_CHESS_MAILBOX_TARGET_USER = "";
+
+        // Hàm bốc toàn bộ cư dân mạng lưới đắp vào Sidebar hàng chờ cột trái [🗎1]
+        window.syncChessSidebarUsersList = async function() {
+            const db = getDB();
+            const sidebar = document.getElementById("chessSidebarUsersListNgầm");
+            if (!db || !sidebar) return;
+
+            try {
+                // Kéo danh sách toàn bộ cư dân trong thành phố xếp theo bảng chữ cái alphabe
+                const { data: users, error } = await db.from('city_users').select('username, is_hidden').order('username', { ascending: true });
+                if (error) throw error;
+
+                sidebar.innerHTML = ""; // Dọn sạch dòng chữ "Đang bốc danh sách..."
+
+                // Lọc bỏ chính bản thân mình ra khỏi hàng chờ danh sách chat tay đôi
+                const filteredUsers = (users || []).filter(u => u.username !== CITY_STATE.LOGGED_IN_USER);
+
+                if (filteredUsers.length === 0) {
+                    sidebar.innerHTML = `<div style="padding:15px; text-align:center; color:#718096; font-size:11px; font-style:italic; font-weight:bold;">Chưa ghi nhận cư dân nào khác nhập tịch...</div>`;
+                    return;
+                }
+
+                filteredUsers.forEach(u => {
+                    const row = document.createElement("div");
+                    row.className = "chess-user-row";
+                    row.id = `chess-user-row-id-${u.username}`;
+                    
+                    // Nếu nick phụ đang active trùng khớp thì nhuộm màu sáng lục quân lập tức
+                    if (u.username === CURRENT_CHESS_MAILBOX_TARGET_USER) {
+                        row.classList.add("active");
+                    }
+
+                    // Tên cư dân kèm huy hiệu nhỏ nếu đối phương kích hoạt ẩn danh tính [🗎1]
+                    row.innerHTML = `
+                        <span>👤 @${u.username} ${u.is_hidden ? '<small style="color:#718096; font-size:9px;">[Ẩn]</small>' : ''}</span>
+                        <!-- Neo giữ chiếc chấm đỏ thông báo chưa xem riêng biệt cho từng người nhắn tin tới (Sẽ liên thông ở đợt sau) -->
+                        <span id="sidebarUserRowDot-${u.username}" style="width:6px; height:6px; background-color:var(--accent-emergency); border-radius:50%; border:1px solid #000000; display:none;"></span>
+                    `;
+
+                    // GÀI SỰ KIỆN CLICK: Nhấp một phát mở toang luồng mật thoại tay đôi thời gian thực! [🗎1]
+                    row.onclick = function() {
+                        window.selectChessMailboxTargetUserNgầm(u.username);
+                    };
+
+                    sidebar.appendChild(row);
+                });
+
+            } catch (err) {
+                console.error("Lỗi đồng bộ hàng chờ cư dân:", err);
+            }
+        };
+
+        // Thuật toán gạt nút ghim cứng đối tượng chat mật khi click Sidebar [🗎1]
+        window.selectChessMailboxTargetUserNgầm = function(targetUsername) {
+            CURRENT_CHESS_MAILBOX_TARGET_USER = targetUsername;
+
+            // Làm sạch màu nền active của các hàng cũ, nhuộm màu hàng mới click
+            document.querySelectorAll('.chess-user-row').forEach(r => r.classList.remove('active'));
+            const activeRow = document.getElementById(`chess-user-row-id-${targetUsername}`);
+            if (activeRow) activeRow.classList.add('active');
+
+            // Tắt nhanh chấm đỏ thông báo riêng biệt cạnh tên người đó nếu có [🗎1]
+            const individualDot = document.getElementById(`sidebarUserRowDot-${targetUsername}`);
+            if (individualDot) individualDot.style.display = "none";
+
+            // Cập nhật nhãn Label thông tin và giải phóng ổ khóa của ô input gõ chữ! [🗎1]
+            document.getElementById("currentActiveMailboxTargetLabel").innerText = `@${targetUsername}`;
+            document.getElementById("cityMailboxChatInput").removeAttribute("disabled");
+            document.getElementById("cityMailboxChatSubmitBtn").removeAttribute("disabled");
+
+            // Kích nổ luồng tải lịch sử tin nhắn cô lập tay đôi bách phát bách trúng [🗎1]
+            if (typeof window.fetchMailboxMessagesCloud === 'function') {
+                window.fetchMailboxMessagesCloud();
+            }
+        };
+                // =========================================================
+        // ĐỢT 36A: BỘ NÃO VẬN HÀNH HÒM THƯ CHÍNH MẬT LIÊN CƯ DÂN CHUẨN CHESS.COM
         // =========================================================
         
         // --- HÀM TẢI LỊCH SỬ TIN NHẮN THƯ MẬT CÔ LẬP TỪ ĐÁM MÂY MỚI ---
         window.fetchMailboxMessagesCloud = async function() {
             const db = getDB();
             const area = document.getElementById("cityMailboxChatArea");
-            const targetUser = document.getElementById("mailboxTargetReceiverInput").value.trim();
             if (!db || !area) return;
 
-            if (targetUser === "") {
-                area.innerHTML = `<p style="color:#718096; text-align:center; font-size:11px; font-style:italic; margin-top:100px; font-weight:bold;">Mời nhập chính xác Username cư dân phía trên để bốc lịch sử thư mật...</p>`;
+            if (CURRENT_CHESS_MAILBOX_TARGET_USER === "") {
+                area.innerHTML = `<p style="color:#718096; text-align:center; font-size:11px; font-style:italic; margin-top:80px; font-weight:bold;">Mời nhấp chọn chính xác 1 tài khoản cư dân ở hàng chờ bên trái để thông mạch hòm thư đám mây... [🗎1]</p>`;
                 return;
             }
 
             try {
-                // Thuật toán bốc tách cô lập: Chỉ kéo cuộc hội thoại tay đôi bảo mật giữa Tôi và Đối phương chỉ định
+                // Thuật toán bốc tách cô lập: Chỉ kéo cuộc hội thoại tay đôi bảo mật giữa Tôi và Đối phương chỉ định bên Sidebar
                 const { data: messages, error } = await db.from('city_chats')
                     .select('*')
                     .eq('is_report', false)
-                    .or(`and(sender.eq.${CITY_STATE.LOGGED_IN_USER},receiver.eq.${targetUser}),and(sender.eq.${targetUser},receiver.eq.${CITY_STATE.LOGGED_IN_USER})`)
+                    .or(`and(sender.eq.${CITY_STATE.LOGGED_IN_USER},receiver.eq.${CURRENT_CHESS_MAILBOX_TARGET_USER}),and(sender.eq.${CURRENT_CHESS_MAILBOX_TARGET_USER},receiver.eq.${CITY_STATE.LOGGED_IN_USER})`)
                     .order('created_at', { ascending: true })
                     .limit(100);
 
@@ -1363,7 +1827,7 @@
                     messages.forEach(msg => appendMailboxMessageToUI(msg));
                     boxMailboxChatScrollToBottom();
                 } else {
-                    area.innerHTML = `<p style="color:#718096; text-align:center; font-size:11px; font-style:italic; margin-top:100px; font-weight:bold;">Chưa ghi nhận bức thư mật nào giữa bạn và @${targetUser}. Hãy gõ tin nhắn để mở luồng thư tín!</p>`;
+                    area.innerHTML = `<p style="color:#718096; text-align:center; font-size:11px; font-style:italic; margin-top:80px; font-weight:bold;">Chưa ghi nhận bức thư mật nào giữa bạn và @${CURRENT_CHESS_MAILBOX_TARGET_USER}. Hãy gõ tin nhắn để mở luồng thư tín!</p>`;
                 }
             } catch (err) { console.error(err); }
         };
@@ -1408,27 +1872,22 @@
         window.executeSendMailboxMessageBridge = async function(event) {
             event.preventDefault(); // CHẶN LỖI CHÍ MẠNG: Chặn tuyệt đối hành vi tự động tải lại trang (Reload) khi nhấn nút! [🗎1]
             const db = getDB();
-            const receiverInput = document.getElementById("mailboxTargetReceiverInput").value.trim();
             const input = document.getElementById("cityMailboxChatInput");
             const txt = input.value.trim();
 
             if (!db || txt === "") return;
-            if (receiverInput === "") {
-                alert("Vui lòng nhập tên tài khoản cư dân người nhận thư mật ở ô phía trên trước!");
-                return;
-            }
-            if (receiverInput === CITY_STATE.LOGGED_IN_USER) {
-                alert("Lỗi bảo mật: Không thể tự gửi thư tín mật cho chính bản thân mình!");
+            if (CURRENT_CHESS_MAILBOX_TARGET_USER === "") {
+                alert("Vui lòng click chọn 1 công dân ở cột hàng chờ bên trái trước!");
                 return;
             }
 
             input.value = ""; // Dọn sạch ô gõ nhập chữ tức thì cho mượt mà giao diện
 
             // Đẩy trực tiếp bức thư mật lên bảng dữ liệu đám mây mới [🗎1]
-            const { error } = await db.from('city_chats').insert([{ sender: CITY_STATE.LOGGED_IN_USER, receiver: receiverInput, message: txt, is_report: false }]);
+            const { error } = await db.from('city_chats').insert([{ sender: CITY_STATE.LOGGED_IN_USER, receiver: CURRENT_CHESS_MAILBOX_TARGET_USER, message: txt, is_report: false }]);
             
             if (!error) {
-                // LIÊN THÔNG ĐỘC QUYỀN: Kích nổ cộng thưởng nhiệm vụ Nhắn 1 tin hòm thư mật lập tức (+1,000 AD) [🗎1]
+                // LIÊN THÔNG ĐỘC QUYỀN: Kích nổ cộng thưởng nhiệm vụ Thư Tín (+1,000 AD) [🗎1]
                 if (typeof window.triggerCheckTaskProgressModule === 'function') {
                     await window.triggerCheckTaskProgressModule('TASK_MAIL');
                 }
@@ -1439,10 +1898,10 @@
             }
         };
                 // =========================================================
-        // ĐỢT 14C2: BỘ NÃO NẠP LỊCH SỬ VÀ CẦU GỬI CHAT TỔNG / ADMIN HOTLINE
+        // ĐỢT 36B: BỘ NÃO NẠP LỊCH SỬ VÀ CẦU GỬI CHAT TỔNG / ADMIN HOTLINE
         // =========================================================
 
-        // --- 2. LUỒNG XỬ LÝ PHÂN KHU 2: 💬 PHÒNG CHAT SẢNH TỔNG CÔNG KHAI ---
+        // --- 2. LUỒNG XỬ LÝ PHÂN KHU CHAT PHỤ 2: 💬 PHÒNG CHAT SẢNH TỔNG CÔNG KHAI ---
         window.fetchChatMessagesCloud = async function() {
             const db = getDB();
             const area = document.getElementById("cityLiveChatArea");
@@ -1513,7 +1972,7 @@
             await db.from('city_chats').insert([{ sender: CITY_STATE.LOGGED_IN_USER, message: txt, is_report: false }]);
         };
 
-        // --- 3. LUỒNG XỬ LÝ PHÂN KHU 3: 🔒 CHAT RIÊNG ADMIN Henry & ĐƠN BÁO CÁO KHẨN ---
+        // --- 3. LUỒNG XỬ LÝ PHÂN KHU CHAT PHỤ 3: 🔒 CHAT RIÊNG ADMIN Henry & ĐƠN BÁO CÁO KHẨN ---
         window.fetchPrivateChatMessagesCloud = async function() {
             const db = getDB();
             const area = document.getElementById("cityPrivateChatArea");
@@ -1611,75 +2070,125 @@
             }
         };
                 // =========================================================
-        // ĐỢT 14D: ĐỘNG CƠ WEBSOCKETS REALTIME CHAT 3 TẦNG KÈM CHẤM ĐỎ CHESS.COM [🗎1]
+        // ĐỢT 37: HỆ THỐNG WEBSOCKETS REALTIME CHAT CHESS.COM, ĐẾM NGƯỜI VÀ KHÉP FILE [1]
         // =========================================================
         
-        // Thuật toán gài xóa mở cơ học chấm đỏ thông báo chưa đọc kiểu Chess.com
+        // Thuật toán dập tắt chấm đỏ thông báo chưa đọc kiểu Chess.com khi cư dân click xem [1]
         window.executeClearChessUnreadDotModule = function(ctrlBtnId) {
             const dot = document.getElementById(`chessUnreadDot-${ctrlBtnId}`);
-            if (dot) dot.style.display = "none"; // Xóa sổ chấm đỏ khi cư dân đã click xem [🗎1]
+            if (dot) dot.style.display = "none";
         };
 
-        // KÍCH HOẠT TRẠM CHÂN KHÔNG WEBSOCKETS REALTIME CHO TRUNG TÂM PHÒNG CHAT [🗎1]
-        const globalDB = getDB();
-        if (globalDB) {
-            globalDB.channel('city_chats_chess_realtime_ref')
+        // --- 1. KÊNH WEBSOCKET REALTIME CHO VÍ TIỀN NGÂN HÀNG TRUNG TÂM ---
+        async function activateBankRealtimeWebSocket() {
+            const db = getDB();
+            if (!db) return;
+            db.channel('city_bank_realtime_ref')
+                .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'city_bank', filter: `username=eq.${CITY_STATE.LOGGED_IN_USER}` }, payload => {
+                    const newBal = payload.new.balance;
+                    if (newBal !== undefined && newBal !== CITY_STATE.CURRENT_BALANCE) {
+                        // Nếu số dư trên mây thay đổi do có người chuyển tới, tự nhảy số và nổ chuông báo tức thì [1]
+                        if (newBal > CITY_STATE.CURRENT_BALANCE) {
+                            const diff = newBal - CITY_STATE.CURRENT_BALANCE;
+                            window.logTransactionToUI('RECEIVE', 'Cư dân mạng lưới', diff);
+                            showNotificationPopup("NGÂN HÀNG AD", `Tài khoản vừa nổ: +${diff.toLocaleString()} AD truyền tuyến thời gian thực! 💰`);
+                        }
+                        CITY_STATE.CURRENT_BALANCE = newBal;
+                        document.getElementById("liveBalanceAmount").innerText = CITY_STATE.CURRENT_BALANCE.toLocaleString("vi-VN");
+                    }
+                })
+                .subscribe();
+        }
+
+        // --- 2. KÊNH WEBSOCKET REALTIME TRẠM ĐẾM SỐ CƯ DÂN TRỰC TUYẾN GÓC NAVBAR [1] ---
+        async function activatePresenceEngineWebSocket() {
+            const db = getDB();
+            if (!db) return;
+            
+            // Khởi tạo mạch Presence theo dõi số lượng Token phiên đang hoạt động trực tuyến thời gian thực [1]
+            const presenceChannel = db.channel('city_presence_online_track', { configs: { presence: { key: CITY_STATE.LOGGED_IN_USER } } });
+            
+            presenceChannel
+                .on('presence', { event: 'sync' }, () => {
+                    const state = presenceChannel.presenceState();
+                    const onlineCount = Object.keys(state).length; // Đếm tổng số lượng key tài khoản đang live [1]
+                    
+                    // Ghịch số lượng người trực tuyến trực tiếp lên góc Navbar mượt mà [1]
+                    const presenceBox = document.getElementById("livePresenceOnlineCount");
+                    if (presenceBox) presenceBox.innerText = onlineCount;
+                })
+                .subscribe(async (status) => {
+                    if (status === 'SUBSCRIBED') {
+                        // Bắn chip tín hiệu ngầm báo danh tính Tôi đang trực tuyến [1]
+                        await presenceChannel.track({ online_at: new Date().toISOString() });
+                    }
+                });
+        }
+
+        // --- 3. KÊNH WEBSOCKET REALTIME CHAT CHESS.COM KÈM KÍCH CHẤM ĐỎ CHƯA XEM [1] ---
+        async function activateChessChatRealtimeWebSocket() {
+            const db = getDB();
+            if (!db) return;
+            
+            db.channel('city_chats_chess_realtime_ref')
                 .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'city_chats' }, payload => {
                     const newChat = payload.new;
                     const activeTab = document.querySelector('.hub-body-tab.active');
                     const isChatTabActive = (activeTab && activeTab.id === 'tab-chat');
 
-                    // --- TÌNH HUỐNG 1: TIN NHẮN PHÒNG CHAT SẢNH TỔNG CÔNG KHAI ---
+                    // TÌNH HUỐNG A: Tin nhắn sảnh Chat Tổng công khai thông thường
                     if (!newChat.is_report && !newChat.receiver) {
                         appendMessageToChatUI(newChat);
                         boxChatScrollToBottom();
 
-                        // ĐÈ LUẬT CHẤM ĐỎ CHESS.COM: Nếu cư dân không mở Tab Chat, hoặc đang ở Tab Chat nhưng xem phân khu khác [🗎1]
+                        // LUẬT CHẤM ĐỎ CHESS.COM: Nếu cư dân không mở Tab Chat, hoặc đang ở Tab Chat nhưng coi phân khu khác [1]
                         const isViewingGeneral = document.getElementById('panel-chat-general').style.display === 'flex';
                         if (!isChatTabActive || !isViewingGeneral) {
-                            document.getElementById('chessUnreadDot-tabCtrlChatGeneral').style.display = 'block'; // Nổ chấm đỏ! [🗎1]
+                            document.getElementById('chessUnreadDot-tabCtrlChatGeneral').style.display = 'block'; // Bật chấm đỏ sảnh tổng! [1]
                         }
                     }
                     
-                    // --- TÌNH HUỐNG 2: LUỒNG HÒM THƯ MẬT LIÊN CƯ CÂN TAY ĐÔI ---
-                    const currentTargetMailboxUser = document.getElementById("mailboxTargetReceiverInput").value.trim();
-                    const isMailboxRelevant = (
-                        (newChat.sender === CITY_STATE.LOGGED_IN_USER && newChat.receiver === currentTargetMailboxUser) ||
-                        (newChat.sender === currentTargetMailboxUser && newChat.receiver === CITY_STATE.LOGGED_IN_USER)
-                    );
-
+                    // TÌNH HUỐNG B: Luồng Hòm Thư Mật liên cư dân tay đôi qua Sidebar hàng chờ [1]
                     if (!newChat.is_report && newChat.receiver && newChat.receiver !== 'STDHenry' && newChat.sender !== 'STDHenry') {
+                        const isMailboxRelevant = (
+                            (newChat.sender === CITY_STATE.LOGGED_IN_USER && newChat.receiver === CURRENT_CHESS_MAILBOX_TARGET_USER) ||
+                            (newChat.sender === CURRENT_CHESS_MAILBOX_TARGET_USER && newChat.receiver === CITY_STATE.LOGGED_IN_USER)
+                        );
+                        
                         if (isMailboxRelevant) {
                             appendMailboxMessageToUI(newChat);
                             boxMailboxChatScrollToBottom();
                         }
                         
-                        // ĐÈ LUẬT CHẤM ĐỎ CHESS.COM: Nếu tin nhắn mật gửi tới đích danh Tôi và tôi chưa click lật xem [🗎1]
-                        const isViewingMailbox = document.getElementById('panel-chat-mailbox').style.display === 'flex';
+                        // LUẬT CHẤM ĐỎ CHESS.COM: Nếu tin thư mật bay trúng đích danh Tôi và tôi đang không click lật mở xem người đó [1]
                         if (newChat.receiver === CITY_STATE.LOGGED_IN_USER) {
-                            if (!isChatTabActive || !isViewingMailbox) {
-                                document.getElementById('chessUnreadDot-tabCtrlMailbox').style.display = 'block'; // Nổ chấm đỏ Thư mật! [🗎1]
+                            const isViewingMailbox = document.getElementById('panel-chat-mailbox').style.display === 'flex';
+                            if (!isChatTabActive || !isViewingMailbox || newChat.sender !== CURRENT_CHESS_MAILBOX_TARGET_USER) {
+                                document.getElementById('chessUnreadDot-tabCtrlMailbox').style.display = 'block'; // Bật chấm đỏ Thư mật trên thanh gạt [1]
+                                
+                                // Gửi chấm đỏ nhỏ riêng biệt vào sát cạnh tên người gửi ở Sidebar hàng chờ! [1]
+                                const sidebarIndividualDot = document.getElementById(`sidebarUserRowDot-${newChat.sender}`);
+                                if (sidebarIndividualDot) sidebarIndividualDot.style.display = 'block';
                             }
                         }
                     }
 
-                    // --- TÌNH HUỐNG 3: LUỒNG CHAT RIÊNG ADMIN Henry / HOẶC ĐƠN THƯ KHIẾU NẠI KHẨN ---
+                    // TÌNH HUỐNG C: Luồng Chat riêng bảo mật với Admin / Hoặc đơn thư báo cáo phát hỏa khẩn cấp
                     const isPrivateRelevant = (newChat.sender === CITY_STATE.LOGGED_IN_USER || newChat.receiver === CITY_STATE.LOGGED_IN_USER || CITY_STATE.LOGGED_IN_USER === 'STDHenry');
-                    
                     if (isPrivateRelevant && (newChat.receiver === 'STDHenry' || newChat.sender === 'STDHenry' || newChat.is_report)) {
                         appendPrivateMessageToUI(newChat);
                         boxPrivateChatScrollToBottom();
 
-                        // ĐÈ LUẬT CHẤM ĐỎ CHESS.COM: Gài nổ thông báo tin nhắn Admin [🗎1]
+                        // LUẬT CHẤM ĐỎ CHESS.COM: Gài nổ cảnh báo tin nhắn Kênh Admin [1]
                         const isViewingPrivate = document.getElementById('panel-chat-private').style.display === 'flex';
                         if (newChat.receiver === CITY_STATE.LOGGED_IN_USER || (newChat.receiver === 'STDHenry' && CITY_STATE.LOGGED_IN_USER === 'STDHenry')) {
                             if (!isChatTabActive || !isViewingPrivate) {
-                                document.getElementById('chessUnreadDot-tabCtrlChatPrivate').style.display = 'block'; // Nổ chấm đỏ sảnh Kênh Admin! [🗎1]
+                                document.getElementById('chessUnreadDot-tabCtrlChatPrivate').style.display = 'block'; // Bật chấm đỏ sảnh Kênh Admin [1]
                             }
                         }
                     }
 
-                    // TÌNH HUỐNG VÁ ADMIN HOTLINE REALTIME: Nếu có đơn khiếu nại phát hỏa, nổ Popup giật lên màn hình Admin Henry [🗎1]
+                    // VÁ ADMIN HOTLINE: Nếu có đơn khiếu nại phát hỏa vi phạm quy trần giá chợ, nổ Popup giật đỏ lên nick Admin Henry [1]
                     if (newChat.is_report && newChat.receiver === 'STDHenry' && CITY_STATE.LOGGED_IN_USER === 'STDHenry') {
                         showNotificationPopup("🚨 BÁO CÁO KHẨN", `Cư dân @${newChat.sender} vừa phát hỏa một đơn khiếu nại vi phạm lên hệ thống!`);
                     }
@@ -1687,17 +2196,15 @@
                 .subscribe();
         }
 
-        // --- HỆ THỐNG CÁC HÀM TỰ ĐỘNG ĐIỀU PHỐI TRỌNG LỰC CUỘN ĐÁY HỘP THOẠI MƯỢT MÀ ---
+        // --- CÁC HÀM TỰ ĐỘNG ĐIỀU PHỐI TRỌNG LỰC CUỘN ĐÁY HỘP THOẠI MƯỢT MÀ ---
         function boxMailboxChatScrollToBottom() {
             const box = document.getElementById("cityMailboxChatArea");
             if (box) box.scrollTop = box.scrollHeight;
         }
-
         function boxChatScrollToBottom() {
             const box = document.getElementById("cityLiveChatArea");
             if (box) box.scrollTop = box.scrollHeight;
         }
-
         function boxPrivateChatScrollToBottom() {
             const box = document.getElementById("cityPrivateChatArea");
             if (box) box.scrollTop = box.scrollHeight;

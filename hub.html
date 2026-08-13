@@ -1055,8 +1055,11 @@
         <!-- =========================================================
          BỘ NÃO JAVASCRIPT MODULE: KIỂM TRA CHIP NHẬN DIỆN SSO VÀ CHU KỲ NHIỆM VỤ - ĐỢT 26 [🗎1]
          ========================================================= -->
+        <!-- =========================================================
+         BỘ NÃO JAVASCRIPT MODULE: THAY MÁU ĐƯỜNG DẪN TUYỆT ĐỐI HỆ THỐNG [🗎1]
+         ========================================================= -->
     <script type="module">
-        // Nhập trạm liên thông dữ liệu đám mây và bộ nhớ đệm tập trung từ bộ não utils2.js
+        // ĐÃ PHẪU THUẬT: Ép vọt đường dẫn tuyệt đối thẳng thừng về thư mục gốc, triệt tiêu lỗi 404 lạc địa chỉ liên trang! [🗎1]
         import { 
             getDB, 
             CITY_STATE, 
@@ -1065,7 +1068,7 @@
             publishNewServiceCloud,
             purchaseServiceCloud,
             showNotificationPopup
-        } from './utils2.js';
+        } from '/utils2.js';
 
         // Biến lưu giữ mã token hiện tại phục vụ dọn rác khi đăng xuất liên trang [🗎1]
         let CURRENT_SESSION_TOKEN = "";
